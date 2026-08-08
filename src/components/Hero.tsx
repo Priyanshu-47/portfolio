@@ -44,7 +44,7 @@ export function Hero() {
               <span className="mr-2 text-peach-deep">{'//'}</span>hey, I&rsquo;m
             </p>
             <h1 className="mt-4 font-display text-5xl font-bold leading-[1.02] text-ink-2 sm:text-6xl xl:text-7xl">
-              Priyanshu
+              <span className="text-gradient">Priyanshu</span>
               <br />
               <span className="text-gradient">Lodha</span>
             </h1>
@@ -113,9 +113,12 @@ export function Hero() {
               aria-hidden
             />
             <div className="glass relative rounded-3xl px-8 py-12 text-center">
-              <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-2xl bg-gradient-to-br from-lavender-deep to-peach-deep font-display text-5xl font-bold text-white shadow-lg shadow-lavender-deep/40">
-                {profile.initials}
-              </div>
+              <img
+                src={`${import.meta.env.BASE_URL}model-3d-3d-model-man-wearing-glasses_1393761-192.jpg`}
+                alt={profile.name}
+                className="mx-auto h-28 w-28 rounded-2xl object-cover shadow-lg shadow-lavender-deep/40"
+                style={{ objectPosition: '35% 25%' }}
+              />
               <p className="mt-6 font-display text-xl font-semibold text-ink-2">{profile.name}</p>
               <p className="mt-1 text-sm text-slate-600">Full Stack · Pune</p>
               <div className="mt-6 flex justify-center gap-2.5">
