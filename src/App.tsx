@@ -1,7 +1,6 @@
 import { ScrollProgress } from './components/ScrollProgress'
 import { Navbar } from './components/Navbar'
 import { BackgroundFX } from './components/BackgroundFX'
-import { Avatar3D } from './components/Avatar3D'
 import { Hero } from './components/Hero'
 import { About } from './components/About'
 import { CoreStack } from './components/CoreStack'
@@ -23,7 +22,6 @@ export default function App() {
       <ScrollProgress />
       <Navbar />
       <BackgroundFX />
-      <Avatar3D />
       <main className="relative z-10">
         <Hero />
         <About />

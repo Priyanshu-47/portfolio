@@ -1,6 +1,5 @@
 import { Reveal } from './Reveal'
 import { SectionHeading } from './SectionHeading'
-import { sendAvatarCommand } from './Avatar3D'
 import { coreStack } from '../data/resume'
 
 export function CoreStack() {
@@ -18,8 +17,6 @@ export function CoreStack() {
             <article
               className="card card-hover card-bob group h-full p-6"
               style={{ animationDelay: `${(i % 3) * 0.8}s` }}
-              onMouseEnter={() => sendAvatarCommand({ type: 'point', cardId: tech.name })}
-              onMouseLeave={() => sendAvatarCommand({ type: 'unpoint' })}
             >
               <div
                 className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-lavender-deep/60 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
