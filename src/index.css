@@ -1,15 +1,29 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   Design tokens
+   Design tokens — premium pastel palette
+   Soft Sage Green · Creamy Mint · Gentle Lavender · Peach Fuzz · Warm Off-White
 --------------------------------------------------------------------------- */
 @theme {
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --color-ink: #05070d;
-  --color-ink-2: #0a0e1a;
+  /* Pastel surfaces */
+  --color-cream: #faf7f1; /* warm off-white — page base */
+  --color-sage: #dfeadd; /* soft sage green */
+  --color-mint: #dcefe6; /* creamy mint */
+  --color-lavender: #e9e2fa; /* gentle lavender */
+  --color-peach: #fbe7dc; /* peach fuzz */
+
+  /* Ink (text) — deep slate / charcoal, never pure black */
+  --color-ink: #3c4a57; /* body text */
+  --color-ink-2: #22303c; /* headings */
+
+  /* Accents for the pastel gradient */
+  --color-sage-deep: #7a9a72;
+  --color-lavender-deep: #9a86cf;
+  --color-peach-deep: #d98a76;
 
   --animate-float: float 7s ease-in-out infinite;
   --animate-float-slow: float 11s ease-in-out infinite;
@@ -70,8 +84,15 @@ html {
 }
 
 body {
-  background-color: var(--color-ink);
-  color: #e2e8f0;
+  background-color: var(--color-cream);
+  /* Soft pastel washes across the viewport */
+  background-image:
+    radial-gradient(52rem 38rem at 112% -8%, rgba(223, 234, 221, 0.8), transparent 60%),
+    radial-gradient(46rem 34rem at -14% 22%, rgba(233, 226, 250, 0.75), transparent 62%),
+    radial-gradient(42rem 30rem at 118% 66%, rgba(251, 231, 220, 0.9), transparent 60%),
+    radial-gradient(40rem 32rem at 30% 118%, rgba(220, 239, 230, 0.8), transparent 62%);
+  background-attachment: fixed;
+  color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -79,55 +100,60 @@ body {
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.4);
-  color: #fff;
+  background: rgba(154, 134, 207, 0.35);
+  color: var(--color-ink-2);
 }
 
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-ink);
+  background: #f5f1e9;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(129, 140, 248, 0.25);
+  background: rgba(154, 134, 207, 0.35);
   border-radius: 999px;
-  border: 2px solid var(--color-ink);
+  border: 2px solid #f5f1e9;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(129, 140, 248, 0.45);
+  background: rgba(154, 134, 207, 0.5);
 }
 
 /* ---------------------------------------------------------------------------
    Custom utilities
 --------------------------------------------------------------------------- */
 @utility bg-grid {
-  background-image: linear-gradient(
-      to right,
-      rgba(148, 163, 184, 0.07) 1px,
-      transparent 1px
-    ),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.07) 1px, transparent 1px);
+  background-image: linear-gradient(to right, rgba(122, 141, 153, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(122, 141, 153, 0.08) 1px, transparent 1px);
   background-size: 48px 48px;
 }
 
+/* Sage → lavender → peach, dark enough to read on cream */
 @utility text-gradient {
-  background-image: linear-gradient(92deg, #a5b4fc 0%, #8b5cf6 48%, #22d3ee 100%);
+  background-image: linear-gradient(92deg, #6f9669 0%, #8f7cc4 50%, #cf7f6c 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
+/* High-blur glassmorphism over the pastel canvas */
 @utility glass {
-  background-color: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background-color: rgba(255, 255, 255, 0.42);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+}
+
+@utility glass-soft {
+  background-color: rgba(255, 255, 255, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 @utility card-ring {
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  background-color: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  background-color: rgba(255, 255, 255, 0.4);
 }
 
 @utility animate-caret {
@@ -149,7 +175,7 @@ body {
   border-radius: inherit;
   background: radial-gradient(
     440px circle at var(--mx, 50%) var(--my, 50%),
-    rgb(139 92 246 / 0.16),
+    rgba(154, 134, 207, 0.26),
     transparent 68%
   );
   opacity: 0;
@@ -165,16 +191,6 @@ body {
 /* ---------------------------------------------------------------------------
    Components
 --------------------------------------------------------------------------- */
-/* ---------------------------------------------------------------------------
-   Accessibility: disable motion when requested
---------------------------------------------------------------------------- */
-@media (prefers-reduced-motion: reduce) {
-  .animate-caret {
-    animation: none;
-    opacity: 1;
-  }
-}
-
 @layer components {
   .section {
     margin-inline: auto;
@@ -185,9 +201,12 @@ body {
 
   .card {
     position: relative;
-    border: 1px solid rgb(255 255 255 / 0.09);
-    background-color: rgb(255 255 255 / 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    background-color: rgba(255, 255, 255, 0.4);
     border-radius: 1.25rem;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 12px 32px -22px rgba(102, 108, 132, 0.35);
     transition:
       transform 0.3s ease,
       border-color 0.3s ease,
@@ -197,9 +216,9 @@ body {
 
   .card-hover:hover {
     transform: translateY(-4px);
-    border-color: rgb(255 255 255 / 0.18);
-    background-color: rgb(255 255 255 / 0.06);
-    box-shadow: 0 22px 44px -22px rgb(0 0 0 / 0.65);
+    border-color: rgba(255, 255, 255, 0.55);
+    background-color: rgba(255, 255, 255, 0.58);
+    box-shadow: 0 24px 48px -26px rgba(122, 112, 158, 0.4);
   }
 
   .btn-primary {
@@ -211,15 +230,15 @@ body {
     font-size: 0.875rem;
     font-weight: 600;
     color: #fff;
-    background-image: linear-gradient(90deg, #6366f1, #8b5cf6);
-    box-shadow: 0 8px 24px -10px rgb(99 102 241 / 0.55);
+    background-image: linear-gradient(90deg, #9d86cf, #e28a86);
+    box-shadow: 0 10px 26px -12px rgba(157, 134, 207, 0.65);
     transition:
       transform 0.25s ease,
       box-shadow 0.25s ease;
   }
   .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 14px 32px -8px rgb(99 102 241 / 0.7);
+    box-shadow: 0 16px 34px -10px rgba(226, 138, 134, 0.7);
   }
 
   .btn-ghost {
@@ -230,9 +249,11 @@ body {
     padding: 0.75rem 1.5rem;
     font-size: 0.875rem;
     font-weight: 600;
-    color: #e2e8f0;
-    border: 1px solid rgb(255 255 255 / 0.14);
-    background-color: rgb(255 255 255 / 0.05);
+    color: var(--color-ink);
+    border: 1px solid rgba(122, 118, 148, 0.24);
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     transition:
       transform 0.25s ease,
       border-color 0.25s ease,
@@ -240,8 +261,8 @@ body {
   }
   .btn-ghost:hover {
     transform: translateY(-2px);
-    border-color: rgb(255 255 255 / 0.28);
-    background-color: rgb(255 255 255 / 0.09);
+    border-color: rgba(122, 118, 148, 0.42);
+    background-color: rgba(255, 255, 255, 0.62);
   }
 
   .social-btn {
@@ -251,9 +272,11 @@ body {
     height: 2.5rem;
     width: 2.5rem;
     border-radius: 0.75rem;
-    border: 1px solid rgb(255 255 255 / 0.12);
-    background-color: rgb(255 255 255 / 0.05);
-    color: #94a3b8;
+    border: 1px solid rgba(122, 118, 148, 0.2);
+    background-color: rgba(255, 255, 255, 0.4);
+    color: #5b6470;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     transition:
       color 0.25s ease,
       border-color 0.25s ease,
@@ -262,8 +285,21 @@ body {
   }
   .social-btn:hover {
     transform: translateY(-2px);
-    color: #fff;
-    border-color: rgb(165 180 252 / 0.5);
-    background-color: rgb(255 255 255 / 0.1);
+    color: var(--color-ink-2);
+    border-color: rgba(154, 134, 207, 0.5);
+    background-color: rgba(255, 255, 255, 0.65);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Accessibility: disable motion when requested
+--------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .animate-caret {
+    animation: none;
+    opacity: 1;
+  }
+  html {
+    scroll-behavior: auto;
   }
 }

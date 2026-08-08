@@ -35,14 +35,14 @@ export function Navbar() {
     <header
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         scrolled || open
-          ? 'border-b border-white/10 bg-ink/80 backdrop-blur-xl'
+          ? 'border-b border-white/30 bg-white/40 backdrop-blur-md shadow-[0_8px_30px_-18px_rgba(122,112,158,0.35)]'
           : 'border-b border-transparent bg-transparent'
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
         <a href="#home" onClick={() => setOpen(false)} className="font-display text-xl font-bold">
           <span className="text-gradient">PL</span>
-          <span className="text-slate-500">.</span>
+          <span className="text-slate-400">.</span>
         </a>
 
         {/* Desktop links */}
@@ -52,12 +52,12 @@ export function Navbar() {
               key={link.id}
               href={`#${link.id}`}
               className={`group relative rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                active === link.id ? 'text-white' : 'text-slate-400 hover:text-white'
+                active === link.id ? 'text-ink-2' : 'text-slate-500 hover:text-ink-2'
               }`}
             >
               {link.label}
               <span
-                className={`absolute inset-x-3 -bottom-px h-px bg-gradient-to-r from-indigo-400 to-cyan-300 transition-opacity duration-300 ${
+                className={`absolute inset-x-3 -bottom-px h-px bg-gradient-to-r from-sage-deep via-lavender-deep to-peach-deep transition-opacity duration-300 ${
                   active === link.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-60'
                 }`}
               />
@@ -68,17 +68,17 @@ export function Navbar() {
         <div className="flex items-center gap-2">
           <a
             href="#contact"
-            className="hidden items-center gap-1.5 rounded-lg border border-white/12 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:border-white/25 hover:bg-white/10 md:inline-flex"
+            className="hidden items-center gap-1.5 rounded-lg border border-white/40 bg-white/40 px-4 py-2 text-sm font-semibold text-ink-2 backdrop-blur-md transition hover:border-white/70 hover:bg-white/60 md:inline-flex"
           >
             Hire me
-            <ArrowUpRight className="h-4 w-4 text-indigo-300" />
+            <ArrowUpRight className="h-4 w-4 text-lavender-deep" />
           </a>
           <button
             type="button"
             aria-label="Toggle menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="rounded-lg border border-white/10 p-2 text-slate-200 transition hover:bg-white/5 md:hidden"
+            className="rounded-lg border border-white/40 bg-white/30 p-2 text-ink backdrop-blur-md transition hover:bg-white/50 md:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -87,7 +87,7 @@ export function Navbar() {
 
       {/* Mobile panel */}
       <div
-        className={`overflow-hidden border-white/10 bg-ink/95 backdrop-blur-xl transition-[max-height] duration-300 ease-out md:hidden ${
+        className={`overflow-hidden border-white/30 bg-white/60 backdrop-blur-md transition-[max-height] duration-300 ease-out md:hidden ${
           open ? 'max-h-96 border-b' : 'max-h-0'
         }`}
       >
@@ -98,7 +98,7 @@ export function Navbar() {
               href={`#${link.id}`}
               onClick={() => setOpen(false)}
               className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                active === link.id ? 'bg-white/5 text-white' : 'text-slate-400 hover:text-white'
+                active === link.id ? 'bg-white/60 text-ink-2' : 'text-slate-500 hover:text-ink-2'
               }`}
             >
               {link.label}

@@ -20,7 +20,7 @@ export function StatCounter({ value, label }: StatCounterProps) {
   return (
     <div
       ref={ref}
-      className={`rounded-xl border border-white/10 bg-white/5 p-4 text-center transition-all duration-700 ease-out hover:border-indigo-400/40 hover:bg-white/[0.07] ${
+      className={`rounded-xl border border-white/40 bg-white/40 p-4 text-center backdrop-blur-sm transition-all duration-700 ease-out hover:border-lavender-deep/50 hover:bg-white/60 ${
         visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
       }`}
     >
@@ -28,7 +28,7 @@ export function StatCounter({ value, label }: StatCounterProps) {
         {count}
         {suffix}
       </div>
-      <div className="mt-1 text-xs leading-tight text-slate-400">{label}</div>
+      <div className="mt-1 text-xs leading-tight text-slate-500">{label}</div>
     </div>
   )
 }

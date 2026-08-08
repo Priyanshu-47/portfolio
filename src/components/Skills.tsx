@@ -15,14 +15,14 @@ export function Skills() {
         {skillGroups.map((group, i) => (
           <Reveal key={group.title} delay={i * 60} className="h-full">
             <div className="card card-hover h-full p-6">
-              <h3 className="font-display text-base font-semibold text-white">{group.title}</h3>
+              <h3 className="font-display text-base font-semibold text-ink-2">{group.title}</h3>
               <div className="mt-4 flex flex-wrap gap-2">
                 {group.skills.map((skill) => (
                   <span
                     key={skill.label}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-slate-300 transition-colors hover:border-indigo-400/40 hover:bg-white/10 hover:text-white"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-white/40 bg-white/40 px-3 py-1.5 text-xs text-slate-600 backdrop-blur-sm transition-colors hover:border-lavender-deep/50 hover:bg-white/60 hover:text-ink-2"
                   >
-                    {skill.icon ? <skill.icon className="text-indigo-300" /> : null}
+                    {skill.icon ? <skill.icon className="text-lavender-deep" /> : null}
                     {skill.label}
                   </span>
                 ))}

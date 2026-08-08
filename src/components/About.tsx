@@ -29,7 +29,7 @@ export function About() {
           <div className="grid gap-3 sm:grid-cols-2">
             {facts.map((fact) => (
               <div key={fact.label} className="card card-hover flex items-start gap-3.5 p-4">
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-indigo-300">
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/40 bg-white/50 text-lavender-deep">
                   <fact.icon className="h-4 w-4" />
                 </span>
                 <div className="min-w-0">
@@ -39,13 +39,13 @@ export function About() {
                       href={fact.href}
                       target="_blank"
                       rel="noreferrer"
-                      className="mt-1 block truncate text-sm font-medium text-cyan-300 hover:text-cyan-200"
+                      className="mt-1 block truncate text-sm font-medium text-lavender-deep hover:text-peach-deep"
                       title={fact.value}
                     >
                       {fact.value}
                     </a>
                   ) : (
-                    <p className="mt-1 truncate text-sm font-medium text-slate-200" title={fact.value}>
+                    <p className="mt-1 truncate text-sm font-medium text-slate-700" title={fact.value}>
                       {fact.value}
                     </p>
                   )}

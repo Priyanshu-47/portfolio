@@ -118,6 +118,8 @@ export const coreStack: CoreTech[] = [
 /* ---------------------------------------------------------------------------
    Experience
 --------------------------------------------------------------------------- */
+export type SceneMode = 'terminal' | 'cloud' | 'vision'
+
 export type Job = {
   role: string
   company: string
@@ -125,6 +127,8 @@ export type Job = {
   period: string
   highlights: string[]
   tags: string[]
+  /** Mini-avatar context action shown in the expanded card */
+  scene?: { mode: SceneMode; label: string; line: string }
 }
 
 export const experience: Job[] = [
@@ -144,6 +148,7 @@ export const experience: Job[] = [
       'Drive AI-assisted development workflows using Cursor AI for code generation, debugging, documentation and impact analysis.',
     ],
     tags: ['ASP.NET Core', 'React', 'SQL Server', 'AWS', 'Cursor AI', 'Auth0'],
+    scene: { mode: 'cloud', label: 'cloud deploy', line: '$ aws ecs update-service --cluster lp-connect' },
   },
   {
     role: 'AI Intern',
@@ -156,6 +161,7 @@ export const experience: Job[] = [
       'Improved verification workflows through intelligent document processing.',
     ],
     tags: ['Python', 'Machine Learning', 'NLP'],
+    scene: { mode: 'terminal', label: 'AI pipeline', line: '$ python train.py --model document-ai' },
   },
   {
     role: 'Summer Intern',
@@ -167,6 +173,7 @@ export const experience: Job[] = [
       'Implemented and evaluated neural-network algorithms for computer-vision use cases.',
     ],
     tags: ['Python', 'CNN', 'Computer Vision'],
+    scene: { mode: 'vision', label: 'computer vision', line: '$ python detect.py --task vehicle-cnn' },
   },
 ]
 

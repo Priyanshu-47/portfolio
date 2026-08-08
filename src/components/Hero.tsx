@@ -32,32 +32,32 @@ export function Hero() {
         style={{ maskImage: 'radial-gradient(ellipse 65% 55% at 50% 32%, black, transparent)' }}
         aria-hidden
       />
-      <div className="animate-orb absolute -left-32 -top-32 h-96 w-96 rounded-full bg-indigo-600/25 blur-3xl" aria-hidden />
-      <div className="animate-orb absolute -right-40 top-1/4 h-[28rem] w-[28rem] rounded-full bg-violet-600/20 blur-3xl [animation-delay:-9s]" aria-hidden />
-      <div className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-cyan-500/10 blur-3xl" aria-hidden />
+      <div className="animate-orb absolute -left-32 -top-32 h-96 w-96 rounded-full bg-lavender/70 blur-3xl" aria-hidden />
+      <div className="animate-orb absolute -right-40 top-1/4 h-[28rem] w-[28rem] rounded-full bg-peach/80 blur-3xl [animation-delay:-9s]" aria-hidden />
+      <div className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-sage/70 blur-3xl" aria-hidden />
 
       <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 px-6 lg:grid-cols-[1.15fr_0.85fr]">
         {/* Left: copy */}
         <div>
           <Reveal>
-            <p className="font-mono text-sm font-medium tracking-wide text-indigo-300">
-              <span className="mr-2 text-cyan-300">{'//'}</span>hey, I&rsquo;m
+            <p className="font-mono text-sm font-medium tracking-wide text-lavender-deep">
+              <span className="mr-2 text-peach-deep">{'//'}</span>hey, I&rsquo;m
             </p>
-            <h1 className="mt-4 font-display text-5xl font-bold leading-[1.02] text-white sm:text-6xl xl:text-7xl">
+            <h1 className="mt-4 font-display text-5xl font-bold leading-[1.02] text-ink-2 sm:text-6xl xl:text-7xl">
               Priyanshu
               <br />
               <span className="text-gradient">Lodha</span>
             </h1>
-            <p className="mt-5 font-display text-xl font-medium text-slate-300 sm:text-2xl">
+            <p className="mt-5 font-display text-xl font-medium text-slate-700 sm:text-2xl">
               {profile.role}
             </p>
-            <p className="mt-3 font-mono text-sm text-slate-400 sm:text-base">
-              <span className="text-cyan-300">$</span>
+            <p className="mt-3 font-mono text-sm text-slate-500 sm:text-base">
+              <span className="text-sage-deep">$</span>
               <span className="ml-2 text-slate-500">builds&nbsp;with</span>{' '}
               <Typewriter words={stackNames} className="font-semibold text-gradient" />
               <span className="sr-only">Core stack: {stackNames.join(', ')}</span>
             </p>
-            <p className="mt-4 max-w-xl leading-relaxed text-slate-400">{profile.tagline}</p>
+            <p className="mt-4 max-w-xl leading-relaxed text-slate-600">{profile.tagline}</p>
           </Reveal>
 
           <Reveal delay={120}>
@@ -88,9 +88,9 @@ export function Hero() {
               ))}
               <a
                 href={`tel:+91${profile.phoneRaw}`}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-300 transition-colors hover:border-indigo-400/40 hover:text-white"
+                className="inline-flex items-center gap-2 rounded-xl border border-white/40 bg-white/40 px-3 py-2 text-sm text-slate-600 backdrop-blur-md transition-colors hover:border-lavender-deep/50 hover:text-ink-2"
               >
-                <Phone className="h-4 w-4 text-indigo-300" />
+                <Phone className="h-4 w-4 text-lavender-deep" />
                 {profile.phone}
               </a>
             </div>
@@ -109,21 +109,21 @@ export function Hero() {
         <Reveal delay={150} className="hidden lg:block">
           <div className="relative mx-auto w-80">
             <div
-              className="absolute -inset-8 rounded-[2.5rem] bg-gradient-to-br from-indigo-500/30 via-violet-500/20 to-cyan-400/20 blur-2xl"
+              className="absolute -inset-8 rounded-[2.5rem] bg-gradient-to-br from-sage/60 via-lavender/60 to-peach/60 blur-2xl"
               aria-hidden
             />
             <div className="glass relative rounded-3xl px-8 py-12 text-center">
-              <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 font-display text-5xl font-bold text-white shadow-lg shadow-indigo-500/30">
+              <div className="mx-auto flex h-28 w-28 items-center justify-center rounded-2xl bg-gradient-to-br from-lavender-deep to-peach-deep font-display text-5xl font-bold text-white shadow-lg shadow-lavender-deep/40">
                 {profile.initials}
               </div>
-              <p className="mt-6 font-display text-xl font-semibold text-white">{profile.name}</p>
-              <p className="mt-1 text-sm text-slate-400">Full Stack · Pune</p>
+              <p className="mt-6 font-display text-xl font-semibold text-ink-2">{profile.name}</p>
+              <p className="mt-1 text-sm text-slate-600">Full Stack · Pune</p>
               <div className="mt-6 flex justify-center gap-2.5">
                 {coreStack.map((tech) => (
                   <span
                     key={tech.name}
                     title={tech.name}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-lg text-slate-200"
+                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/40 bg-white/50 text-lg text-ink-2"
                   >
                     <tech.icon />
                   </span>
@@ -136,7 +136,7 @@ export function Hero() {
               <span
                 key={tech.name}
                 style={floatPositions[i % floatPositions.length]}
-                className="animate-float absolute z-10 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-ink-2/90 text-2xl text-slate-100 shadow-lg shadow-black/40"
+                className="animate-float absolute z-10 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/50 bg-white/70 text-2xl text-ink-2 shadow-none backdrop-blur-md"
                 title={tech.name}
               >
                 <tech.icon />
@@ -150,7 +150,7 @@ export function Hero() {
       <a
         href="#about"
         aria-label="Scroll to about"
-        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-slate-500 transition-colors hover:text-slate-300 md:flex"
+        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-slate-500 transition-colors hover:text-ink-2 md:flex"
       >
         <span className="font-mono text-[11px] tracking-widest uppercase">scroll</span>
         <ChevronDown className="h-4 w-4 animate-bounce" />

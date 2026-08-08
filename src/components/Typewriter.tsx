@@ -49,7 +49,7 @@ export function Typewriter({ words, className = '' }: TypewriterProps) {
       <span aria-hidden>{text}</span>
       <span
         aria-hidden
-        className="animate-caret ml-0.5 inline-block h-[1.1em] w-[2px] translate-y-[3px] rounded-full bg-cyan-300"
+        className="animate-caret ml-0.5 inline-block h-[1.1em] w-[2px] translate-y-[3px] rounded-full bg-lavender-deep"
       />
     </span>
   )
