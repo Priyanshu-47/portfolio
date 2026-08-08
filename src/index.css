@@ -149,17 +149,17 @@ body {
 
 /* High-blur glassmorphism over the pastel canvas */
 @utility glass {
-  background-color: rgba(255, 255, 255, 0.42);
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  backdrop-filter: blur(16px) saturate(1.4);
-  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  background-color: rgba(255, 255, 255, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(22px) saturate(1.5);
+  -webkit-backdrop-filter: blur(22px) saturate(1.5);
 }
 
 @utility glass-soft {
-  background-color: rgba(255, 255, 255, 0.32);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(14px) saturate(1.3);
+  -webkit-backdrop-filter: blur(14px) saturate(1.3);
 }
 
 @utility card-ring {
@@ -223,12 +223,14 @@ body {
 
   .card {
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.24);
-    background-color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.36);
     border-radius: 1.25rem;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 12px 32px -22px rgba(102, 108, 132, 0.35);
+    backdrop-filter: blur(18px) saturate(1.35);
+    -webkit-backdrop-filter: blur(18px) saturate(1.35);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.45),
+      0 12px 32px -22px rgba(102, 108, 132, 0.35);
     transition:
       transform 0.3s ease,
       border-color 0.3s ease,

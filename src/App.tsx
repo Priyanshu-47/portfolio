@@ -1,5 +1,6 @@
 import { ScrollProgress } from './components/ScrollProgress'
 import { Navbar } from './components/Navbar'
+import { BackgroundFX } from './components/BackgroundFX'
 import { Avatar3D } from './components/Avatar3D'
 import { Hero } from './components/Hero'
 import { About } from './components/About'
@@ -21,8 +22,9 @@ export default function App() {
       </a>
       <ScrollProgress />
       <Navbar />
+      <BackgroundFX />
       <Avatar3D />
-      <main>
+      <main className="relative z-10">
         <Hero />
         <About />
         <CoreStack />
