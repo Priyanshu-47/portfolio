@@ -2,6 +2,7 @@ import { useRef, useState, useCallback } from 'react'
 import { Calendar, Boxes, CheckCircle2, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react'
 import { Reveal } from './Reveal'
 import { SectionHeading } from './SectionHeading'
+import { sendAvatarCommand } from './Avatar3D'
 import { Chip } from './Chip'
 import { projects } from '../data/resume'
 import type { Project } from '../data/resume'
@@ -20,8 +21,14 @@ function ProjectCard({ project }: { project: Project }) {
 
   return (
     <article
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      onMouseEnter={() => {
+        setHovered(true)
+        sendAvatarCommand({ type: 'point', cardId: project.title })
+      }}
+      onMouseLeave={() => {
+        setHovered(false)
+        sendAvatarCommand({ type: 'unpoint' })
+      }}
       className="group relative flex h-full w-[340px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-white/40 bg-white/40 p-6 backdrop-blur-md transition-all duration-350 sm:w-[380px] sm:p-7"
       style={{
         ...gradientStyle,

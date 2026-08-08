@@ -45,10 +45,38 @@ function useScrollState(): ScrollState {
 }
 
 /* ---------------------------------------------------------------------------
+   Avatar command bus — cards call sendAvatarCommand('point' / 'unpoint') from
+   their hover handlers. The avatar subscribes with useAvatarCommand(). This is
+   deliberately a plain module-level pub/sub (no context provider) so any card
+   can talk to the avatar without adding props to the tree.
+--------------------------------------------------------------------------- */
+export type AvatarCommand =
+  | { type: 'wave' }
+  | { type: 'point'; cardId: string }
+  | { type: 'unpoint' }
+
+let _avatarListeners: ((cmd: AvatarCommand) => void)[] = []
+
+export function sendAvatarCommand(cmd: AvatarCommand) {
+  for (const fn of _avatarListeners) fn(cmd)
+}
+
+function useAvatarCommand(): AvatarCommand | null {
+  const [cmd, setCmd] = useState<AvatarCommand | null>(null)
+  useEffect(() => {
+    _avatarListeners.push(setCmd)
+    return () => { _avatarListeners = _avatarListeners.filter((f) => f !== setCmd) }
+  }, [])
+  return cmd
+}
+
+/* ---------------------------------------------------------------------------
    TalkingHead — real-time 3D avatar controller (met4citizen, MIT)
 --------------------------------------------------------------------------- */
 // Resolves relative to `base: './'`, so it works under the GH Pages subpath.
-const AVATAR_URL = `${import.meta.env.BASE_URL}avatars/brunette-t.glb`
+// avatarsdk.glb = the male developer companion (AvatarSDK/MetaPerson origin):
+// Mixamo-compatible rig, ARKit 52 blendshapes, Oculus visemes.
+const AVATAR_URL = `${import.meta.env.BASE_URL}avatars/avatarsdk.glb`
 
 const TALKING_HEAD_OPTIONS: TalkingHeadOptions = {
   cameraView: 'full', // full-body framing inside the tile
@@ -59,12 +87,9 @@ const TALKING_HEAD_OPTIONS: TalkingHeadOptions = {
   modelRoot: 'Armature', // Mixamo GLB root bone
   modelPixelRatio: Math.min(window.devicePixelRatio || 1, 2),
   modelFPS: 60,
-  dracoEnabled: false, // brunette-t is meshopt — no Draco payload
+  dracoEnabled: false, // avatarsdk.glb is uncompressed — no Draco payload
   lipsyncModules: [], // this avatar never speaks — don't load the lipsync modules
 }
-
-// Built-in gestures only (no "point" — "index" is the closest).
-const GESTURES = ['index', 'handup', 'side'] as const
 
 /* Gaze target from scroll. lookAt(x, y, t) takes viewport-pixel coordinates
    (verified in the library source), so map the normalized sweep to window size:
@@ -118,20 +143,27 @@ const SECTION_LABELS: Record<string, string> = {
   contact: "let's build something",
 }
 
+/* Gesture cadence — a teacher: waves hello, points to guide attention, and
+   only steps in when the visitor signals interest. */
+const WAVE_DURATION = 3.5
+const WAVE_COOLDOWN = 15_000
+const POINT_DURATION = 2.6
+
 export function Avatar3D() {
   const scroll = useScrollState()
+  const avatarCmd = useAvatarCommand()
   const reduced = useReducedMotion()
   const mountRef = useRef<HTMLDivElement>(null)
   const headRef = useRef<TalkingHead | null>(null)
   const readyRef = useRef(false)
-  const lastGazeRef = useRef(0)
-  const gestureIdxRef = useRef(0)
+  const lastScrollGazeRef = useRef(0)
+  const lastCursorRef = useRef(0)
+  const lastWaveRef = useRef(0)
 
   /* Create the controller once per mount. The library appends its own <canvas>
      to the mount node and auto-resizes via an internal ResizeObserver. StrictMode
      double-invokes effects in dev, so cleanup must fully dispose the instance and
-     the gaze must wait until the avatar has actually loaded (lookAt touches eye
-     objects that only exist post-load). */
+     gaze/gestures must wait until the avatar has actually loaded. */
   useEffect(() => {
     const node = mountRef.current
     if (!node) return
@@ -144,8 +176,13 @@ export function Avatar3D() {
       .then(() => {
         if (headRef.current !== head) return // superseded by a remount
         readyRef.current = true
-        const { x, y } = gazeFromScroll(_currentScroll)
-        head.lookAt(x, y, 900)
+        lastWaveRef.current = performance.now() // mark the greeting as used
+
+        /* Welcome wave — face the camera first, then raise the hand. */
+        head.lookAtCamera(350)
+        window.setTimeout(() => {
+          if (headRef.current === head) head.playGesture('handup', WAVE_DURATION, true)
+        }, 550)
       })
       .catch(() => {
         if (headRef.current === head) readyRef.current = true
@@ -158,31 +195,77 @@ export function Avatar3D() {
     }
   }, [])
 
+  /* Cursor head-tracking — the avatar follows the mouse in idle, giving the
+     "lifelike, aware" baseline. Throttled: lookAt starts a ~300 ms transition,
+     so firing ~12 Hz is plenty. Hand gestures and head/eye gaze share no bones,
+     so pointing/waving never fights the tracking. */
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      const head = headRef.current
+      if (!head || !readyRef.current) return
+      const now = performance.now()
+      if (now - lastCursorRef.current < 80) return
+      lastCursorRef.current = now
+      head.lookAt(e.clientX, e.clientY, 300)
+    }
+    window.addEventListener('mousemove', handleMove, { passive: true })
+    return () => window.removeEventListener('mousemove', handleMove)
+  }, [])
+
   /* Scroll-synced gaze — throttled, since the pub/sub fires on every pixel. */
   useEffect(() => {
     const head = headRef.current
     if (!head || !readyRef.current) return
     const now = performance.now()
-    if (now - lastGazeRef.current < 120) return
-    lastGazeRef.current = now
+    if (now - lastScrollGazeRef.current < 120) return
+    lastScrollGazeRef.current = now
     const { x, y } = gazeFromScroll(scroll)
     head.lookAt(x, y, 900)
   }, [scroll])
 
-  const goTop = () => window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' })
+  /* Wave "hi" again when the visitor scrolls back to the hero top view. */
+  useEffect(() => {
+    if (scroll.section !== 'home' || !readyRef.current) return
+    const now = performance.now()
+    if (now - lastWaveRef.current < WAVE_COOLDOWN) return
+    lastWaveRef.current = now
+    const head = headRef.current
+    if (!head) return
+    head.lookAtCamera(350)
+    head.playGesture('handup', WAVE_DURATION, true)
+  }, [scroll.section, reduced])
 
-  const onPointerEnter = () => {
-    headRef.current?.playGesture('ok', 2.5)
-  }
+  /* Teacher-style pointing — cards broadcast 'point' on hover, 'unpoint' on
+     leave. We let the gesture play out for a beat before it fades back into
+     the idle baseline (lookAt cursor-tracking resumes on its own). */
+  useEffect(() => {
+    if (!avatarCmd || !readyRef.current) return
+    const head = headRef.current
+    if (!head) return
+    if (avatarCmd.type === 'wave') {
+      head.lookAtCamera(350)
+      head.playGesture('handup', WAVE_DURATION, true)
+    } else if (avatarCmd.type === 'point') {
+      head.playGesture('index', POINT_DURATION)
+    }
+    // 'unpoint' needs no action — the gesture simply runs its course.
+  }, [avatarCmd])
+
+  const goTop = () => window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' })
 
   const onClick = () => {
     goTop()
-    const name = GESTURES[gestureIdxRef.current % GESTURES.length]
-    gestureIdxRef.current += 1
-    headRef.current?.playGesture(name, 2.5)
+    /* Clicking the avatar scrolls you home — greet with a wave. */
+    const head = headRef.current
+    if (!head || !readyRef.current) return
+    head.lookAtCamera(350)
+    head.playGesture('handup', WAVE_DURATION, true)
   }
 
   return (
+    /* pointer-events-none on the outer wrapper: the avatar overlay never blocks
+       text selection, button clicks, or card hovers underneath. Only the small
+       interactive tile opts back in via pointer-events-auto on the <button>. */
     <motion.div
       className="pointer-events-none fixed bottom-4 right-4 z-40 hidden select-none items-end gap-3 sm:flex"
       initial={{ opacity: 0, y: 20 }}
@@ -207,7 +290,6 @@ export function Avatar3D() {
       <button
         type="button"
         onClick={onClick}
-        onPointerEnter={onPointerEnter}
         aria-label="Back to top"
         className="pointer-events-auto relative touch-pan-y"
       >

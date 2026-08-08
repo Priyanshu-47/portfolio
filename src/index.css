@@ -75,6 +75,17 @@
   }
 }
 
+/* Gentle idle bob for grid cards — pauses on hover so the lift reads clearly */
+@keyframes card-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
 /* ---------------------------------------------------------------------------
    Base
 --------------------------------------------------------------------------- */
@@ -158,6 +169,17 @@ body {
 
 @utility animate-caret {
   animation: caret 1.1s steps(1) infinite;
+}
+
+/* Subtle "floating" card effect with staggered delays per card.
+   `animation: none` on hover hands transform back to .card-hover:hover so the
+   hover lift and micro-shadow still take effect without fighting the bob. */
+@utility card-bob {
+  animation: card-bob 6s ease-in-out infinite;
+}
+
+.card-bob:hover {
+  animation: none;
 }
 
 @utility spotlight-card {

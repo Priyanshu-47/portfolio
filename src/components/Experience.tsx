@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { Calendar, MapPin, CheckCircle2, ChevronDown, Cloud, Code2, Eye } from 'lucide-react'
 import { Reveal } from './Reveal'
 import { SectionHeading } from './SectionHeading'
+import { sendAvatarCommand } from './Avatar3D'
 import { Chip } from './Chip'
 import { experience } from '../data/resume'
 import type { Job, SceneMode } from '../data/resume'
@@ -72,8 +73,14 @@ export function Experience() {
                 role="button"
                 tabIndex={0}
                 aria-expanded={open}
-                onMouseEnter={() => setExpanded(i)}
-                onMouseLeave={() => setExpanded(0)}
+                onMouseEnter={() => {
+                  setExpanded(i)
+                  sendAvatarCommand({ type: 'point', cardId: job.company })
+                }}
+                onMouseLeave={() => {
+                  setExpanded(0)
+                  sendAvatarCommand({ type: 'unpoint' })
+                }}
                 onFocus={() => setExpanded(i)}
                 onBlur={() => setExpanded(0)}
                 onKeyDown={(e) => {
