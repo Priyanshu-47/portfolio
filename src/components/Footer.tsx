@@ -37,7 +37,7 @@ export function Footer() {
         aria-hidden
       />
 
-      <div className="relative mx-auto max-w-6xl px-6 py-20 sm:py-24">
+      <div className="relative mx-auto max-w-6xl px-6 py-16 sm:py-20">
         <Reveal>
           <h2 className="font-display text-3xl font-bold leading-tight text-ink-2 sm:text-5xl">
             Let&rsquo;s build something
@@ -52,9 +52,8 @@ export function Footer() {
 
         <Reveal delay={100}>
           <div className="mt-9 flex flex-wrap items-center gap-4">
-            <a href={`mailto:${profile.email}`} className="btn-primary">
+            <a href={`mailto:${profile.email}`} className="btn-primary" aria-label="Send email">
               <Mail className="h-4 w-4" />
-              {profile.email}
             </a>
             <a href={profile.resumeUrl} download className="btn-ghost">
               <Download className="h-4 w-4" />

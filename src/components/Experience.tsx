@@ -62,7 +62,7 @@ export function Experience() {
         description="From AI internships to enterprise platforms serving institutional investors — hover a card to dive into the milestones."
       />
 
-      <div className="mx-auto flex max-w-3xl flex-col gap-4">
+      <div className="relative z-10 isolate mx-auto flex max-w-3xl flex-col gap-4">
         {experience.map((job, i) => {
           const open = expanded === i
           return (
@@ -83,10 +83,10 @@ export function Experience() {
                   }
                 }}
                 onClick={() => setExpanded(open ? null : i)}
-                className={`group cursor-pointer rounded-2xl border p-5 backdrop-blur-md transition-colors duration-300 sm:p-6 ${
+                className={`group relative cursor-pointer rounded-2xl border p-5 backdrop-blur-md transition-colors duration-300 sm:p-6 ${
                   open
-                    ? 'border-white/70 bg-white/55 shadow-[0_20px_44px_-26px_rgba(122,112,158,0.45)]'
-                    : 'border-white/40 bg-white/40 hover:border-white/60 hover:bg-white/50'
+                    ? 'z-20 border-white/70 bg-white/55 shadow-[0_20px_44px_-26px_rgba(122,112,158,0.45)]'
+                    : 'z-10 border-white/40 bg-white/40 hover:border-white/60 hover:bg-white/50'
                 }`}
               >
                 <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-2">
@@ -126,7 +126,7 @@ export function Experience() {
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: reduced ? 0 : 0.35, ease: 'easeInOut' }}
-                      className="overflow-hidden"
+                      className={`overflow-hidden ${open ? 'pointer-events-auto' : 'pointer-events-none'}`}
                     >
                       <div className="pt-4">
                         <ul className="space-y-2">

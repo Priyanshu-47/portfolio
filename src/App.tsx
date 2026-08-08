@@ -1,6 +1,6 @@
 import { ScrollProgress } from './components/ScrollProgress'
 import { Navbar } from './components/Navbar'
-import { Avatar } from './components/Avatar'
+import { Avatar3D } from './components/Avatar3D'
 import { Hero } from './components/Hero'
 import { About } from './components/About'
 import { CoreStack } from './components/CoreStack'
@@ -21,7 +21,7 @@ export default function App() {
       </a>
       <ScrollProgress />
       <Navbar />
-      <Avatar />
+      <Avatar3D />
       <main>
         <Hero />
         <About />
