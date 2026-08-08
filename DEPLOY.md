@@ -1,89 +1,62 @@
 # Deploying this Portfolio
 
-The production build lives in `E:\Portfolio\dist\`. It's a pure static site
-(5 files, ~400 KB) with **relative asset paths**, so it works under any
-subpath — a GitHub Pages repo, your own domain, Netlify, anywhere.
+**Live at https://priyanshu-47.github.io/portfolio/** — fully automated.
 
-You have **no local Git** on this machine, so the deployment path is the
-browser — you don't need to install anything. Pick **Option A** (GitHub
-Pages) or **Option B** (Netlify Drop). Both take ~2 minutes.
+The repo `github.com/Priyanshu-47/portfolio` holds the **source**. A GitHub
+Actions workflow (`.github/workflows/deploy.yml`) builds and deploys to
+GitHub Pages automatically on **every push to `main`** — nothing manual.
 
-> The `base: './'` in `vite.config.ts` is what makes this work: every asset
-> link in `dist/index.html` is relative (`./assets/...`), so it resolves
-> correctly no matter what URL hosts it.
+- Source path: `main` branch → `vite build` → `dist/` → `actions/deploy-pages`
+- `base: './'` in `vite.config.ts` makes all asset paths relative, so the
+  site works under the `/portfolio/` subpath.
 
 ---
 
-## Option A — GitHub Pages (browser upload, no Git)
+## Updating the site
 
-### 1. Create the repository
-1. Go to **github.com** and sign in.
-2. Click **`+`** (top-right) → **New repository**.
-3. **Repository name** — two choices:
-   - `username.github.io` (exactly your GitHub username, e.g. `Priyanshu-47.github.io`)
-     → hosts at `https://Priyanshu-47.github.io/`
-   - any other name, e.g. `portfolio` → hosts at
-     `https://Priyanshu-47.github.io/portfolio/`
-4. Set it **Public**. **Do NOT** check "Add a README" / ".gitignore" / "license" —
-   leave everything else empty so the upload lands clean.
-5. Click **Create repository**.
+1. Make your changes in `src/`.
+2. Commit and push:
+   ```bash
+   git add -A
+   git commit -m "update: <what changed>"
+   git push
+   ```
+3. GitHub Actions builds and deploys in ~40s.
+4. Check the run: `gh run watch` (from `E:\Portfolio`).
 
-### 2. Upload the built files
-1. On the empty repo page, click **`Add file`** (top-right) → **Upload files**.
-2. Open `E:\Portfolio\dist` in File Explorer.
-3. Select **everything inside** the `dist` folder — `index.html`,
-   `favicon.svg`, `resume.pdf`, and the `assets` folder — and drag them into
-   the browser's upload box.
-   ⚠️ Don't drag the `dist` folder itself — only its contents.
-4. Click **Commit changes** (the default commit message is fine).
-
-### 3. Turn on Pages
-1. In the repo, go to **Settings** → **Pages** (left sidebar).
-2. Under **Build and deployment** → **Source**, select **Deploy from a branch**.
-3. **Branch**: `main` · **Folder**: `/ (root)` → **Save**.
-4. Wait **1–2 minutes** (the first build takes a little longer).
-
-### 4. Visit your site
-- Repo `username.github.io` → `https://<username>.github.io/`
-- Repo `portfolio` → `https://<username>.github.io/portfolio/`
-
-Every future update = re-run `npm run build`, then re-upload the changed
-files in `dist` the same way.
+To preview locally first: `npm run dev` (http://localhost:5173) or
+`npm run build && npm run preview`.
 
 ---
 
-## Option B — Netlify Drop (zero-setup, instant live URL)
+## Local setup (already done on this machine)
 
-The simplest option of all — no repo, no settings, just drag and drop:
-
-1. Go to **https://app.netlify.com/drop** (sign in with email/GitHub/Google).
-2. Drag the **`dist` folder itself** into the browser page.
-3. Your site is live within seconds at a random `https://<random-name>.netlify.app` URL.
-4. To rename it: **Site configuration** → **Site details** → **Change site name**.
-5. Netlify gives you a shareable URL instantly. You can connect a custom
-   domain later in **Domain management**.
-
-> Netlify Drop sites are free and stay up indefinitely. This is the fastest
-> way to get a recruiter-facing link today.
+- **Git** installed via winget (`Git.Git`)
+- **GitHub CLI** installed via winget (`GitHub.cli`), logged in as
+  `Priyanshu-47` with `repo`, `workflow`, `read:org`, `gist` scopes
+- `gh auth setup-git` configures git to authenticate with the token
+- Local git identity: `Priyanshu Lodha` / GitHub noreply email
+- Origin remote: `https://github.com/Priyanshu-47/portfolio.git`
 
 ---
 
-## Future: one-command deploys (once you install Git)
+## What the live profile data shows (About section)
 
-When you install Git on this machine, `npm run deploy` does everything —
-builds, then pushes `dist/` to the `gh-pages` branch of your repo via the
-`gh-pages` helper (auto-installed by `npx`):
+The About section's **GitHub** and **Open Source** cards are backed by the
+real profile `github.com/Priyanshu-47`, fetched 2026-08-08:
 
-```bash
-npm run deploy
-```
+- 27 public repositories (Python, C#, TypeScript, SQL, JS, Dart, more)
+- Active: daily NeetCode DSA practice (`neetcode-submissions`), plus a
+  certification hub and Hexaware/ARTH training projects
 
-That requires:
-- Git installed and on PATH (`winget install --id Git.Git`)
-- You've set the remote:
-  ```bash
-  git init
-  git remote add origin https://github.com/<username>/<repo>.git
-  ```
+These live values live in `src/data/resume.ts` → `profile.githubStats` —
+update the numbers there if the profile changes.
 
-Until then, Options A and B above need nothing but a browser.
+---
+
+## Troubleshooting
+
+- **Deploy failed?** `gh run list` → `gh run view <id> --log-failed`
+- **Wrong URL?** Pages is set to `build_type: workflow` — change via
+  repo → Settings → Pages → Source → **Deploy from a branch**.
+- **No `workflow` scope?** `gh auth refresh -h github.com -s workflow`
