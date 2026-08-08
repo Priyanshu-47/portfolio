@@ -6,8 +6,8 @@ import { useReducedMotion } from 'framer-motion'
 /* ---------------------------------------------------------------------------
    BackgroundFX — a fixed, scroll-reactive layer that sits BEHIND the content
    sections (main is `relative z-10`):
-     • five floating 3D solids (RoamingShapes) that drift randomly across the
-       ENTIRE viewport as you scroll,
+     • five floating 3D solids (RoamingShapes) that roam across the ENTIRE
+       viewport while you scroll — and freeze when the page is idle,
      • four blurred pastel orbs that wash vertically on scroll, and
      • a faint structural grid.
    Everything is pointer-events-none, so no content beneath is ever blocked.
@@ -33,10 +33,11 @@ const ORBS: Orb[] = [
    Floating 3D solids. The camera sits at z=6 (fov 40°), so a shape parked at
    depth z spans halfH = (6 - z) * tan(20°) of visible height; pickTarget()
    randomizes inside that frustum (× aspect for width) so a shape can roam to
-   any on-screen spot. Targets re-roll every few seconds — and ~every 0.7s
-   while actively scrolling — and the lerp rate scales with scroll velocity,
-   so shapes sweep the whole viewport the faster you scroll, then settle into
-   a slow drift when you stop.
+   any on-screen spot. Motion is driven ONLY by scrolling: shapes chase a
+   random target while the visitor scrolls (a new target re-rolls after
+   ~90px of cumulative scroll travel, so a nudge moves them a little and a
+   long fling sends them sweeping across the viewport), then freeze ~0.35s
+   after the last scroll pixel — no idle drift, no idle rotation.
 --------------------------------------------------------------------------- */
 type Shape = {
   kind: 'icosa' | 'octa' | 'torusKnot' | 'dodeca' | 'torus'
@@ -57,7 +58,16 @@ const SHAPES: Shape[] = [
 ]
 
 const CAM_Z = 6
-const HALF_TAN = Math.tan((40 * Math.PI) / 180 / 2) // tan(fov/2)
+const HALF_TAN = Math.tan((40 * Math.PI) / 180 / 2)
+
+// Motion only happens while the visitor is actually scrolling. Shapes keep
+// moving for this many seconds after the last scroll pixel (so they finish
+// their path smoothly), then freeze completely — no idle drift, no idle
+// rotation. Targets re-roll after this much cumulative scroll travel, never
+// more often than RETARGET_MIN_T apart.
+const SETTLE = 0.35
+const RETARGET_DIST = 90
+const RETARGET_MIN_T = 0.5 // tan(fov/2)
 
 function pickTarget(shape: Shape, aspect: number, out: THREE.Vector3) {
   const z = shape.zMin + Math.random() * (shape.zMax - shape.zMin)
@@ -69,7 +79,10 @@ function RoamingShapes({ reduced }: { reduced: boolean }) {
   const refs = useRef<(THREE.Mesh | null)[]>([])
   const targets = useRef<THREE.Vector3[]>(SHAPES.map(() => new THREE.Vector3()))
   const lastY = useRef(0)
-  const retargetAt = useRef(0)
+  const lastScrollRef = useRef(-1) // starts "idle" so shapes rest until the first scroll
+  const scrollAccum = useRef(0)
+  const lastRollRef = useRef(0)
+  const moveClock = useRef(0) // only advances while active → rotation freezes cleanly
 
   // Park each shape at a random full-screen spot on mount — avoids a first
   // paint with everything piled at the origin, and reduced-motion users still
@@ -91,16 +104,24 @@ function RoamingShapes({ reduced }: { reduced: boolean }) {
     const y = window.scrollY
     const v = Math.abs(y - lastY.current)
     lastY.current = y
+    if (v > 0.5) lastScrollRef.current = t
 
-    // Re-roll targets every few seconds — or ~0.7s while the visitor is
-    // actively scrolling, so movement is tied to the scroll.
-    const boost = v > 3 ? 0.7 : 2.5
-    if (t > retargetAt.current) {
-      retargetAt.current = t + boost
+    // Idle: no scrolling for SETTLE seconds → shapes stay put (no drift,
+    // no rotation, no retargeting) until the visitor scrolls again.
+    if (t - lastScrollRef.current > SETTLE) return
+
+    const d = Math.min(dt, 0.05)
+    moveClock.current += d // only advances while active → rotation freezes, no snap
+
+    // Re-roll a random target after enough scroll travel; a tiny nudge moves
+    // shapes a little, a long fling sends them across the whole viewport.
+    scrollAccum.current += v
+    if (scrollAccum.current > RETARGET_DIST && t - lastRollRef.current > RETARGET_MIN_T) {
+      scrollAccum.current = 0
+      lastRollRef.current = t
       SHAPES.forEach((s, i) => pickTarget(s, aspect, targets.current[i]))
     }
 
-    const d = Math.min(dt, 0.05)
     const k = 1 - Math.exp(-(0.6 + Math.min(v * 0.012, 3)) * d)
     SHAPES.forEach((s, i) => {
       const m = refs.current[i]
@@ -109,8 +130,8 @@ function RoamingShapes({ reduced }: { reduced: boolean }) {
       m.position.x += (target.x - m.position.x) * k
       m.position.y += (target.y - m.position.y) * k
       m.position.z += (target.z - m.position.z) * k
-      m.rotation.x = t * s.speed * 1.3
-      m.rotation.y = t * s.speed
+      m.rotation.x = moveClock.current * s.speed * 1.3
+      m.rotation.y = moveClock.current * s.speed
     })
   })
 
@@ -147,17 +168,28 @@ export function BackgroundFX() {
     if (reduced || !wrapRef.current) return
     let raf = 0
     let current = 0
+    let prevY = window.scrollY
+    let lastMoved = -Infinity
 
     const tick = () => {
-      const max = document.documentElement.scrollHeight - window.innerHeight
-      const target = max > 0 ? window.scrollY / max : 0
-      current += (target - current) * 0.08 // smooth trailing parallax
-      const vh = window.innerHeight
-      ORBS.forEach((orb, i) => {
-        const el = orbRefs.current[i]
-        if (!el) return
-        el.style.transform = `translate3d(0, ${(-current * orb.parallax * vh) / 100}px, 0)`
-      })
+      const now = performance.now()
+      const y = window.scrollY
+      if (Math.abs(y - prevY) > 0.5) lastMoved = now
+      prevY = y
+
+      // Orbs trail the scroll like the shapes: freeze once scrolling has
+      // been idle for SETTLE seconds, so nothing drifts at rest.
+      if (now - lastMoved < SETTLE * 1000) {
+        const max = document.documentElement.scrollHeight - window.innerHeight
+        const target = max > 0 ? y / max : 0
+        current += (target - current) * 0.15 // smooth trailing parallax
+        const vh = window.innerHeight
+        ORBS.forEach((orb, i) => {
+          const el = orbRefs.current[i]
+          if (!el) return
+          el.style.transform = `translate3d(0, ${(-current * orb.parallax * vh) / 100}px, 0)`
+        })
+      }
       raf = requestAnimationFrame(tick)
     }
     raf = requestAnimationFrame(tick)
