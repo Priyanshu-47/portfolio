@@ -117,7 +117,11 @@ export function Hero() {
                 src={`${import.meta.env.BASE_URL}model-3d-3d-model-man-wearing-glasses_1393761-192.jpg`}
                 alt={profile.name}
                 className="mx-auto h-28 w-28 rounded-2xl object-cover shadow-lg shadow-lavender-deep/40"
-                style={{ objectPosition: '35% 25%' }}
+                style={{
+                  objectPosition: '40% 30%',
+                  maskImage: 'radial-gradient(ellipse 75% 80% at 40% 40%, black 55%, transparent 100%)',
+                  WebkitMaskImage: 'radial-gradient(ellipse 75% 80% at 40% 40%, black 55%, transparent 100%)',
+                }}
               />
               <p className="mt-6 font-display text-xl font-semibold text-ink-2">{profile.name}</p>
               <p className="mt-1 text-sm text-slate-600">Full Stack · Pune</p>
