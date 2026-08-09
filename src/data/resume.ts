@@ -27,7 +27,7 @@ export const profile = {
   email: 'priyanshulodha47@gmail.com',
   phone: '+91 98500 50647',
   phoneRaw: '9850050647',
-  resumeUrl: '/resume.pdf',
+  resumeUrl: './resume.pdf',
   linkedin: 'https://linkedin.com/in/priyanshu-lodha/',
   github: 'https://github.com/Priyanshu-47',
   tagline:
