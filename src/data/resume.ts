@@ -38,7 +38,7 @@ export const profile = {
     'Beyond enterprise software, I have trained CNNs for computer vision, built AI pipelines for healthcare document analysis, and shipped full-stack SaaS products — inventory management, HR platforms and food-ordering systems — end to end. I am a strong believer in AI-assisted engineering: Cursor AI is woven into my daily workflow for code generation, debugging, documentation and impact analysis.',
   stats: [
     { value: '2+', label: 'Years of experience' },
-    { value: '3', label: 'Projects shipped' },
+    { value: '5', label: 'Projects shipped' },
     { value: '5+', label: 'AWS services used' },
     { value: '5', label: 'Certifications' },
   ],
@@ -78,7 +78,7 @@ export const coreStack: CoreTech[] = [
     tagline: 'Backend backbone',
     description:
       'ASP.NET Core REST APIs, Entity Framework Core and Clean Architecture power every backend I build.',
-    usage: ['Carlyle LP Connect', 'WorkSphere HR', 'Hotpot'],
+    usage: ['Carlyle LP Connect', 'HotPot', 'ReleaseRadar'],
     icon: SiDotnet,
   },
   {
@@ -86,23 +86,23 @@ export const coreStack: CoreTech[] = [
     tagline: 'Frontend craft',
     description:
       'Component-driven, typed interfaces built with React, TypeScript and Redux — responsive, accessible and fast.',
-    usage: ['Every project', 'Hexaware platforms'],
+    usage: ['Every project', 'IncidentLens AI', 'ReleaseRadar'],
     icon: SiReact,
   },
   {
     name: 'AWS',
     tagline: 'Cloud & scale',
     description:
-      'Lambda, ECS, S3, RDS and CloudWatch for deployment, storage, observability and monitoring in production.',
-    usage: ['Carlyle LP Connect', 'Cloud-native builds'],
+      'Lambda, ECS, S3, RDS, CloudWatch and Bedrock for deployment, storage, AI workflows and monitoring in production.',
+    usage: ['Carlyle LP Connect', 'Maverick Certification Hub', 'PolicySense AI'],
     icon: FaAws,
   },
   {
     name: 'Python',
     tagline: 'AI & data',
     description:
-      'CNNs and machine-learning pipelines for computer-vision and healthcare document-analysis use cases.',
-    usage: ['NeoDocto', 'LinuxWorld'],
+      'CNNs, machine-learning and LLM pipelines — LangChain, RAG and vector search — for AI-powered applications.',
+    usage: ['PolicySense AI', 'IncidentLens AI', 'NeoDocto'],
     icon: SiPython,
   },
   {
@@ -192,19 +192,6 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    title: 'HotPot',
-    subtitle: 'Online food-ordering platform',
-    period: 'Jan 2024 – Mar 2024',
-    description:
-      'A full-stack web-based food ordering platform supporting menu browsing, cart management, order placement and delivery workflows.',
-    highlights: [
-      'Built a React frontend and .NET Core backend with JWT-based authentication and role-based access.',
-      'Implemented Redux for centralized application state management across customer workflows.',
-      'Developed REST APIs and database components for menu, cart, address and order workflows using MSSQL and Entity Framework Core.',
-    ],
-    tags: ['.NET Core', 'React', 'MSSQL', 'C#', 'JWT'],
-  },
-  {
     title: 'Maverick Certification Hub',
     subtitle: 'Corporate certification automation platform',
     period: '2026',
@@ -220,6 +207,32 @@ export const projects: Project[] = [
     featured: true,
   },
   {
+    title: 'PolicySense AI',
+    subtitle: 'AI-powered insurance discovery platform',
+    period: 'Jan 2026 – Apr 2026',
+    description:
+      'An AI-powered insurance discovery platform that analyzes policy documents and identifies potentially applicable benefits.',
+    highlights: [
+      'Implemented a Retrieval-Augmented Generation (RAG) pipeline using document embeddings, semantic retrieval and vector search for question answering over insurance documents.',
+      'Built AI workflows for policy summarization, coverage analysis and claim guidance using LLM-based application workflows.',
+      'Integrated OCR and document intelligence workflows for processing unstructured policy documents and retrieving relevant policy context.',
+    ],
+    tags: ['Python', 'OpenAI API', 'LangChain', 'PostgreSQL', 'AWS Bedrock'],
+  },
+  {
+    title: 'IncidentLens AI',
+    subtitle: 'AI-powered production incident analysis',
+    period: 'May 2026 – Jul 2026',
+    description:
+      'An AI-powered production incident analysis platform that analyzes application logs and historical incidents to accelerate troubleshooting.',
+    highlights: [
+      'Implemented log ingestion, error classification, document embeddings and semantic retrieval to identify similar incidents from a historical knowledge base.',
+      'Built a Retrieval-Augmented Generation (RAG) workflow combining retrieved incident context with LLM reasoning to generate root-cause candidates and remediation suggestions.',
+      'Developed REST APIs and a React dashboard for log submission, incident analysis and investigation reports.',
+    ],
+    tags: ['Python', 'LangChain', 'OpenAI API', 'PostgreSQL', 'React'],
+  },
+  {
     title: 'ReleaseRadar',
     subtitle: 'Developer release intelligence platform',
     period: 'May 2026 – Jul 2026',
@@ -231,6 +244,19 @@ export const projects: Project[] = [
       'Developed React dashboards for engineering teams to monitor release readiness, deployment status and historical changes.',
     ],
     tags: ['.NET 10', 'React', 'PostgreSQL', 'GitHub API', 'Docker', 'AWS'],
+  },
+  {
+    title: 'HotPot',
+    subtitle: 'Online food-ordering platform',
+    period: 'Jan 2024 – Mar 2024',
+    description:
+      'A full-stack web-based food ordering platform supporting menu browsing, cart management, order placement and delivery workflows.',
+    highlights: [
+      'Built a React frontend and .NET Core backend with JWT-based authentication and role-based access.',
+      'Implemented Redux for centralized application state management across customer workflows.',
+      'Developed REST APIs and database components for menu, cart, address and order workflows using MSSQL and Entity Framework Core.',
+    ],
+    tags: ['.NET Core', 'React', 'MSSQL', 'C#', 'JWT'],
   },
 ]
 
@@ -257,6 +283,17 @@ export const skillGroups: SkillGroup[] = [
     ],
   },
   {
+    title: 'AI & GenAI',
+    skills: [
+      { label: 'LLM Applications' },
+      { label: 'OpenAI API' },
+      { label: 'LangChain' },
+      { label: 'RAG' },
+      { label: 'Prompt Engineering' },
+      { label: 'Vector Search' },
+    ],
+  },
+  {
     title: 'Frameworks',
     skills: [
       { label: 'ASP.NET Core', icon: SiDotnet },
@@ -272,6 +309,7 @@ export const skillGroups: SkillGroup[] = [
     skills: [
       { label: 'SQL Server', icon: SiMysql },
       { label: 'PostgreSQL', icon: SiPostgresql },
+      { label: 'Neon DB' },
     ],
   },
   {
@@ -282,6 +320,8 @@ export const skillGroups: SkillGroup[] = [
       { label: 'AWS S3' },
       { label: 'AWS RDS' },
       { label: 'AWS CloudWatch' },
+      { label: 'AWS Bedrock' },
+      { label: 'AWS Cognito' },
     ],
   },
   {
@@ -289,6 +329,7 @@ export const skillGroups: SkillGroup[] = [
     skills: [
       { label: 'Git', icon: SiGithub },
       { label: 'GitHub', icon: SiGithub },
+      { label: 'GitHub API' },
       { label: 'Docker', icon: SiDocker },
       { label: 'Swagger', icon: SiSwagger },
       { label: 'Postman' },
@@ -327,9 +368,16 @@ export const education: Education[] = [
     location: 'Chandwad, MH',
   },
   {
-    school: 'ARTH — LinuxWorld Informatics Pvt Ltd',
-    period: 'Sept 2020 – Dec 2021',
-    location: 'Jaipur, RJ',
+    school: 'Sanjivani Junior College',
+    degree: 'Higher Secondary Certificate (HSC) · 79.8%',
+    period: '2017 – 2019',
+    location: 'Kopargaon, MH',
+  },
+  {
+    school: 'Samata International School',
+    degree: 'Secondary School Certificate (SSC) · 91.2%',
+    period: '2017',
+    location: 'Kopargaon, MH',
   },
 ]
 
