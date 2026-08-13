@@ -77,8 +77,7 @@ export function Hero() {
                 <a
                   key={s.label}
                   href={s.href}
-                  target="_blank"
-                  rel="noreferrer"
+                  {...(s.href.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noreferrer' })}
                   aria-label={s.label}
                   title={s.label}
                   className="social-btn"

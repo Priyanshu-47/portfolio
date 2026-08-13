@@ -14,8 +14,7 @@ function FooterSocial({ label }: { label: string }) {
   return (
     <a
       href={href}
-      target="_blank"
-      rel="noreferrer"
+      {...(href.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noreferrer' })}
       aria-label={label}
       className="social-btn"
     >
