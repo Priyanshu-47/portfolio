@@ -38,9 +38,9 @@ export const profile = {
     'Beyond enterprise software, I have trained CNNs for computer vision, built AI pipelines for healthcare document analysis, and shipped full-stack SaaS products — inventory management, HR platforms and food-ordering systems — end to end. I am a strong believer in AI-assisted engineering: Cursor AI is woven into my daily workflow for code generation, debugging, documentation and impact analysis.',
   stats: [
     { value: '2+', label: 'Years of experience' },
-    { value: '4+', label: 'Projects shipped' },
+    { value: '3', label: 'Projects shipped' },
     { value: '5+', label: 'AWS services used' },
-    { value: '3', label: 'Certifications' },
+    { value: '5', label: 'Certifications' },
   ],
   /* Live values pulled from https://github.com/Priyanshu-47 (fetched 2026-08-08) */
   githubStats: {
@@ -192,55 +192,45 @@ export type Project = {
 
 export const projects: Project[] = [
   {
-    title: 'Carlyle — LP Connect',
-    subtitle: 'Enterprise investor platform',
-    period: 'May 2024 – Present',
-    description:
-      'Enterprise modules for Carlyle’s investor platform, used worldwide for secure investment management.',
-    highlights: [
-      'Designed backend APIs with ASP.NET Core and Entity Framework.',
-      'Built reusable React components and integrated secure authentication via Auth0.',
-      'Leveraged Cursor AI to accelerate impact analysis, implementation, testing and documentation.',
-    ],
-    tags: ['.NET Core', 'React', 'SQL Server', 'Auth0', 'AWS', 'Cursor AI'],
-    featured: true,
-  },
-  {
-    title: 'InventoryFlow SaaS',
-    subtitle: 'Cloud-ready inventory management',
-    period: 'May 2026 – Jul 2026',
-    description:
-      'A cloud-ready inventory platform for stock tracking, purchase orders and warehouse management.',
-    highlights: [
-      'Implemented real-time inventory updates using SignalR.',
-      'Built dashboards for analytics, inventory alerts and reporting.',
-    ],
-    tags: ['ASP.NET Core', 'React', 'SignalR', 'PostgreSQL'],
-  },
-  {
-    title: 'WorkSphere HR',
-    subtitle: 'Full-stack HR management',
-    period: 'Jan 2026 – Apr 2026',
-    description:
-      'A full-stack HR platform covering employee management, attendance, payroll and leave tracking.',
-    highlights: [
-      'Implemented JWT authentication, role-based authorization and REST APIs with ASP.NET Core.',
-      'Developed responsive React dashboards for HR, Managers and Employees.',
-      'Containerized with Docker and backed by PostgreSQL for scalable storage.',
-    ],
-    tags: ['.NET 10', 'React', 'PostgreSQL', 'Docker', 'JWT'],
-  },
-  {
-    title: 'Hotpot',
+    title: 'HotPot',
     subtitle: 'Online food-ordering platform',
     period: 'Jan 2024 – Mar 2024',
     description:
-      'A web-based food-ordering platform to browse menus, place orders and track deliveries in real time.',
+      'A full-stack web-based food ordering platform supporting menu browsing, cart management, order placement and delivery workflows.',
     highlights: [
-      'Built a React frontend with Redux for centralized state management.',
-      'Created a .NET Core backend with role-based JWT authentication.',
+      'Built a React frontend and .NET Core backend with JWT-based authentication and role-based access.',
+      'Implemented Redux for centralized application state management across customer workflows.',
+      'Developed REST APIs and database components for menu, cart, address and order workflows using MSSQL and Entity Framework Core.',
     ],
-    tags: ['.NET Core', 'React', 'MSSQL', 'Redux', 'JWT'],
+    tags: ['.NET Core', 'React', 'MSSQL', 'C#', 'JWT'],
+  },
+  {
+    title: 'Maverick Certification Hub',
+    subtitle: 'Corporate certification automation platform',
+    period: '2026',
+    description:
+      'An end-to-end automation platform for corporate certification drives, streamlining eligibility validation and voucher processing workflows.',
+    highlights: [
+      'Implemented a custom eligibility rules engine and automated certification workflows to reduce manual voucher processing errors.',
+      'Integrated AWS Cognito for secure authentication and AWS Bedrock (Nova 2 Lite) for intelligent workflow automation and analytics.',
+      'Architected full-stack Next.js APIs with a Neon DB backend and developed real-time pass-rate and ROI analytics dashboards.',
+      'Runner-Up — Hexaware Maverick Designathon 2026, developed within a 48-hour engineering cycle.',
+    ],
+    tags: ['Next.js', 'AWS Bedrock', 'AWS Cognito', 'Neon DB'],
+    featured: true,
+  },
+  {
+    title: 'ReleaseRadar',
+    subtitle: 'Developer release intelligence platform',
+    period: 'May 2026 – Jul 2026',
+    description:
+      'A developer release intelligence platform integrating source control activity, pull requests, deployments and environment health into a unified release view.',
+    highlights: [
+      'Built ASP.NET Core REST APIs to aggregate repository activity, release readiness, deployment history and environment status.',
+      'Integrated GitHub APIs to correlate pull requests, commits and release changes with deployment workflows.',
+      'Developed React dashboards for engineering teams to monitor release readiness, deployment status and historical changes.',
+    ],
+    tags: ['.NET 10', 'React', 'PostgreSQL', 'GitHub API', 'Docker', 'AWS'],
   },
 ]
 
@@ -346,10 +336,13 @@ export const education: Education[] = [
 export type Certification = {
   title: string
   issuer: string
+  period?: string
 }
 
 export const certifications: Certification[] = [
+  { title: 'Claude Certified Developer — Foundations', issuer: 'Anthropic', period: 'Aug 2026' },
+  { title: 'Claude Certified Associate — Foundations', issuer: 'Anthropic', period: 'Aug 2026' },
   { title: 'Microsoft Azure Fundamentals (AZ-900)', issuer: 'Microsoft' },
-  { title: 'AWS AI Learning Track', issuer: 'AWS' },
   { title: 'Runner-Up — Hexaware Maverick Designathon 2026', issuer: 'Hexaware Technologies' },
+  { title: 'AWS AI Learning Track', issuer: 'AWS' },
 ]

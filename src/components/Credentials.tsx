@@ -47,7 +47,15 @@ export function Credentials() {
                 </span>
                 <div className="min-w-0">
                   <p className="font-medium text-slate-700">{cert.title}</p>
-                  <p className="mt-0.5 text-xs text-slate-500">{cert.issuer}</p>
+                  <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-slate-500">
+                    <span>{cert.issuer}</span>
+                    {cert.period ? (
+                      <span className="inline-flex items-center gap-1 font-mono text-lavender-deep">
+                        <Calendar className="h-3 w-3" />
+                        {cert.period}
+                      </span>
+                    ) : null}
+                  </p>
                 </div>
               </div>
             ))}
