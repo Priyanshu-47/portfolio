@@ -1,183 +1,86 @@
-import { useRef, useState, useCallback } from 'react'
-import { Calendar, Boxes, CheckCircle2, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react'
-import { Reveal } from './Reveal'
-import { SectionHeading } from './SectionHeading'
-import { Chip } from './Chip'
-import { projects } from '../data/resume'
-import type { Project } from '../data/resume'
+import { Link } from "react-router-dom";
+import { FiArrowUpRight } from "react-icons/fi";
+import { Reveal } from "./Reveal";
+import { projects } from "../data/resume";
 
-/* ---------------------------------------------------------------------------
-   Single project card — glassmorphism with hover micro-zoom + gradient shift
---------------------------------------------------------------------------- */
-function ProjectCard({ project }: { project: Project }) {
-  const [hovered, setHovered] = useState(false)
-
-  // Shift background gradient position on hover for a dynamic feel
-  const gradientStyle = {
-    backgroundPosition: hovered ? '60% 40%' : '50% 50%',
-    transition: 'background-position 0.5s ease, transform 0.35s ease, box-shadow 0.35s ease',
-  }
-
-  return (
-    <article
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      className="group relative flex h-full w-[340px] shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-white/40 bg-white/40 p-6 backdrop-blur-md transition-all duration-350 sm:w-[380px] sm:p-7"
-      style={{
-        ...gradientStyle,
-        transform: hovered ? 'scale(1.03) translateY(-4px)' : 'scale(1) translateY(0)',
-        boxShadow: hovered
-          ? '0 24px 48px -26px rgba(154, 134, 207, 0.45)'
-          : '0 12px 32px -22px rgba(102, 108, 132, 0.25)',
-        background: hovered
-          ? 'linear-gradient(135deg, rgba(255,255,255,0.55) 0%, rgba(233,226,250,0.3) 50%, rgba(251,231,220,0.25) 100%)'
-          : 'rgba(255, 255, 255, 0.4)',
-      }}
-    >
-      {/* Top accent line */}
-      {project.featured && (
-        <div
-          className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-lavender-deep/60 to-transparent"
-          aria-hidden
-        />
-      )}
-
-      {/* Header: icon + title */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-white/40 bg-white/50 text-lavender-deep transition-colors duration-300 group-hover:text-peach-deep">
-            <Boxes className="h-5 w-5" />
-          </span>
-          <div>
-            <h3 className="font-display text-lg font-semibold text-ink-2">{project.title}</h3>
-            <p className="text-xs text-slate-500">{project.subtitle}</p>
-          </div>
-        </div>
-        {project.featured && (
-          <span className="hidden shrink-0 rounded-full border border-lavender-deep/30 bg-lavender-deep/10 px-3 py-1 font-mono text-[11px] text-lavender-deep sm:inline-flex">
-            Featured
-          </span>
-        )}
-      </div>
-
-      {/* Period */}
-      <p className="mt-4 inline-flex items-center gap-1.5 font-mono text-xs text-slate-500">
-        <Calendar className="h-3.5 w-3.5 text-lavender-deep" />
-        {project.period}
-      </p>
-
-      {/* Description */}
-      <p className="mt-3 text-sm leading-relaxed text-slate-600">{project.description}</p>
-
-      {/* Highlights — revealed on hover */}
-      <div
-        className="overflow-hidden transition-all duration-500 ease-in-out"
-        style={{ maxHeight: hovered ? '200px' : '0', opacity: hovered ? 1 : 0, marginTop: hovered ? '12px' : '0' }}
-      >
-        <ul className="space-y-2">
-          {project.highlights.map((h) => (
-            <li key={h} className="flex gap-2.5 text-sm leading-relaxed text-slate-600">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-peach-deep/80" />
-              {h}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Tech badges */}
-      <div className="mt-auto flex flex-wrap gap-2 pt-5">
-        {project.tags.map((tag) => (
-          <Chip key={tag}>{tag}</Chip>
-        ))}
-      </div>
-
-      {/* Action link — visible on hover */}
-      <div
-        className="overflow-hidden transition-all duration-400 ease-in-out"
-        style={{ maxHeight: hovered ? '40px' : '0', opacity: hovered ? 1 : 0, marginTop: hovered ? '12px' : '0' }}
-      >
-        <a
-          href={project.featured ? 'https://github.com/Priyanshu-47' : '#'}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-lavender-deep transition-colors hover:text-peach-deep"
-        >
-          View project <ExternalLink className="h-3 w-3" />
-        </a>
-      </div>
-    </article>
-  )
+function slugify(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
-/* ---------------------------------------------------------------------------
-   Horizontal carousel with scroll-snap + navigation arrows
---------------------------------------------------------------------------- */
-export function Projects() {
-  const scrollRef = useRef<HTMLDivElement>(null)
-  const [canScrollLeft, setCanScrollLeft] = useState(false)
-  const [canScrollRight, setCanScrollRight] = useState(true)
-
-  const checkScroll = useCallback(() => {
-    const el = scrollRef.current
-    if (!el) return
-    setCanScrollLeft(el.scrollLeft > 10)
-    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10)
-  }, [])
-
-  const scroll = (dir: 'left' | 'right') => {
-    const el = scrollRef.current
-    if (!el) return
-    const amount = 400
-    el.scrollBy({ left: dir === 'left' ? -amount : amount, behavior: 'smooth' })
-  }
-
+export default function Projects() {
   return (
-    <section id="projects" className="section">
-      <SectionHeading
-        eyebrow="projects"
-        title="Things I've built."
-        description="Enterprise platforms, SaaS products and full-stack apps — shipped with .NET, React and a lot of intentional craft."
-      />
+    <section className="bg-[var(--color-light-bg)] py-24 relative overflow-hidden">
+      <div className="absolute inset-0 riwa-vertical-lines-dark" />
 
-      <div className="relative">
-        {/* Navigation arrows */}
-        {canScrollLeft && (
-          <button
-            onClick={() => scroll('left')}
-            className="absolute -left-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/60 text-ink shadow-lg backdrop-blur-md transition-colors hover:bg-white/80"
-            aria-label="Scroll left"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-        )}
-        {canScrollRight && (
-          <button
-            onClick={() => scroll('right')}
-            className="absolute -right-4 top-1/2 z-20 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/40 bg-white/60 text-ink shadow-lg backdrop-blur-md transition-colors hover:bg-white/80"
-            aria-label="Scroll right"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        )}
+      <div className="container-riwa relative z-10">
+        <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* Left: Label + Heading */}
+          <div>
+            <Reveal>
+              <div className="section-label section-label-dark mb-6">
+                ourProjects.
+              </div>
+            </Reveal>
 
-        {/* Fade edges */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-cream to-transparent" aria-hidden />
-        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-cream to-transparent" aria-hidden />
-
-        {/* Scrollable track */}
-        <Reveal>
-          <div
-            ref={scrollRef}
-            onScroll={checkScroll}
-            className="flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-4 pt-2 scrollbar-none"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {projects.map((project) => (
-              <ProjectCard key={project.title} project={project} />
-            ))}
+            <Reveal>
+              <h2 className="section-heading section-heading-light mb-4">
+                Our
+              </h2>
+              <h2 className="section-heading section-heading-light text-[var(--color-light-muted)] mb-8">
+                Projects.
+              </h2>
+            </Reveal>
           </div>
-        </Reveal>
+
+          {/* Right: Description + CTA */}
+          <div className="lg:pt-32">
+            <Reveal delay={0.1}>
+              <p className="text-[var(--color-light-secondary)] text-lg leading-relaxed mb-8">
+                Discover how my creative vision transforms ideas into powerful,
+                conversion-driven digital experiences that truly stand out.
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.2}>
+              <Link
+                to="/projects"
+                className="block w-full bg-[var(--color-dark-bg)] text-white text-center py-5 rounded-2xl font-[var(--font-display)] text-lg font-semibold hover:bg-[var(--color-dark-card)] transition-colors group"
+              >
+                ALL PROJECTS
+                <span className="inline-block ml-2 text-[var(--color-orange)]">✦</span>
+              </Link>
+            </Reveal>
+          </div>
+        </div>
+
+        {/* Project cards — Riwa: list-style with orange diamond icons */}
+        <div className="grid md:grid-cols-2 gap-4 mt-16">
+          {projects.slice(0, 4).map((project, i) => (
+            <Reveal key={project.title} delay={i * 0.1}>
+              <Link
+                to={`/projects/${slugify(project.title)}`}
+                className="group block bg-white border border-black/5 p-6 hover:shadow-lg transition-all duration-300"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <span className="text-[var(--color-orange)] text-xs">✦</span>
+                    <h3 className="font-[var(--font-display)] text-lg font-semibold text-[var(--color-light-text)] group-hover:text-[var(--color-orange)] transition-colors">
+                      {project.title}
+                    </h3>
+                  </div>
+                  <FiArrowUpRight className="text-[var(--color-light-muted)] group-hover:text-[var(--color-orange)] transition-colors" />
+                </div>
+                <p className="text-[var(--color-light-secondary)] text-sm mt-2 ml-5">
+                  {project.tags[0]}
+                </p>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
-  )
+  );
 }

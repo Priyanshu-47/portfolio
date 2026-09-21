@@ -1,111 +1,165 @@
-import { useEffect, useState } from 'react'
-import { Menu, X, ArrowUpRight } from 'lucide-react'
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { HiMenuAlt3, HiX } from "react-icons/hi";
 
-const links = [
-  { id: 'about', label: 'About' },
-  { id: 'stack', label: 'Stack' },
-  { id: 'experience', label: 'Experience' },
-  { id: 'projects', label: 'Projects' },
-  { id: 'skills', label: 'Skills' },
-  { id: 'contact', label: 'Contact' },
-]
+const navLinks = [
+  { path: "/", label: "ABOUT" },
+  { path: "/projects", label: "PROJECTS" },
+  { path: "/contact", label: "CONTACT" },
+];
 
-export function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
-  const [open, setOpen] = useState(false)
-  const [active, setActive] = useState('')
+export default function Navbar() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [pastHero, setPastHero] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 16)
-      const probe = window.scrollY + 160
-      let current = ''
-      for (const link of links) {
-        const el = document.getElementById(link.id)
-        if (el && el.offsetTop <= probe) current = link.id
-      }
-      setActive(current)
-    }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    const handleScroll = () => {
+      // Once hero (100dvh) scrolls past, show secondary nav
+      setPastHero(window.scrollY > window.innerHeight * 0.85);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
 
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled || open
-          ? 'border-b border-white/30 bg-white/40 backdrop-blur-md shadow-[0_8px_30px_-18px_rgba(122,112,158,0.35)]'
-          : 'border-b border-transparent bg-transparent'
-      }`}
-    >
-      <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <a href="#home" onClick={() => setOpen(false)} className="font-display text-xl font-bold">
-          <span className="text-gradient">PL</span>
-          <span className="text-slate-400">.</span>
-        </a>
-
-        {/* Desktop links */}
-        <div className="hidden items-center gap-1 md:flex">
-          {links.map((link) => (
-            <a
-              key={link.id}
-              href={`#${link.id}`}
-              className={`group relative rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
-                active === link.id ? 'text-ink-2' : 'text-slate-500 hover:text-ink-2'
-              }`}
-            >
-              {link.label}
-              <span
-                className={`absolute inset-x-3 -bottom-px h-px bg-gradient-to-r from-sage-deep via-lavender-deep to-peach-deep transition-opacity duration-300 ${
-                  active === link.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-60'
-                }`}
-              />
-            </a>
-          ))}
-        </div>
-
-        <div className="flex items-center gap-2">
-          <a
-            href="#contact"
-            className="hidden items-center gap-1.5 rounded-lg border border-white/40 bg-white/40 px-4 py-2 text-sm font-semibold text-ink-2 backdrop-blur-md transition hover:border-white/70 hover:bg-white/60 md:inline-flex"
+    <>
+      {/*
+        PRIMARY NAV — inside hero, scrolls away with it.
+        White text on orange, no mix-blend-mode.
+      */}
+      <div
+        className="absolute top-0 left-0 right-0 z-50"
+        style={{ pointerEvents: pastHero ? "none" : "auto" }}
+      >
+        <div className="container-riwa flex items-center justify-between" style={{ height: "70px" }}>
+          {/* Logo */}
+          <Link
+            to="/"
+            className="font-[var(--font-display)] font-bold text-white text-xl tracking-tight"
           >
-            Hire me
-            <ArrowUpRight className="h-4 w-4 text-lavender-deep" />
-          </a>
+            PRIYANSHU<span className="text-[var(--color-orange)]">®</span>
+          </Link>
+
+          {/* Desktop Nav links — only in hero */}
+          <div className="hidden md:flex items-center justify-between flex-1 mx-12">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className="font-[var(--font-sans)] text-base font-normal tracking-tight text-white hover:text-white/80"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          {/* Hamburger */}
           <button
-            type="button"
-            aria-label="Toggle menu"
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-            className="rounded-lg border border-white/40 bg-white/30 p-2 text-ink backdrop-blur-md transition hover:bg-white/50 md:hidden"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="hidden md:flex flex-col gap-1.5 p-2"
           >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            <span className="block w-7 h-[2px] bg-white" />
+            <span className="block w-7 h-[2px] bg-white" />
+          </button>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden text-white text-2xl"
+          >
+            {mobileOpen ? <HiX /> : <HiMenuAlt3 />}
           </button>
         </div>
-      </nav>
-
-      {/* Mobile panel */}
-      <div
-        className={`overflow-hidden border-white/30 bg-white/60 backdrop-blur-md transition-[max-height] duration-300 ease-out md:hidden ${
-          open ? 'max-h-96 border-b' : 'max-h-0'
-        }`}
-      >
-        <div className="flex flex-col gap-1 px-6 py-4">
-          {links.map((link) => (
-            <a
-              key={link.id}
-              href={`#${link.id}`}
-              onClick={() => setOpen(false)}
-              className={`rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                active === link.id ? 'bg-white/60 text-ink-2' : 'text-slate-500 hover:text-ink-2'
-              }`}
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
       </div>
-    </header>
-  )
+
+      {/*
+        SECONDARY NAV — appears after hero scrolls away.
+        Logo + hamburger only. Uses mix-blend-mode: difference
+        so text auto-adapts (dark on light bg).
+      */}
+      <AnimatePresence>
+        {pastHero && (
+          <motion.nav
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed top-0 left-0 right-0 z-50"
+            style={{ mixBlendMode: "difference" }}
+          >
+            <div className="container-riwa flex items-center justify-between" style={{ height: "70px" }}>
+              {/* Logo — dark via blend mode */}
+              <Link
+                to="/"
+                className="font-[var(--font-display)] font-bold text-white text-xl tracking-tight"
+              >
+                PRIYANSHU<span className="text-[var(--color-orange)]">®</span>
+              </Link>
+
+              {/* Spacer to push hamburger right */}
+              <div className="flex-1" />
+
+              {/* Hamburger only — dark via blend mode */}
+              <button
+                onClick={() => setMobileOpen(!mobileOpen)}
+                className="hidden md:flex flex-col gap-1.5 p-2"
+              >
+                <span className="block w-7 h-[2px] bg-white" />
+                <span className="block w-7 h-[2px] bg-white" />
+              </button>
+
+              {/* Mobile Menu Button */}
+              <button
+                onClick={() => setMobileOpen(!mobileOpen)}
+                className="md:hidden text-white text-2xl"
+              >
+                {mobileOpen ? <HiX /> : <HiMenuAlt3 />}
+              </button>
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-40 bg-[var(--color-dark-bg)] pt-20"
+          >
+            <div className="container-riwa flex flex-col gap-8">
+              {navLinks.map((link, i) => (
+                <motion.div
+                  key={link.path}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <Link
+                    to={link.path}
+                    className={`font-[var(--font-display)] text-4xl font-semibold uppercase ${
+                      location.pathname === link.path
+                        ? "text-[var(--color-orange)]"
+                        : "text-white"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
 }

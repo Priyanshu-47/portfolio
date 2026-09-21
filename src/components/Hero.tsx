@@ -1,166 +1,194 @@
-import { useMemo } from 'react'
-import type { CSSProperties } from 'react'
-import { ArrowRight, Mail, Phone, ChevronDown, Download } from 'lucide-react'
-import { FaGithub, FaLinkedin } from 'react-icons/fa6'
-import { Reveal } from './Reveal'
-import { Typewriter } from './Typewriter'
-import { StatCounter } from './StatCounter'
-import { coreStack, profile, socials } from '../data/resume'
+import { useState, useMemo, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Link } from "react-router-dom";
+import AnimatedLines from "./AnimatedLines";
 
-const floatPositions: CSSProperties[] = [
-  { top: '6%', left: '-8%', animationDelay: '0s' },
-  { top: '16%', right: '-10%', animationDelay: '0.7s' },
-  { bottom: '24%', left: '-12%', animationDelay: '1.4s' },
-  { bottom: '8%', right: '-8%', animationDelay: '2.1s' },
-  { top: '46%', right: '-14%', animationDelay: '2.8s' },
-]
+// 4-pointed star SVG path — matches Riwa's sparkle shape
+const StarSVG = ({ size, color }: { size: number; color: string }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill={color}>
+    <path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5Z" />
+  </svg>
+);
 
-function SocialIcon({ label }: { label: string }) {
-  if (label === 'LinkedIn') return <FaLinkedin className="h-4 w-4" />
-  if (label === 'GitHub') return <FaGithub className="h-4 w-4" />
-  return <Mail className="h-4 w-4" />
+// Generate sparkle positions — Riwa has ~50 scattered stars
+function generateSparkles(count: number) {
+  const sparkles = [];
+  for (let i = 0; i < count; i++) {
+    sparkles.push({
+      id: i,
+      left: `${(i * 37 + 13) % 95 + 2}%`,
+      top: `${(i * 29 + 7) % 85 + 5}%`,
+      size: 8 + (i % 4) * 4,
+      delay: (i * 0.4) % 3,
+      duration: 2.5 + (i % 3) * 0.5,
+      opacity: 0.3 + (i % 3) * 0.2,
+    });
+  }
+  return sparkles;
 }
 
-export function Hero() {
-  const stackNames = useMemo(() => coreStack.map((t) => t.name), [])
+export default function Hero() {
+  const [isHovered, setIsHovered] = useState(false);
+  const sparkles = useMemo(() => generateSparkles(50), []);
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  // Scroll-based parallax — hero content moves up on scroll
+  const { scrollY } = useScroll();
+  const heroY = useTransform(scrollY, [0, 800], [0, -200]);
 
   return (
-    <section id="home" className="relative flex min-h-screen items-center overflow-hidden pt-24 pb-16">
-      {/* Background layers */}
-      <div
-        className="bg-grid absolute inset-0"
-        style={{ maskImage: 'radial-gradient(ellipse 65% 55% at 50% 32%, black, transparent)' }}
-        aria-hidden
-      />
-      <div className="animate-orb absolute -left-32 -top-32 h-96 w-96 rounded-full bg-lavender/70 blur-3xl" aria-hidden />
-      <div className="animate-orb absolute -right-40 top-1/4 h-[28rem] w-[28rem] rounded-full bg-peach/80 blur-3xl [animation-delay:-9s]" aria-hidden />
-      <div className="absolute bottom-0 left-1/3 h-72 w-72 rounded-full bg-sage/70 blur-3xl" aria-hidden />
-
-      <div className="relative mx-auto grid w-full max-w-6xl items-center gap-14 px-6 lg:grid-cols-[1.15fr_0.85fr]">
-        {/* Left: copy */}
-        <div>
-          <Reveal>
-            <p className="font-mono text-sm font-medium tracking-wide text-lavender-deep">
-              <span className="mr-2 text-peach-deep">{'//'}</span>hey, I&rsquo;m
-            </p>
-            <h1 className="mt-4 font-display text-5xl font-bold leading-[1.02] text-ink-2 sm:text-6xl xl:text-7xl">
-              <span className="text-gradient">Priyanshu</span>
-              <br />
-              <span className="text-gradient">Lodha</span>
-            </h1>
-            <p className="mt-5 font-display text-xl font-medium text-slate-700 sm:text-2xl">
-              {profile.role}
-            </p>
-            <p className="mt-3 font-mono text-sm text-slate-500 sm:text-base">
-              <span className="text-sage-deep">$</span>
-              <span className="ml-2 text-slate-500">builds&nbsp;with</span>{' '}
-              <Typewriter words={stackNames} className="font-semibold text-gradient" />
-              <span className="sr-only">Core stack: {stackNames.join(', ')}</span>
-            </p>
-            <p className="mt-4 max-w-xl leading-relaxed text-slate-600">{profile.tagline}</p>
-          </Reveal>
-
-          <Reveal delay={120}>
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <a href="#projects" className="btn-primary">
-                View my work
-                <ArrowRight className="h-4 w-4" />
-              </a>
-              <a href={profile.resumeUrl} download className="btn-ghost">
-                <Download className="h-4 w-4" />
-                Download resume
-              </a>
-            </div>
-
-            <div className="mt-7 flex flex-wrap items-center gap-3">
-              {socials.map((s) => (
-                <a
-                  key={s.label}
-                  href={s.href}
-                  {...(s.href.startsWith('mailto:') ? {} : { target: '_blank', rel: 'noreferrer' })}
-                  aria-label={s.label}
-                  title={s.label}
-                  className="social-btn"
-                >
-                  <SocialIcon label={s.label} />
-                </a>
-              ))}
-              <a
-                href={`tel:+91${profile.phoneRaw}`}
-                className="inline-flex items-center gap-2 rounded-xl border border-white/40 bg-white/40 px-3 py-2 text-sm text-slate-600 backdrop-blur-md transition-colors hover:border-lavender-deep/50 hover:text-ink-2"
-              >
-                <Phone className="h-4 w-4 text-lavender-deep" />
-                {profile.phone}
-              </a>
-            </div>
-          </Reveal>
-
-          <Reveal delay={200}>
-            <div className="mt-10 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {profile.stats.map((stat) => (
-                <StatCounter key={stat.label} value={stat.value} label={stat.label} />
-              ))}
-            </div>
-          </Reveal>
-        </div>
-
-        {/* Right: identity card */}
-        <Reveal delay={150} className="hidden lg:block">
-          <div className="relative mx-auto w-80">
-            <div
-              className="absolute -inset-8 rounded-[2.5rem] bg-gradient-to-br from-sage/60 via-lavender/60 to-peach/60 blur-2xl"
-              aria-hidden
-            />
-            <div className="glass relative rounded-3xl px-8 py-12 text-center">
-              <img
-                src={`${import.meta.env.BASE_URL}model-3d-3d-model-man-wearing-glasses_1393761-192.jpg`}
-                alt={profile.name}
-                className="mx-auto h-28 w-28 rounded-2xl object-cover shadow-lg shadow-lavender-deep/40"
-                style={{
-                  objectPosition: '40% 30%',
-                  maskImage: 'radial-gradient(ellipse 75% 80% at 40% 40%, black 55%, transparent 100%)',
-                  WebkitMaskImage: 'radial-gradient(ellipse 75% 80% at 40% 40%, black 55%, transparent 100%)',
-                }}
-              />
-              <p className="mt-6 font-display text-xl font-semibold text-ink-2">{profile.name}</p>
-              <p className="mt-1 text-sm text-slate-600">Full Stack · Pune</p>
-              <div className="mt-6 flex justify-center gap-2.5">
-                {coreStack.map((tech) => (
-                  <span
-                    key={tech.name}
-                    title={tech.name}
-                    className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/40 bg-white/50 text-lg text-ink-2"
-                  >
-                    <tech.icon />
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Floating badges */}
-            {coreStack.map((tech, i) => (
-              <span
-                key={tech.name}
-                style={floatPositions[i % floatPositions.length]}
-                className="animate-float absolute z-10 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/50 bg-white/70 text-2xl text-ink-2 shadow-none backdrop-blur-md"
-                title={tech.name}
-              >
-                <tech.icon />
-              </span>
-            ))}
-          </div>
-        </Reveal>
+    <section ref={heroRef} className="relative" style={{ height: "100dvh" }}>
+      {/* Full-bleed orange background */}
+      <div className="absolute inset-0 bg-[#D63614]">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#D63614] via-[#D85A20] to-[#C8501E]" />
       </div>
 
-      {/* Scroll cue */}
-      <a
-        href="#about"
-        aria-label="Scroll to about"
-        className="absolute bottom-7 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-slate-500 transition-colors hover:text-ink-2 md:flex"
+      {/* Parallax container — moves up on scroll */}
+      <motion.div
+        className="absolute inset-0"
+        style={{ y: heroY }}
       >
-        <span className="font-mono text-[11px] tracking-widest uppercase">scroll</span>
-        <ChevronDown className="h-4 w-4 animate-bounce" />
-      </a>
+        {/* Giant background text — uses rem so zoom scales it */}
+        <div className="absolute inset-0 flex items-start justify-center pointer-events-none select-none overflow-hidden z-[1]">
+          <span
+            className="font-[var(--font-display)] font-bold uppercase text-center whitespace-nowrap"
+            style={{
+              fontSize: "16rem",
+              lineHeight: 0.82,
+              letterSpacing: "-0.01em",
+              color: "rgba(11, 13, 20, 0.12)",
+              marginTop: "3rem",
+              marginLeft: "1.5rem",
+              transform: "scaleY(1.6)",
+              transformOrigin: "top center",
+            }}
+          >
+            PRIYANSHU
+          </span>
+        </div>
+
+        {/* Portrait — uses rem so zoom scales it */}
+        <div className="absolute inset-0 flex items-end justify-center pointer-events-none z-[2]">
+          <img
+            src="/portrait.png"
+            alt="Priyanshu Lodha"
+            className="object-contain object-bottom"
+            style={{
+              height: "36rem",
+              width: "auto",
+              filter: "saturate(1.3) brightness(0.95) contrast(1.05)",
+              maskImage: "radial-gradient(ellipse 75% 85% at 50% 55%, black 30%, transparent 72%)",
+              WebkitMaskImage: "radial-gradient(ellipse 75% 85% at 50% 55%, black 30%, transparent 72%)",
+            }}
+          />
+        </div>
+
+        {/* Sparkle decorations — Riwa: ~50 scattered static 4-pointed star SVGs */}
+        {sparkles.map((s) => (
+          <div
+            key={s.id}
+            className="absolute"
+            style={{
+              left: s.left,
+              top: s.top,
+              zIndex: 10,
+              pointerEvents: "none",
+              opacity: s.opacity,
+            }}
+          >
+            <StarSVG size={s.size} color="#E9681E" />
+          </div>
+        ))}
+      </motion.div>
+
+      {/* Bottom-left content — also parallax */}
+      <motion.div
+        className="absolute bottom-0 left-0 right-0 z-[3]"
+        style={{ paddingBottom: "2.5rem", y: heroY }}
+      >
+        <div className="container-riwa">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            style={{ maxWidth: "28rem" }}
+          >
+            <p className="text-white uppercase mb-3" style={{ fontFamily: "Inter, sans-serif", fontSize: "16px", fontWeight: 600, letterSpacing: "-0.32px", lineHeight: "19px" }}>
+              LESS NOISE. MORE IMPACT.
+            </p>
+            <p className="text-white/90 leading-relaxed mb-5" style={{ fontFamily: '"IBM Plex Mono", monospace', fontSize: "14px", fontWeight: 500, letterSpacing: "-0.56px", lineHeight: "17px" }}>
+              Full-stack engineer building secure, scalable products — .NET &amp;
+              React at the core, deployed on AWS, and accelerated by AI.
+            </p>
+
+            {/* Riwa-style animated button + avatar — single aligned component */}
+            <Link
+              to="/contact"
+              className="inline-flex items-center relative"
+              onMouseEnter={() => setIsHovered(true)}
+              onMouseLeave={() => setIsHovered(false)}
+            >
+              <motion.div
+                className="relative bg-white flex items-center cursor-pointer"
+                style={{
+                  gap: "1rem",
+                  paddingLeft: "40px",
+                  paddingRight: "52px",
+                  paddingTop: "18px",
+                  paddingBottom: "18px",
+                  borderRadius: "40px",
+                }}
+                animate={{ paddingRight: isHovered ? 56 : 52 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                <div className="relative overflow-hidden">
+                  <motion.span
+                    className="text-[#080A10] font-semibold whitespace-nowrap block"
+                    style={{ fontSize: "16px", fontFamily: "Sora, sans-serif", fontWeight: 600, letterSpacing: "-0.64px", textTransform: "uppercase" }}
+                    animate={{ y: isHovered ? -2 : 0 }}
+                    transition={{ duration: 0.25, ease: "easeOut" }}
+                  >
+                    BOOK A CALL
+                  </motion.span>
+                </div>
+                <motion.div
+                  className="w-9 h-9 rounded-full bg-[#080A10] flex items-center justify-center text-white shrink-0"
+                  animate={{ rotate: isHovered ? 90 : 0 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                >
+                  {isHovered ? (
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                      <path d="M1 1L11 11M11 1L1 11" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                  ) : (
+                    <span className="text-xs">✦</span>
+                  )}
+                </motion.div>
+                {/* Avatar — overlaps right edge of white box */}
+                <motion.div
+                  className="absolute top-1/2 w-12 h-12 rounded-full overflow-hidden border-[3px] border-white z-10"
+                  style={{ right: "-6px", transform: "translateY(-50%)" }}
+                  animate={{ scale: isHovered ? 1.08 : 1 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                >
+                  <img
+                    src="/portrait.png"
+                    alt="Priyanshu"
+                    className="w-full h-full object-cover"
+                  />
+                </motion.div>
+              </motion.div>
+            </Link>
+          </motion.div>
+        </div>
+      </motion.div>
+      {/* Animated horizontal lines — merge on scroll like Riwa */}
+      <AnimatedLines />
+      {/* White transition below lines — smooth blend to next section */}
+      <div
+        className="absolute bottom-0 left-0 right-0 z-[5] pointer-events-none"
+        style={{ height: "4px", backgroundColor: "white" }}
+      />
     </section>
-  )
+  );
 }

@@ -1,89 +1,73 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------------------------
-   Design tokens — premium pastel palette
-   Soft Sage Green · Creamy Mint · Gentle Lavender · Peach Fuzz · Warm Off-White
---------------------------------------------------------------------------- */
+   Riwa Design Tokens — EXACT from riwadesign.framer.website
+   --------------------------------------------------------------------------- */
 @theme {
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, monospace;
 
-  /* Pastel surfaces */
-  --color-cream: #faf7f1; /* warm off-white — page base */
-  --color-sage: #dfeadd; /* soft sage green */
-  --color-mint: #dcefe6; /* creamy mint */
-  --color-lavender: #e9e2fa; /* gentle lavender */
-  --color-peach: #fbe7dc; /* peach fuzz */
+  /* Riwa exact palette */
+  --color-orange: #E9681E;
+  --color-orange-deep: #D63614;
+  --color-orange-hero: #D85A20;
+  --color-orange-glow: rgba(233, 104, 30, 0.3);
 
-  /* Ink (text) — deep slate / charcoal, never pure black */
-  --color-ink: #3c4a57; /* body text */
-  --color-ink-2: #22303c; /* headings */
+  --color-dark-bg: #080A10;
+  --color-dark-card: #14171D;
+  --color-dark-card-alt: #1C1C1C;
+  --color-dark-surface: #21242B;
+  --color-dark-border: rgba(255, 255, 255, 0.08);
+  --color-dark-text: #FFFFFF;
+  --color-dark-secondary: #9E9E9E;
+  --color-dark-muted: #5E5E5E;
+  --color-dark-dim: #686868;
 
-  /* Accents for the pastel gradient */
-  --color-sage-deep: #7a9a72;
-  --color-lavender-deep: #9a86cf;
-  --color-peach-deep: #d98a76;
+  --color-light-bg: #F0F0F0;
+  --color-light-card: #FFFFFF;
+  --color-light-text: #0B0D14;
+  --color-light-secondary: #686868;
+  --color-light-muted: #9E9E9E;
 
-  --animate-float: float 7s ease-in-out infinite;
-  --animate-float-slow: float 11s ease-in-out infinite;
-  --animate-orb: orb 18s ease-in-out infinite alternate;
-  --animate-marquee: marquee 32s linear infinite;
+  --color-white: #FFFFFF;
+  --color-black: #000000;
+
+  --animate-fade-in: fadeIn 0.6s ease-out forwards;
+  --animate-slide-up: slideUp 0.5s ease-out forwards;
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-14px);
-  }
+/* ---------------------------------------------------------------------------
+   Keyframes
+--------------------------------------------------------------------------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-@keyframes orb {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.7;
-  }
-  100% {
-    transform: translate(46px, -34px) scale(1.18);
-    opacity: 1;
-  }
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
-@keyframes caret {
-  0%,
-  45% {
-    opacity: 1;
-  }
-  50%,
-  95% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(5deg); }
 }
 
-/* Gentle idle bob for grid cards — pauses on hover so the lift reads clearly */
-@keyframes card-bob {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
 /* ---------------------------------------------------------------------------
@@ -91,239 +75,282 @@
 --------------------------------------------------------------------------- */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 5.5rem;
 }
 
 body {
-  background-color: var(--color-cream);
-  /* Soft pastel washes across the viewport */
-  background-image:
-    radial-gradient(52rem 38rem at 112% -8%, rgba(223, 234, 221, 0.8), transparent 60%),
-    radial-gradient(46rem 34rem at -14% 22%, rgba(233, 226, 250, 0.75), transparent 62%),
-    radial-gradient(42rem 30rem at 118% 66%, rgba(251, 231, 220, 0.9), transparent 60%),
-    radial-gradient(40rem 32rem at 30% 118%, rgba(220, 239, 230, 0.8), transparent 62%);
-  background-attachment: fixed;
-  color: var(--color-ink);
   font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  background-color: var(--color-dark-bg);
+  color: var(--color-dark-secondary);
   overflow-x: hidden;
 }
 
-::selection {
-  background: rgba(154, 134, 207, 0.35);
-  color: var(--color-ink-2);
-}
-
-::-webkit-scrollbar {
-  width: 10px;
-}
-::-webkit-scrollbar-track {
-  background: #f5f1e9;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(154, 134, 207, 0.35);
-  border-radius: 999px;
-  border: 2px solid #f5f1e9;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(154, 134, 207, 0.5);
-}
-
-/* ---------------------------------------------------------------------------
-   Custom utilities
---------------------------------------------------------------------------- */
-@utility bg-grid {
-  background-image: linear-gradient(to right, rgba(122, 141, 153, 0.08) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(122, 141, 153, 0.08) 1px, transparent 1px);
-  background-size: 48px 48px;
-}
-
-/* Sage → lavender → peach, dark enough to read on cream */
-@utility text-gradient {
-  background-image: linear-gradient(92deg, #6f9669 0%, #8f7cc4 50%, #cf7f6c 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-/* High-blur glassmorphism over the pastel canvas */
-@utility glass {
-  background-color: rgba(255, 255, 255, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(22px) saturate(1.5);
-  -webkit-backdrop-filter: blur(22px) saturate(1.5);
-}
-
-@utility glass-soft {
-  background-color: rgba(255, 255, 255, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  backdrop-filter: blur(14px) saturate(1.3);
-  -webkit-backdrop-filter: blur(14px) saturate(1.3);
-}
-
-@utility card-ring {
-  border: 1px solid rgba(255, 255, 255, 0.24);
-  background-color: rgba(255, 255, 255, 0.4);
-}
-
-@utility animate-caret {
-  animation: caret 1.1s steps(1) infinite;
-}
-
-/* Subtle "floating" card effect with staggered delays per card.
-   `animation: none` on hover hands transform back to .card-hover:hover so the
-   hover lift and micro-shadow still take effect without fighting the bob. */
-@utility card-bob {
-  animation: card-bob 6s ease-in-out infinite;
-}
-
-.card-bob:hover {
-  animation: none;
-}
-
-@utility spotlight-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 1.25rem;
-  transform-style: preserve-3d;
-  transition: transform 0.18s ease-out;
-}
-
-.spotlight-card::after {
-  content: '';
-  position: absolute;
+/* Noise overlay */
+body::before {
+  content: "";
+  position: fixed;
   inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    440px circle at var(--mx, 50%) var(--my, 50%),
-    rgba(154, 134, 207, 0.26),
-    transparent 68%
-  );
-  opacity: 0;
-  transition: opacity 0.35s ease;
+  z-index: 9999;
   pointer-events: none;
-  z-index: 2;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  background-repeat: repeat;
 }
 
-.spotlight-card:hover::after {
-  opacity: 1;
-}
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-dark-bg); }
+::-webkit-scrollbar-thumb { background: #222; border-radius: 3px; }
 
-/* ---------------------------------------------------------------------------
-   Components
---------------------------------------------------------------------------- */
-@layer components {
-  .section {
-    margin-inline: auto;
-    max-width: 72rem;
-    padding-inline: 1.5rem;
-    padding-block: 5.5rem;
-  }
-
-  .card {
-    position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background-color: rgba(255, 255, 255, 0.36);
-    border-radius: 1.25rem;
-    backdrop-filter: blur(18px) saturate(1.35);
-    -webkit-backdrop-filter: blur(18px) saturate(1.35);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, 0.45),
-      0 12px 32px -22px rgba(102, 108, 132, 0.35);
-    transition:
-      transform 0.3s ease,
-      border-color 0.3s ease,
-      background-color 0.3s ease,
-      box-shadow 0.3s ease;
-  }
-
-  .card-hover:hover {
-    transform: translateY(-4px);
-    border-color: rgba(255, 255, 255, 0.55);
-    background-color: rgba(255, 255, 255, 0.58);
-    box-shadow: 0 24px 48px -26px rgba(122, 112, 158, 0.4);
-  }
-
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    border-radius: 0.75rem;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #fff;
-    background-image: linear-gradient(90deg, #9d86cf, #e28a86);
-    box-shadow: 0 10px 26px -12px rgba(157, 134, 207, 0.65);
-    transition:
-      transform 0.25s ease,
-      box-shadow 0.25s ease;
-  }
-  .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 16px 34px -10px rgba(226, 138, 134, 0.7);
-  }
-
-  .btn-ghost {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    border-radius: 0.75rem;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-ink);
-    border: 1px solid rgba(122, 118, 148, 0.24);
-    background-color: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition:
-      transform 0.25s ease,
-      border-color 0.25s ease,
-      background-color 0.25s ease;
-  }
-  .btn-ghost:hover {
-    transform: translateY(-2px);
-    border-color: rgba(122, 118, 148, 0.42);
-    background-color: rgba(255, 255, 255, 0.62);
-  }
-
-  .social-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 2.5rem;
-    width: 2.5rem;
-    border-radius: 0.75rem;
-    border: 1px solid rgba(122, 118, 148, 0.2);
-    background-color: rgba(255, 255, 255, 0.4);
-    color: #5b6470;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    transition:
-      color 0.25s ease,
-      border-color 0.25s ease,
-      background-color 0.25s ease,
-      transform 0.25s ease;
-  }
-  .social-btn:hover {
-    transform: translateY(-2px);
-    color: var(--color-ink-2);
-    border-color: rgba(154, 134, 207, 0.5);
-    background-color: rgba(255, 255, 255, 0.65);
-  }
+::selection {
+  background: var(--color-orange);
+  color: #fff;
 }
 
 /* ---------------------------------------------------------------------------
-   Accessibility: disable motion when requested
+   Typography — EXACT Riwa sizes
 --------------------------------------------------------------------------- */
-@media (prefers-reduced-motion: reduce) {
-  .animate-caret {
-    animation: none;
-    opacity: 1;
+.section-heading {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(3rem, 8vw, 6.25rem);
+  letter-spacing: -0.04em;
+  line-height: 1.0;
+  color: var(--color-dark-text);
+  text-transform: uppercase;
+}
+
+.section-heading-light {
+  color: var(--color-light-text);
+}
+
+.section-heading-muted {
+  color: var(--color-dark-muted);
+}
+
+.section-label {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-dark-dim);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 8px 16px;
+  border-radius: 50px;
+}
+
+.section-label::before {
+  content: "●";
+  color: var(--color-orange);
+  font-size: 0.625rem;
+}
+
+.section-label-number {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--color-dark-dim);
+}
+
+.section-label-dark {
+  color: var(--color-light-secondary);
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.section-label-dark::before {
+  color: var(--color-orange);
+}
+
+/* Body text */
+.riwa-body-text {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.7;
+  color: var(--color-dark-secondary);
+}
+
+/* ---------------------------------------------------------------------------
+   Background Patterns
+--------------------------------------------------------------------------- */
+.riwa-grid-bg {
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+.riwa-vertical-lines {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255,255,255,0.03) 0px,
+      rgba(255,255,255,0.03) 1px,
+      transparent 1px,
+      transparent 120px
+    );
+  background-size: 120px 100%;
+}
+
+.riwa-vertical-lines-dark {
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,0,0,0.04) 0px,
+      rgba(0,0,0,0.04) 1px,
+      transparent 1px,
+      transparent 120px
+    );
+  background-size: 120px 100%;
+}
+
+/* ---------------------------------------------------------------------------
+   Section Dividers
+--------------------------------------------------------------------------- */
+.riwa-divider {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+
+.riwa-divider > div {
+  height: 1px;
+  background: var(--color-dark-border);
+}
+
+/* ---------------------------------------------------------------------------
+   Cards — Riwa exact
+--------------------------------------------------------------------------- */
+.riwa-card {
+  background: var(--color-dark-card);
+  border: 1px solid var(--color-dark-border);
+  border-radius: 12px;
+  transition: all 0.4s ease;
+}
+
+.riwa-card:hover {
+  background: var(--color-dark-card-alt);
+  border-color: var(--color-dark-border);
+  transform: perspective(1000px) rotateX(1deg);
+}
+
+.riwa-card-light {
+  background: var(--color-light-card);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* ---------------------------------------------------------------------------
+   Button — Riwa exact: 10px radius, compact
+--------------------------------------------------------------------------- */
+.riwa-btn {
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.riwa-btn-primary {
+  background: var(--color-white);
+  color: var(--color-dark-bg);
+}
+
+.riwa-btn-primary:hover {
+  background: #f0f0f0;
+}
+
+.riwa-btn-orange {
+  background: var(--color-orange);
+  color: var(--color-white);
+}
+
+.riwa-btn-orange:hover {
+  background: var(--color-orange-deep);
+}
+
+.riwa-btn-outline {
+  border: 1px solid var(--color-dark-border);
+  color: var(--color-dark-text);
+  background: transparent;
+}
+
+.riwa-btn-outline:hover {
+  border-color: var(--color-orange);
+  color: var(--color-orange);
+}
+
+/* Pill variant */
+.riwa-pill {
+  border-radius: 50px;
+  padding: 10px 20px;
+}
+
+/* ---------------------------------------------------------------------------
+   Gradient Text
+--------------------------------------------------------------------------- */
+.riwa-gradient-text {
+  background: linear-gradient(135deg, var(--color-orange), #F59E42);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ---------------------------------------------------------------------------
+   Sparkle / Star decorations
+--------------------------------------------------------------------------- */
+.riwa-sparkle {
+  color: var(--color-orange);
+  animation: sparkle 3s ease-in-out infinite;
+}
+
+/* ---------------------------------------------------------------------------
+   Accent overlay (for project cards)
+--------------------------------------------------------------------------- */
+.riwa-accent-overlay {
+  background: var(--color-orange-glow);
+}
+
+/* ---------------------------------------------------------------------------
+   Utilities
+--------------------------------------------------------------------------- */
+.container-riwa {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+@media (min-width: 768px) {
+  .container-riwa {
+    padding-left: 48px;
+    padding-right: 48px;
   }
-  html {
-    scroll-behavior: auto;
+}
+
+@media (min-width: 1280px) {
+  .container-riwa {
+    padding-left: 80px;
+    padding-right: 80px;
   }
+}
+
+/* Marquee */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
 }

@@ -1,60 +1,94 @@
-import { Briefcase, GitFork, GraduationCap, Mail, MapPin, FolderGit2 } from 'lucide-react'
-import type { LucideIcon } from 'lucide-react'
-import { Reveal } from './Reveal'
-import { SectionHeading } from './SectionHeading'
-import { profile } from '../data/resume'
+import { Reveal } from "./Reveal";
 
-type Fact = { icon: LucideIcon; label: string; value: string; href?: string }
+const features = [
+  {
+    label: "FIRST",
+    icon: "⬆",
+    title: "Full-Stack Expertise",
+    description:
+      "End-to-end development with .NET, React, AWS — from database schema to pixel-perfect UI.",
+  },
+  {
+    label: "SECOND",
+    icon: "✦",
+    title: "AI-Accelerated Development",
+    description:
+      "Cursor AI woven into daily workflow for code generation, debugging, documentation and impact analysis.",
+  },
+  {
+    label: "THIRD",
+    icon: "▲",
+    title: "Enterprise-Grade Quality",
+    description:
+      "Secure, scalable applications built for production — Auth0, Salesforce, Appian integrations.",
+  },
+  {
+    label: "FOURTH",
+    icon: "◆",
+    title: "Long-term Impact",
+    description:
+      "Building systems that evolve — not just launch. Production support, monitoring, and continuous improvement.",
+  },
+];
 
-const facts: Fact[] = [
-  { icon: MapPin, label: 'Based in', value: profile.location },
-  { icon: Briefcase, label: 'Currently', value: 'Full Stack Engineer @ Hexaware' },
-  { icon: GraduationCap, label: 'Education', value: 'B.E. Computer Science · 8.88 CGPA' },
-  { icon: Mail, label: 'Email', value: profile.email },
-  { icon: GitFork, label: 'GitHub', value: profile.githubStats.handle, href: profile.github },
-  { icon: FolderGit2, label: 'Open source', value: `${profile.githubStats.repos} public repos · ${profile.githubStats.activity}` },
-]
-
-export function About() {
+export default function About() {
   return (
-    <section id="about" className="section">
-      <SectionHeading eyebrow="about" title="Engineer, builder, AI-accelerated." />
-      <div className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr]">
-        <Reveal>
-          <p className="text-lg leading-relaxed text-slate-300">{profile.summary}</p>
-          <p className="mt-5 leading-relaxed text-slate-400">{profile.summaryExtra}</p>
-        </Reveal>
+    <section className="bg-[var(--color-dark-bg)] py-24 relative overflow-hidden">
+      <div className="absolute inset-0 riwa-vertical-lines" />
 
-        <Reveal delay={100}>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {facts.map((fact) => (
-              <div key={fact.label} className="card card-hover flex items-start gap-3.5 p-4">
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/40 bg-white/50 text-lavender-deep">
-                  <fact.icon className="h-4 w-4" />
-                </span>
-                <div className="min-w-0">
-                  <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">{fact.label}</p>
-                  {fact.href ? (
-                    <a
-                      href={fact.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="mt-1 block truncate text-sm font-medium text-lavender-deep hover:text-peach-deep"
-                      title={fact.value}
-                    >
-                      {fact.value}
-                    </a>
-                  ) : (
-                    <p className="mt-1 truncate text-sm font-medium text-slate-700" title={fact.value}>
-                      {fact.value}
-                    </p>
-                  )}
-                </div>
-              </div>
-            ))}
+      <div className="container-riwa relative z-10">
+        {/* Riwa: label on the RIGHT side */}
+        <Reveal>
+          <div className="flex justify-end mb-6">
+            <div className="section-label">
+              the team
+            </div>
           </div>
         </Reveal>
+
+        <Reveal>
+          <h2 className="section-heading mb-4">
+            The Team
+          </h2>
+          <h2 className="section-heading section-heading-muted mb-4">
+            Behind Your
+          </h2>
+          <h2 className="section-heading section-heading-muted mb-8">
+            Projects.
+          </h2>
+        </Reveal>
+
+        <Reveal delay={0.1}>
+          <p className="text-[var(--color-dark-secondary)] text-lg leading-relaxed max-w-lg mb-16">
+            My goal is to combine strategy, design, and technology to create
+            experiences that build trust and deliver results.
+          </p>
+        </Reveal>
+
+        {/* Feature cards — Riwa: 4 cards with FIRST/SECOND/THIRD/FOURTH labels */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {features.map((feature, i) => (
+            <Reveal key={i} delay={i * 0.1}>
+              <div className="bg-[var(--color-dark-card)] border border-white/5 p-6 hover:bg-[var(--color-dark-card-alt)] transition-colors group">
+                <div className="flex items-center gap-3 mb-4">
+                  <span className="text-[var(--color-orange)] text-sm">
+                    {feature.icon}
+                  </span>
+                  <span className="font-[var(--font-mono)] text-xs text-[var(--color-orange)] uppercase">
+                    {feature.label}
+                  </span>
+                </div>
+                <h4 className="font-[var(--font-mono)] text-sm font-medium text-white mb-3">
+                  {feature.title}
+                </h4>
+                <p className="text-[var(--color-dark-secondary)] text-xs leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
-  )
+  );
 }

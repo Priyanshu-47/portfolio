@@ -1,24 +1,22 @@
-import type { PropsWithChildren } from 'react'
-import { useReveal } from '../hooks/useReveal'
+import { ReactNode } from "react";
+import { motion } from "framer-motion";
 
-type RevealProps = PropsWithChildren<{
-  className?: string
-  /** Stagger delay in ms */
-  delay?: number
-}>
+interface RevealProps {
+  children: ReactNode;
+  delay?: number;
+  className?: string;
+}
 
-export function Reveal({ children, className = '', delay = 0 }: RevealProps) {
-  const { ref, visible } = useReveal<HTMLDivElement>()
-
+export function Reveal({ children, delay = 0, className = "" }: RevealProps) {
   return (
-    <div
-      ref={ref}
-      style={{ transitionDelay: `${delay}ms` }}
-      className={`transition-all duration-700 ease-out will-change-transform motion-reduce:transition-none motion-reduce:transform-none ${
-        visible ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'
-      } ${className}`}
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay }}
+      className={className}
     >
       {children}
-    </div>
-  )
+    </motion.div>
+  );
 }
