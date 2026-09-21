@@ -36,7 +36,7 @@ function AnimatedRoutes() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.PROD ? "/portfolio" : ""}>
       <ScrollToTop />
       <div className="relative min-h-screen antialiased">
         <a
