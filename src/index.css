@@ -28,7 +28,7 @@
   --color-light-card: #FFFFFF;
   --color-light-text: #0B0D14;
   --color-light-secondary: #686868;
-  --color-light-muted: #9E9E9E;
+  --color-light-muted: #5E5E5E;
 
   --color-white: #FFFFFF;
   --color-black: #000000;
@@ -193,6 +193,14 @@ body::before {
       transparent 120px
     );
   background-size: 120px 100%;
+}
+
+/* Riwa-style 3 centered vertical lines for light sections */
+.riwa-three-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .riwa-vertical-lines-dark {
