@@ -41,7 +41,7 @@ export default function Navbar() {
           {/* Logo */}
           <Link
             to="/"
-            className="font-[var(--font-display)] font-bold text-white text-xl tracking-tight"
+            className="font-display font-bold text-white text-xl tracking-tight"
           >
             PRIYANSHU<span className="text-[var(--color-orange)]">®</span>
           </Link>
@@ -52,7 +52,7 @@ export default function Navbar() {
               <Link
                 key={link.path}
                 to={link.path}
-                className="font-[var(--font-sans)] text-base font-normal tracking-tight text-white hover:text-white/80 absolute"
+                className="font-sans text-base font-normal tracking-tight text-white hover:text-white/80 absolute"
                 style={{ left: `${(i + 1) * 25}%`, transform: "translateX(-50%)" }}
               >
                 {link.label}
@@ -98,7 +98,7 @@ export default function Navbar() {
               {/* Logo — dark via blend mode */}
               <Link
                 to="/"
-                className="font-[var(--font-display)] font-bold text-white text-xl tracking-tight"
+                className="font-display font-bold text-white text-xl tracking-tight"
               >
                 PRIYANSHU<span className="text-[var(--color-orange)]">®</span>
               </Link>
@@ -147,7 +147,7 @@ export default function Navbar() {
                 >
                   <Link
                     to={link.path}
-                    className={`font-[var(--font-display)] text-4xl font-semibold uppercase ${
+                    className={`font-display text-4xl font-semibold uppercase ${
                       location.pathname === link.path
                         ? "text-[var(--color-orange)]"
                         : "text-white"

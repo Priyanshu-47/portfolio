@@ -22,7 +22,7 @@ export default function Skills() {
           {skillGroups.map((group, i) => (
             <Reveal key={group.title} delay={i * 0.1}>
               <div>
-                <h4 className="font-[var(--font-mono)] text-sm text-[var(--color-orange)] mb-4 uppercase">
+                <h4 className="font-mono text-sm text-[var(--color-orange)] mb-4 uppercase">
                   {group.title}
                 </h4>
                 <div className="flex flex-wrap gap-2">

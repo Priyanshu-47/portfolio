@@ -51,7 +51,7 @@ export default function Hero() {
         {/* Giant background text — uses rem so zoom scales it */}
         <div className="absolute inset-0 flex items-start justify-center pointer-events-none select-none overflow-hidden z-[1]">
           <span
-            className="font-[var(--font-display)] font-bold uppercase text-center whitespace-nowrap"
+            className="font-display font-bold uppercase text-center whitespace-nowrap"
             style={{
               fontSize: "16rem",
               lineHeight: 0.82,

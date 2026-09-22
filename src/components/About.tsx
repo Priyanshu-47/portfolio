@@ -74,11 +74,11 @@ export default function About() {
                   <span className="text-[var(--color-orange)] text-sm">
                     {feature.icon}
                   </span>
-                  <span className="font-[var(--font-mono)] text-xs text-[var(--color-orange)] uppercase">
+                  <span className="font-mono text-xs text-[var(--color-orange)] uppercase">
                     {feature.label}
                   </span>
                 </div>
-                <h4 className="font-[var(--font-mono)] text-sm font-medium text-white mb-3">
+                <h4 className="font-mono text-sm font-medium text-white mb-3">
                   {feature.title}
                 </h4>
                 <p className="text-[var(--color-dark-secondary)] text-xs leading-relaxed">

@@ -20,7 +20,7 @@ export default function Marquee() {
         {[...items, ...items].map((item, i) => (
           <span
             key={i}
-            className="mx-8 font-[var(--font-mono)] text-sm text-[var(--color-dark-muted)] whitespace-nowrap"
+            className="mx-8 font-mono text-sm text-[var(--color-dark-muted)] whitespace-nowrap"
           >
             {item}
           </span>

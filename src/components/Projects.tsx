@@ -45,7 +45,7 @@ export default function Projects() {
           {/* Right: Year + Description + CTA */}
           <div className="lg:pt-32">
             <Reveal delay={0.1}>
-              <p className="font-[var(--font-mono)] text-[var(--color-light-secondary)] text-sm mb-6">
+              <p className="font-mono text-[var(--color-light-secondary)] text-sm mb-6">
                 (2022-26©)
               </p>
             </Reveal>
@@ -60,7 +60,7 @@ export default function Projects() {
             <Reveal delay={0.2}>
               <Link
                 to="/projects"
-                className="flex items-center justify-center w-full bg-[var(--color-dark-bg)] text-white text-center py-5 rounded-full font-[var(--font-display)] text-lg font-semibold hover:bg-[var(--color-dark-card)] transition-colors group"
+                className="flex items-center justify-center w-full bg-[var(--color-dark-bg)] text-white text-center py-5 rounded-full font-display text-lg font-semibold hover:bg-[var(--color-dark-card)] transition-colors group"
               >
                 ALL PROJECTS
                 <span className="inline-flex items-center justify-center w-7 h-7 ml-3 rounded-full bg-[var(--color-orange)] text-white text-xs">
@@ -82,7 +82,7 @@ export default function Projects() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <span className="text-[var(--color-orange)] text-xs">✦</span>
-                    <h3 className="font-[var(--font-display)] text-lg font-semibold text-[var(--color-light-text)] group-hover:text-[var(--color-orange)] transition-colors">
+                    <h3 className="font-display text-lg font-semibold text-[var(--color-light-text)] group-hover:text-[var(--color-orange)] transition-colors">
                       {project.title}
                     </h3>
                   </div>

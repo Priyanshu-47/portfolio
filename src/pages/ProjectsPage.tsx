@@ -64,7 +64,7 @@ export default function ProjectsPage() {
                   {/* Image placeholder */}
                   <div className="relative h-72 overflow-hidden bg-[var(--color-light-card)]">
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="font-[var(--font-display)] text-[8rem] font-bold text-[var(--color-light-text)] opacity-[0.05] select-none">
+                      <span className="font-display text-[8rem] font-bold text-[var(--color-light-text)] opacity-[0.05] select-none">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                     </div>
@@ -76,15 +76,15 @@ export default function ProjectsPage() {
                   {/* Content */}
                   <div className="p-6">
                     <div className="flex items-center gap-3 mb-3">
-                      <span className="text-xs font-[var(--font-mono)] text-[var(--color-accent)] font-medium uppercase">
+                      <span className="text-xs font-mono text-[var(--color-accent)] font-medium uppercase">
                         {project.category}
                       </span>
                       <span className="w-1 h-1 rounded-full bg-[var(--color-light-muted)]" />
-                      <span className="text-xs text-[var(--color-light-muted)] font-[var(--font-mono)]">
+                      <span className="text-xs text-[var(--color-light-muted)] font-mono">
                         {project.period}
                       </span>
                     </div>
-                    <h3 className="font-[var(--font-display)] text-xl font-semibold text-[var(--color-light-text)] mb-2 group-hover:text-[var(--color-accent)] transition-colors">
+                    <h3 className="font-display text-xl font-semibold text-[var(--color-light-text)] mb-2 group-hover:text-[var(--color-accent)] transition-colors">
                       {project.title}
                     </h3>
                     <p className="text-[var(--color-light-secondary)] text-sm leading-relaxed line-clamp-2 mb-4">
@@ -94,7 +94,7 @@ export default function ProjectsPage() {
                       {project.tags.slice(0, 4).map((tag) => (
                         <span
                           key={tag}
-                          className="px-3 py-1 text-xs font-[var(--font-mono)] text-[var(--color-accent)] bg-[var(--color-accent-subtle)] rounded-full"
+                          className="px-3 py-1 text-xs font-mono text-[var(--color-accent)] bg-[var(--color-accent-subtle)] rounded-full"
                         >
                           {tag}
                         </span>

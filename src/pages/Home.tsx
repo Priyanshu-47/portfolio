@@ -50,8 +50,8 @@ export default function Home() {
         <div className="container-riwa relative z-10">
           {/* Massive heading — left-aligned to line 2 (25% of viewport) */}
           <Reveal delay={0.1}>
-            <h2 className="font-[var(--font-display)] font-semibold uppercase leading-[0.88] tracking-[-0.04em] text-[var(--color-light-text)] ml-[calc(25vw-24px)] md:ml-[calc(25vw-48px)] xl:ml-[calc(570px-25vw)]"
-              style={{ fontSize: "clamp(3.5rem, 9vw, 7.5rem)" }}>
+            <h2 className="font-display font-semibold uppercase leading-none tracking-[-0.06em] text-[var(--color-light-text)] ml-[calc(25vw-24px)] md:ml-[calc(25vw-48px)] xl:ml-[calc(570px-25vw)]"
+              style={{ fontSize: "clamp(3rem, 7.2vw, 100px)" }}>
               <span className="block">Crafting</span>
               <span className="block">Scalable</span>
               <span className="block text-[var(--color-light-muted)]">Products</span>
@@ -63,7 +63,10 @@ export default function Home() {
           <div className="mt-10">
             <Reveal delay={0.2}>
               <div className="ml-[50%] max-w-md">
-                <p className="text-[var(--color-light-secondary)] text-base leading-relaxed">
+                <p
+                  className="font-body text-[var(--color-light-secondary)]"
+                  style={{ fontSize: "18px", lineHeight: 1.4 }}
+                >
                   I blend engineering, performance, and clean architecture to create
                   full-stack applications — and keep them running smoothly.
                 </p>

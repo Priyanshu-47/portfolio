@@ -23,15 +23,15 @@ export default function Experience() {
             <Reveal key={i} delay={i * 0.1}>
               <div className="group border-b border-white/5 py-8 flex flex-col md:flex-row gap-6 md:gap-12">
                 <div className="md:w-48 shrink-0">
-                  <span className="font-[var(--font-mono)] text-[var(--color-orange)] text-sm">
+                  <span className="font-mono text-[var(--color-orange)] text-sm">
                     {exp.period}
                   </span>
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-[var(--font-display)] text-xl font-semibold text-white mb-1 group-hover:text-[var(--color-orange)] transition-colors">
+                  <h3 className="font-display text-xl font-semibold text-white mb-1 group-hover:text-[var(--color-orange)] transition-colors">
                     {exp.role}
                   </h3>
-                  <p className="text-[var(--color-orange)] text-sm font-medium mb-3 font-[var(--font-mono)]">
+                  <p className="text-[var(--color-orange)] text-sm font-medium mb-3 font-mono">
                     {exp.company}
                   </p>
                   <ul className="text-[var(--color-dark-secondary)] text-sm leading-relaxed max-w-2xl space-y-1">
@@ -46,7 +46,7 @@ export default function Experience() {
                     {exp.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-0.5 text-xs font-[var(--font-mono)] text-[var(--color-dark-muted)] border border-white/5 rounded"
+                        className="px-2 py-0.5 text-xs font-mono text-[var(--color-dark-muted)] border border-white/5 rounded"
                       >
                         {tag}
                       </span>

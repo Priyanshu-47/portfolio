@@ -45,7 +45,7 @@ export default function AboutPage() {
           <div className="grid lg:grid-cols-2 gap-16">
             <Reveal>
               <div>
-                <h2 className="font-[var(--font-display)] text-3xl font-bold text-[var(--color-light-text)] mb-6">
+                <h2 className="font-display text-3xl font-bold text-[var(--color-light-text)] mb-6">
                   {profile.name}
                 </h2>
                 <p className="text-[var(--color-light-secondary)] text-lg leading-relaxed mb-8">
@@ -73,7 +73,7 @@ export default function AboutPage() {
                     key={item.label}
                     className="flex justify-between items-center border-b border-[var(--color-light-border)] pb-4"
                   >
-                    <span className="text-xs font-[var(--font-mono)] text-[var(--color-light-muted)] uppercase tracking-wider">
+                    <span className="text-xs font-mono text-[var(--color-light-muted)] uppercase tracking-wider">
                       {item.label}
                     </span>
                     <span className="text-[var(--color-light-text)] font-medium text-sm text-right">
@@ -106,12 +106,12 @@ export default function AboutPage() {
               <Reveal key={i} delay={i * 0.1}>
                 <div className="group border-b border-[var(--color-dark-border)] py-8 flex flex-col md:flex-row gap-6 md:gap-12">
                   <div className="md:w-48 shrink-0">
-                    <span className="font-[var(--font-mono)] text-[var(--color-accent)] text-sm">
+                    <span className="font-mono text-[var(--color-accent)] text-sm">
                       {exp.period}
                     </span>
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-[var(--font-display)] text-xl font-semibold text-[var(--color-dark-text)] mb-1 group-hover:text-[var(--color-accent)] transition-colors">
+                    <h3 className="font-display text-xl font-semibold text-[var(--color-dark-text)] mb-1 group-hover:text-[var(--color-accent)] transition-colors">
                       {exp.role}
                     </h3>
                     <p className="text-[var(--color-accent)] text-sm font-medium mb-3">
@@ -129,7 +129,7 @@ export default function AboutPage() {
                       {exp.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-2 py-0.5 text-xs font-[var(--font-mono)] text-[var(--color-dark-muted)] border border-[var(--color-dark-border)] rounded"
+                          className="px-2 py-0.5 text-xs font-mono text-[var(--color-dark-muted)] border border-[var(--color-dark-border)] rounded"
                         >
                           {tag}
                         </span>
@@ -155,13 +155,13 @@ export default function AboutPage() {
                 <div className="space-y-4">
                   {education.map((edu, i) => (
                     <div key={i} className="riwa-card p-6">
-                      <h4 className="font-[var(--font-display)] font-semibold text-[var(--color-dark-text)] mb-1">
+                      <h4 className="font-display font-semibold text-[var(--color-dark-text)] mb-1">
                         {edu.degree || edu.school}
                       </h4>
                       <p className="text-[var(--color-accent)] text-sm mb-1">
                         {edu.school}
                       </p>
-                      <p className="text-[var(--color-dark-muted)] text-xs font-[var(--font-mono)]">
+                      <p className="text-[var(--color-dark-muted)] text-xs font-mono">
                         {edu.period} · {edu.location}
                       </p>
                     </div>
@@ -181,14 +181,14 @@ export default function AboutPage() {
                       key={i}
                       className="riwa-card p-6"
                     >
-                      <h4 className="font-[var(--font-display)] font-semibold text-[var(--color-dark-text)] mb-1">
+                      <h4 className="font-display font-semibold text-[var(--color-dark-text)] mb-1">
                         {cert.title}
                       </h4>
                       <p className="text-[var(--color-accent)] text-sm mb-1">
                         {cert.issuer}
                       </p>
                       {cert.period && (
-                        <p className="text-[var(--color-dark-muted)] text-xs font-[var(--font-mono)]">
+                        <p className="text-[var(--color-dark-muted)] text-xs font-mono">
                           {cert.period}
                         </p>
                       )}

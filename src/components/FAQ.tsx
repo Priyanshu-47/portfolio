@@ -54,7 +54,7 @@ export default function FAQ() {
                   }
                   className="w-full flex items-center justify-between gap-4 py-6 text-left group"
                 >
-                  <span className="font-[var(--font-display)] text-lg font-semibold text-[var(--color-dark-text)] group-hover:text-[var(--color-accent)] transition-colors">
+                  <span className="font-display text-lg font-semibold text-[var(--color-dark-text)] group-hover:text-[var(--color-accent)] transition-colors">
                     {faq.question}
                   </span>
                   <motion.span

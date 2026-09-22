@@ -101,14 +101,14 @@ export default function Stats() {
                     style={{ inset: "24px 28px" }}
                   >
                     {/* Label — IBM Plex Mono */}
-                    <p className="font-[var(--font-mono)] text-[#686868] text-xs uppercase tracking-[0.12em] flex items-center gap-2">
+                    <p className="font-mono text-[#686868] text-xs uppercase tracking-[0.12em] flex items-center gap-2">
                       <span className="text-[var(--color-orange)] text-[10px] leading-none">■</span>
                       {stat.label}
                     </p>
 
                     {/* Value — 54px IBM Plex Mono */}
                     <p
-                      className="font-[var(--font-mono)] font-semibold text-[#0B0D14]"
+                      className="font-mono font-semibold text-[#0B0D14]"
                       style={{
                         fontSize: "54px",
                         letterSpacing: "-2px",
@@ -129,7 +129,7 @@ export default function Stats() {
 
                     {/* Description + icon */}
                     <div className="flex items-end justify-between">
-                      <p className="font-[var(--font-mono)] text-[#5E5E5E] text-xs leading-relaxed whitespace-pre-line">
+                      <p className="font-mono text-[#5E5E5E] text-xs leading-relaxed whitespace-pre-line">
                         {stat.description}
                       </p>
                       <span className="text-black/15 text-3xl leading-none">

@@ -43,7 +43,7 @@ export default function Contact() {
           <Reveal>
             <form onSubmit={handleSubmit} className="space-y-8">
               <div>
-                <label className="block font-[var(--font-mono)] text-xs text-[var(--color-dark-muted)] uppercase tracking-wider mb-2">
+                <label className="block font-mono text-xs text-[var(--color-dark-muted)] uppercase tracking-wider mb-2">
                   Name
                 </label>
                 <input
@@ -52,11 +52,11 @@ export default function Contact() {
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Jane Smith"
                   required
-                  className="w-full bg-transparent border-b border-white/10 text-white py-3 font-[var(--font-mono)] text-sm focus:border-[var(--color-orange)] outline-none transition-colors placeholder:text-white/20"
+                  className="w-full bg-transparent border-b border-white/10 text-white py-3 font-mono text-sm focus:border-[var(--color-orange)] outline-none transition-colors placeholder:text-white/20"
                 />
               </div>
               <div>
-                <label className="block font-[var(--font-mono)] text-xs text-[var(--color-dark-muted)] uppercase tracking-wider mb-2">
+                <label className="block font-mono text-xs text-[var(--color-dark-muted)] uppercase tracking-wider mb-2">
                   Email
                 </label>
                 <input
@@ -65,11 +65,11 @@ export default function Contact() {
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                   placeholder="jane@example.com"
                   required
-                  className="w-full bg-transparent border-b border-white/10 text-white py-3 font-[var(--font-mono)] text-sm focus:border-[var(--color-orange)] outline-none transition-colors placeholder:text-white/20"
+                  className="w-full bg-transparent border-b border-white/10 text-white py-3 font-mono text-sm focus:border-[var(--color-orange)] outline-none transition-colors placeholder:text-white/20"
                 />
               </div>
               <div>
-                <label className="block font-[var(--font-mono)] text-xs text-[var(--color-dark-muted)] uppercase tracking-wider mb-2">
+                <label className="block font-mono text-xs text-[var(--color-dark-muted)] uppercase tracking-wider mb-2">
                   Message
                 </label>
                 <textarea
@@ -78,7 +78,7 @@ export default function Contact() {
                   placeholder="Leave a message"
                   required
                   rows={5}
-                  className="w-full bg-transparent border-b border-white/10 text-white py-3 font-[var(--font-mono)] text-sm focus:border-[var(--color-orange)] outline-none transition-colors resize-none placeholder:text-white/20"
+                  className="w-full bg-transparent border-b border-white/10 text-white py-3 font-mono text-sm focus:border-[var(--color-orange)] outline-none transition-colors resize-none placeholder:text-white/20"
                 />
               </div>
 
@@ -103,13 +103,13 @@ export default function Contact() {
 
               <div className="space-y-4">
                 <div className="flex justify-between items-center border-b border-white/5 py-4">
-                  <span className="font-[var(--font-mono)] text-xs text-[var(--color-dark-muted)] uppercase">
+                  <span className="font-mono text-xs text-[var(--color-dark-muted)] uppercase">
                     Email
                   </span>
                   <span className="text-white text-sm">{profile.email}</span>
                 </div>
                 <div className="flex justify-between items-center border-b border-white/5 py-4">
-                  <span className="font-[var(--font-mono)] text-xs text-[var(--color-dark-muted)] uppercase">
+                  <span className="font-mono text-xs text-[var(--color-dark-muted)] uppercase">
                     Location
                   </span>
                   <span className="text-white text-sm">{profile.location}</span>

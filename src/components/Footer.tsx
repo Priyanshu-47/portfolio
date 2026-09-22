@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <Link
             to="/"
-            className="font-[var(--font-display)] font-bold text-white text-lg"
+            className="font-display font-bold text-white text-lg"
           >
             PRIYANSHU<span className="text-[var(--color-orange)]">.</span>
           </Link>
@@ -17,19 +17,19 @@ export default function Footer() {
           <div className="flex items-center gap-6">
             <Link
               to="/"
-              className="font-[var(--font-mono)] text-xs text-[var(--color-dark-muted)] hover:text-white transition-colors"
+              className="font-mono text-xs text-[var(--color-dark-muted)] hover:text-white transition-colors"
             >
               about
             </Link>
             <Link
               to="/projects"
-              className="font-[var(--font-mono)] text-xs text-[var(--color-dark-muted)] hover:text-white transition-colors"
+              className="font-mono text-xs text-[var(--color-dark-muted)] hover:text-white transition-colors"
             >
               projects
             </Link>
             <Link
               to="/contact"
-              className="font-[var(--font-mono)] text-xs text-[var(--color-dark-muted)] hover:text-white transition-colors"
+              className="font-mono text-xs text-[var(--color-dark-muted)] hover:text-white transition-colors"
             >
               contact
             </Link>

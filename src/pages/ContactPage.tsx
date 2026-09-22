@@ -73,7 +73,7 @@ export default function ContactPage() {
                       <FiMail className="text-[var(--color-accent)]" />
                     </div>
                     <div>
-                      <p className="text-xs text-[var(--color-dark-muted)] font-[var(--font-mono)] uppercase tracking-wider">
+                      <p className="text-xs text-[var(--color-dark-muted)] font-mono uppercase tracking-wider">
                         Email
                       </p>
                       <p className="text-[var(--color-dark-text)]">
@@ -87,7 +87,7 @@ export default function ContactPage() {
                       <FiMapPin className="text-[var(--color-accent)]" />
                     </div>
                     <div>
-                      <p className="text-xs text-[var(--color-dark-muted)] font-[var(--font-mono)] uppercase tracking-wider">
+                      <p className="text-xs text-[var(--color-dark-muted)] font-mono uppercase tracking-wider">
                         Location
                       </p>
                       <p className="text-[var(--color-dark-text)]">
@@ -127,7 +127,7 @@ export default function ContactPage() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid sm:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-xs text-[var(--color-dark-muted)] font-[var(--font-mono)] uppercase tracking-wider mb-2">
+                    <label className="block text-xs text-[var(--color-dark-muted)] font-mono uppercase tracking-wider mb-2">
                       Name
                     </label>
                     <input
@@ -141,7 +141,7 @@ export default function ContactPage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-xs text-[var(--color-dark-muted)] font-[var(--font-mono)] uppercase tracking-wider mb-2">
+                    <label className="block text-xs text-[var(--color-dark-muted)] font-mono uppercase tracking-wider mb-2">
                       Email
                     </label>
                     <input
@@ -157,7 +157,7 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs text-[var(--color-dark-muted)] font-[var(--font-mono)] uppercase tracking-wider mb-2">
+                  <label className="block text-xs text-[var(--color-dark-muted)] font-mono uppercase tracking-wider mb-2">
                     Subject
                   </label>
                   <input
@@ -172,7 +172,7 @@ export default function ContactPage() {
                 </div>
 
                 <div>
-                  <label className="block text-xs text-[var(--color-dark-muted)] font-[var(--font-mono)] uppercase tracking-wider mb-2">
+                  <label className="block text-xs text-[var(--color-dark-muted)] font-mono uppercase tracking-wider mb-2">
                     Message
                   </label>
                   <textarea

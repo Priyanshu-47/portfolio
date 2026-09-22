@@ -69,13 +69,13 @@ export default function Services() {
                   <span className="text-[var(--color-orange)] text-lg">
                     {icons[i]}
                   </span>
-                  <span className="font-[var(--font-mono)] text-[var(--color-dark-muted)] text-sm">
+                  <span className="font-mono text-[var(--color-dark-muted)] text-sm">
                     {service.number}
                   </span>
                 </div>
 
                 {/* Center: service title */}
-                <h4 className="font-[var(--font-mono)] text-lg md:text-xl font-medium text-white flex-1 ml-8 md:ml-16">
+                <h4 className="font-mono text-lg md:text-xl font-medium text-white flex-1 ml-8 md:ml-16">
                   {service.title}
                 </h4>
 

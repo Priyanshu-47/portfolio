@@ -22,20 +22,20 @@ export default function Credentials() {
           {/* Education */}
           <Reveal>
             <div>
-              <h3 className="font-[var(--font-display)] text-lg font-semibold text-[var(--color-dark-text)] mb-6 flex items-center gap-3">
+              <h3 className="font-display text-lg font-semibold text-[var(--color-dark-text)] mb-6 flex items-center gap-3">
                 <span className="w-2 h-2 rounded-full bg-[var(--color-accent)]" />
                 Education
               </h3>
               <div className="space-y-4">
                 {education.map((edu, i) => (
                   <div key={i} className="riwa-card p-5">
-                    <h4 className="font-[var(--font-display)] font-semibold text-[var(--color-dark-text)] mb-1">
+                    <h4 className="font-display font-semibold text-[var(--color-dark-text)] mb-1">
                       {edu.degree || edu.school}
                     </h4>
                     <p className="text-[var(--color-accent)] text-sm mb-1">
                       {edu.school}
                     </p>
-                    <p className="text-[var(--color-dark-muted)] text-xs font-[var(--font-mono)]">
+                    <p className="text-[var(--color-dark-muted)] text-xs font-mono">
                       {edu.period} · {edu.location}
                     </p>
                   </div>
@@ -47,7 +47,7 @@ export default function Credentials() {
           {/* Certifications */}
           <Reveal delay={0.2}>
             <div>
-              <h3 className="font-[var(--font-display)] text-lg font-semibold text-[var(--color-dark-text)] mb-6 flex items-center gap-3">
+              <h3 className="font-display text-lg font-semibold text-[var(--color-dark-text)] mb-6 flex items-center gap-3">
                 <span className="w-2 h-2 rounded-full bg-[var(--color-accent)]" />
                 Certifications
               </h3>
@@ -57,14 +57,14 @@ export default function Credentials() {
                     key={i}
                     className="riwa-card p-5"
                   >
-                    <h4 className="font-[var(--font-display)] font-semibold text-[var(--color-dark-text)] mb-1">
+                    <h4 className="font-display font-semibold text-[var(--color-dark-text)] mb-1">
                       {cert.title}
                     </h4>
                     <p className="text-[var(--color-accent)] text-sm mb-1">
                       {cert.issuer}
                     </p>
                     {cert.period && (
-                      <p className="text-[var(--color-dark-muted)] text-xs font-[var(--font-mono)]">
+                      <p className="text-[var(--color-dark-muted)] text-xs font-mono">
                         {cert.period}
                       </p>
                     )}

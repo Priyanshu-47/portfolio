@@ -55,7 +55,7 @@ export default function ProjectDetail() {
           </Reveal>
 
           <Reveal>
-            <h1 className="font-[var(--font-display)] font-bold text-[var(--color-dark-text)] leading-[1.05] tracking-tight max-w-4xl mb-6"
+            <h1 className="font-display font-bold text-[var(--color-dark-text)] leading-[1.05] tracking-tight max-w-4xl mb-6"
               style={{ fontSize: "clamp(2.5rem, 5vw, 5rem)" }}
             >
               {project.title}
@@ -86,7 +86,7 @@ export default function ProjectDetail() {
               {project.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="px-3 py-1 text-xs font-[var(--font-mono)] text-[var(--color-accent)] bg-[var(--color-accent-subtle)] rounded-full"
+                  className="px-3 py-1 text-xs font-mono text-[var(--color-accent)] bg-[var(--color-accent-subtle)] rounded-full"
                 >
                   {tag}
                 </span>
@@ -108,7 +108,7 @@ export default function ProjectDetail() {
         <div className="container-riwa">
           <Reveal>
             <div className="w-full h-[300px] lg:h-[500px] rounded-2xl bg-gradient-to-br from-[var(--color-dark-card)] via-[#1a1a1a] to-[var(--color-dark-border)] flex items-center justify-center overflow-hidden">
-              <span className="font-[var(--font-display)] text-[8rem] font-bold text-[var(--color-dark-border)] select-none">
+              <span className="font-display text-[8rem] font-bold text-[var(--color-dark-border)] select-none">
                 {project.title.charAt(0)}
               </span>
             </div>
@@ -127,10 +127,10 @@ export default function ProjectDetail() {
           ].map((section, i) => (
             <Reveal key={i} delay={i * 0.1}>
               <div className="border-b border-[var(--color-dark-border)] pb-12 mb-12">
-                <p className="font-[var(--font-mono)] text-xs text-[var(--color-accent)] uppercase tracking-wider mb-4">
+                <p className="font-mono text-xs text-[var(--color-accent)] uppercase tracking-wider mb-4">
                   {section.label}
                 </p>
-                <h2 className="font-[var(--font-display)] text-2xl lg:text-3xl font-semibold text-[var(--color-dark-text)] tracking-tight mb-6">
+                <h2 className="font-display text-2xl lg:text-3xl font-semibold text-[var(--color-dark-text)] tracking-tight mb-6">
                   {section.title}
                 </h2>
                 <p className="max-w-2xl text-[var(--color-dark-secondary)] leading-relaxed">
@@ -143,7 +143,7 @@ export default function ProjectDetail() {
           {project.testimonial && (
             <Reveal>
               <div className="riwa-card p-8 lg:p-12 max-w-2xl">
-                <p className="font-[var(--font-display)] text-lg text-[var(--color-dark-text)] leading-relaxed italic">
+                <p className="font-display text-lg text-[var(--color-dark-text)] leading-relaxed italic">
                   "{project.testimonial.quote}"
                 </p>
                 <div className="mt-6 flex items-center gap-3">
@@ -169,14 +169,14 @@ export default function ProjectDetail() {
       <section className="bg-[var(--color-dark-bg)] border-t border-[var(--color-dark-border)] py-16">
         <div className="container-riwa">
           <Reveal>
-            <p className="font-[var(--font-mono)] text-xs text-[var(--color-dark-muted)] uppercase tracking-wider mb-4">
+            <p className="font-mono text-xs text-[var(--color-dark-muted)] uppercase tracking-wider mb-4">
               Next Project
             </p>
             <Link
               to={`/projects/${nextProject.slug}`}
               className="group block"
             >
-              <h3 className="font-[var(--font-display)] text-2xl lg:text-4xl font-semibold text-[var(--color-dark-text)] tracking-tight group-hover:text-[var(--color-accent)] transition-colors">
+              <h3 className="font-display text-2xl lg:text-4xl font-semibold text-[var(--color-dark-text)] tracking-tight group-hover:text-[var(--color-accent)] transition-colors">
                 {nextProject.title}
               </h3>
               <p className="mt-2 text-sm text-[var(--color-dark-secondary)] flex items-center gap-2">

@@ -48,7 +48,7 @@ export default function Testimonials() {
                   {t.quote}
                 </p>
                 <div className="border-t border-[var(--color-dark-border)] pt-4">
-                  <p className="font-[var(--font-display)] font-semibold text-[var(--color-dark-text)] text-sm">
+                  <p className="font-display font-semibold text-[var(--color-dark-text)] text-sm">
                     {t.author}
                   </p>
                   <p className="text-[var(--color-accent)] text-xs">

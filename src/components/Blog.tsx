@@ -45,14 +45,14 @@ export default function Blog() {
             <Reveal key={i} delay={i * 0.15}>
               <article className="riwa-card p-6 group cursor-pointer h-full flex flex-col">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="px-3 py-1 text-xs font-[var(--font-mono)] text-[var(--color-accent)] bg-[var(--color-accent-subtle)] rounded-full">
+                  <span className="px-3 py-1 text-xs font-mono text-[var(--color-accent)] bg-[var(--color-accent-subtle)] rounded-full">
                     {article.tag}
                   </span>
-                  <span className="text-xs text-[var(--color-dark-muted)] font-[var(--font-mono)]">
+                  <span className="text-xs text-[var(--color-dark-muted)] font-mono">
                     {article.date}
                   </span>
                 </div>
-                <h3 className="font-[var(--font-display)] text-lg font-semibold text-[var(--color-dark-text)] mb-3 group-hover:text-[var(--color-accent)] transition-colors">
+                <h3 className="font-display text-lg font-semibold text-[var(--color-dark-text)] mb-3 group-hover:text-[var(--color-accent)] transition-colors">
                   {article.title}
                 </h3>
                 <p className="text-[var(--color-dark-secondary)] text-sm leading-relaxed flex-1">
