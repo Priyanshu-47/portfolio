@@ -37,7 +37,7 @@ export default function Navbar() {
         className="absolute top-0 left-0 right-0 z-50"
         style={{ pointerEvents: pastHero ? "none" : "auto" }}
       >
-        <div className="container-riwa flex items-center justify-between" style={{ height: "70px" }}>
+        <div className="flex items-center justify-between px-[17px]" style={{ height: "70px" }}>
           {/* Logo */}
           <Link
             to="/"
@@ -46,13 +46,14 @@ export default function Navbar() {
             PRIYANSHU<span className="text-[var(--color-orange)]">®</span>
           </Link>
 
-          {/* Desktop Nav links — only in hero */}
-          <div className="hidden md:flex items-center justify-between flex-1 mx-12">
-            {navLinks.map((link) => (
+          {/* Desktop Nav links — evenly spaced at 25%, 50%, 75% (lines 2, 3, 4) */}
+          <div className="hidden md:flex items-center absolute left-0 right-0">
+            {navLinks.map((link, i) => (
               <Link
                 key={link.path}
                 to={link.path}
-                className="font-[var(--font-sans)] text-base font-normal tracking-tight text-white hover:text-white/80"
+                className="font-[var(--font-sans)] text-base font-normal tracking-tight text-white hover:text-white/80 absolute"
+                style={{ left: `${(i + 1) * 25}%`, transform: "translateX(-50%)" }}
               >
                 {link.label}
               </Link>
@@ -93,7 +94,7 @@ export default function Navbar() {
             className="fixed top-0 left-0 right-0 z-50"
             style={{ mixBlendMode: "difference" }}
           >
-            <div className="container-riwa flex items-center justify-between" style={{ height: "70px" }}>
+            <div className="flex items-center justify-between px-[17px]" style={{ height: "70px" }}>
               {/* Logo — dark via blend mode */}
               <Link
                 to="/"

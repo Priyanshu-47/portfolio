@@ -12,8 +12,15 @@ function slugify(title: string) {
 
 export default function Projects() {
   return (
-    <section className="bg-[var(--color-light-bg)] py-24 relative overflow-hidden">
-      <div className="absolute inset-0 riwa-vertical-lines-dark" />
+    <section className="bg-[var(--color-light-bg)] py-24 relative">
+      {/* 5 vertical lines — Riwa: lines 1&5 at edges, 2-4 equally spaced */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 bottom-0 w-[2px] bg-white" style={{ left: "12px" }} />
+        <div className="absolute top-0 bottom-0 w-[1px] bg-white" style={{ left: "25%" }} />
+        <div className="absolute top-0 bottom-0 w-[1px] bg-white" style={{ left: "50%" }} />
+        <div className="absolute top-0 bottom-0 w-[1px] bg-white" style={{ left: "75%" }} />
+        <div className="absolute top-0 bottom-0 w-[2px] bg-white" style={{ right: "12px" }} />
+      </div>
 
       <div className="container-riwa relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-start">
@@ -21,7 +28,7 @@ export default function Projects() {
           <div>
             <Reveal>
               <div className="section-label section-label-dark mb-6">
-                ourProjects.
+                02  PORTFOLIO
               </div>
             </Reveal>
 
@@ -35,9 +42,15 @@ export default function Projects() {
             </Reveal>
           </div>
 
-          {/* Right: Description + CTA */}
+          {/* Right: Year + Description + CTA */}
           <div className="lg:pt-32">
             <Reveal delay={0.1}>
+              <p className="font-[var(--font-mono)] text-[var(--color-light-secondary)] text-sm mb-6">
+                (2022-26©)
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.15}>
               <p className="text-[var(--color-light-secondary)] text-lg leading-relaxed mb-8">
                 Discover how my creative vision transforms ideas into powerful,
                 conversion-driven digital experiences that truly stand out.
@@ -47,10 +60,12 @@ export default function Projects() {
             <Reveal delay={0.2}>
               <Link
                 to="/projects"
-                className="block w-full bg-[var(--color-dark-bg)] text-white text-center py-5 rounded-2xl font-[var(--font-display)] text-lg font-semibold hover:bg-[var(--color-dark-card)] transition-colors group"
+                className="flex items-center justify-center w-full bg-[var(--color-dark-bg)] text-white text-center py-5 rounded-full font-[var(--font-display)] text-lg font-semibold hover:bg-[var(--color-dark-card)] transition-colors group"
               >
                 ALL PROJECTS
-                <span className="inline-block ml-2 text-[var(--color-orange)]">✦</span>
+                <span className="inline-flex items-center justify-center w-7 h-7 ml-3 rounded-full bg-[var(--color-orange)] text-white text-xs">
+                  ✦
+                </span>
               </Link>
             </Reveal>
           </div>
