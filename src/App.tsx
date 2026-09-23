@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "./components/Navbar";
+import TopBlur from "./components/TopBlur";
 import Home from "./pages/Home";
 import ProjectsPage from "./pages/ProjectsPage";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -46,6 +47,7 @@ export default function App() {
           Skip to content
         </a>
 
+        <TopBlur />
         <Navbar />
 
         <main className="relative z-10">

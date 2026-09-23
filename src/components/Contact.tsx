@@ -20,7 +20,7 @@ export default function Contact() {
   };
 
   return (
-    <section className="bg-[var(--color-dark-bg)] py-24 relative">
+    <section id="contact" className="bg-[var(--color-dark-bg)] py-24 relative">
       <div className="container-riwa relative z-10">
         <Reveal>
           <div className="section-label mb-6">

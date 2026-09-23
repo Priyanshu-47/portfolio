@@ -188,6 +188,7 @@ export type Project = {
   highlights: string[]
   tags: string[]
   featured?: boolean
+  image?: string
 }
 
 export const projects: Project[] = [
