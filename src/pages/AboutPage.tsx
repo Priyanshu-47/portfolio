@@ -103,6 +103,7 @@ const h58Style: CSSProperties = {
   fontWeight: 600,
   fontSize: "clamp(32px, 4.15vw, 58px)",
   lineHeight: 1,
+  letterSpacing: "-3px",
   textTransform: "uppercase",
   color: "#666666",
   margin: 0,
@@ -113,21 +114,20 @@ const bodyDesc: CSSProperties = {
   fontSize: 18,
   lineHeight: "25.2px",
   margin: 0,
+  textWrap: "balance",
 };
 
 const btnStyle: CSSProperties = {
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
-  width: "100%",
-  maxWidth: 334,
+  width: 287,
   height: 66,
   boxSizing: "border-box",
   borderRadius: 40,
   background: "#080A10",
   padding: "20px 20px 20px 24px",
   gap: 16,
-  border: "1px solid rgba(255, 255, 255, 0.73)",
   textDecoration: "none",
 };
 
@@ -151,16 +151,73 @@ const rowLabelStyle: CSSProperties = {
   color: "rgba(255, 255, 255, 0.75)",
 };
 
-const STAR_PATH =
+export const STAR_PATH =
   "M 19 9.5 L 12.066 12.066 L 9.5 19 L 6.934 12.066 L 0 9.5 L 6.934 6.934 L 9.5 0 L 12.066 6.934 Z";
 
 /* notch clip-paths (paint-equivalent of Riwa's corner overlay divs) */
 /* two-up 663×400: TR chamfer 26×17 + BL step 93×38 */
 const TWO_CUT =
   "polygon(0 0, 96.078% 0, 100% 4.25%, 100% 100%, 14.027% 100%, 6.223% 95.125%, 2.215% 95.125%, 0 90.5%)";
-/* team card 327×394: BR step (mirrored BL step, scaled ≈0.4) */
-const TEAM_CUT =
-  "polygon(0 0, 100% 0, 100% calc(100% - 25px), calc(100% - 8px) calc(100% - 16px), calc(100% - 22px) calc(100% - 16px), calc(100% - 49px) 100%, 0 100%)";
+/* Riwa team-card glyphs — exact 14×14 mask paths */
+const TEAM_GLYPHS = {
+  harper: {
+    vb: "0 0 14 14",
+    d: "M 10.604 12 L 3.399 12 C 2.514 12 1.797 11.314 1.797 10.468 C 1.797 9.622 2.514 8.937 3.399 8.937 L 10.604 8.937 C 11.49 8.937 12.207 9.622 12.207 10.468 C 12.207 11.314 11.49 12 10.604 12 Z M 12.41 9.013 C 11.861 9.013 11.323 8.735 11.02 8.253 L 7.423 2.299 C 6.986 1.57 7.244 0.628 8.006 0.21 C 8.768 -0.207 9.754 0.039 10.191 0.767 L 13.788 6.722 C 14.225 7.45 13.967 8.392 13.205 8.81 C 12.948 8.949 12.679 9.013 12.41 9.013 Z M 1.596 9.011 C 1.327 9.011 1.047 8.946 0.8 8.807 C 0.038 8.39 -0.231 7.447 0.217 6.719 L 3.814 0.765 C 4.251 0.037 5.238 -0.22 6 0.208 C 6.762 0.626 7.03 1.568 6.582 2.296 L 2.985 8.25 C 2.694 8.732 2.156 9.011 1.596 9.011 Z",
+  },
+  mason: {
+    vb: "0 0 14 14",
+    d: "M 9.335 0.885 L 9.335 3.786 C 9.335 4.279 8.943 4.671 8.45 4.671 L 5.552 4.671 C 5.06 4.671 4.668 4.279 4.668 3.786 L 4.668 0.885 C 4.668 0.392 5.06 0 5.552 0 L 8.45 0 C 8.932 0 9.335 0.392 9.335 0.885 Z M 4.668 13.115 L 4.668 10.214 C 4.668 9.721 5.06 9.329 5.552 9.329 L 8.45 9.329 C 8.943 9.329 9.335 9.721 9.335 10.214 L 9.335 13.115 C 9.335 13.608 8.943 14 8.45 14 L 5.552 14 C 5.071 14 4.668 13.597 4.668 13.115 Z M 10.218 4.657 L 13.116 4.657 C 13.609 4.657 14.001 5.049 14.001 5.542 L 14.001 8.443 C 14.001 8.936 13.609 9.328 13.116 9.328 L 10.218 9.328 C 9.726 9.328 9.334 8.936 9.334 8.443 L 9.334 5.542 C 9.334 5.06 9.726 4.657 10.218 4.657 Z M 0.884 4.657 L 3.783 4.657 C 4.275 4.657 4.667 5.049 4.667 5.542 L 4.667 8.443 C 4.667 8.936 4.275 9.328 3.783 9.328 L 0.884 9.328 C 0.392 9.328 0 8.936 0 8.443 L 0 5.542 C 0 5.06 0.403 4.657 0.884 4.657 Z",
+  },
+  dylan: {
+    vb: "0 0 14 15",
+    d: "M 6.763 1.838 C 6.763 2.212 7.258 2.345 7.445 2.021 L 8.182 0.743 C 8.283 0.568 8.507 0.509 8.682 0.61 L 9.368 1.006 C 9.543 1.107 9.603 1.33 9.502 1.505 L 8.826 2.675 C 8.639 2.999 9.001 3.362 9.325 3.175 L 10.496 2.499 C 10.671 2.398 10.894 2.458 10.995 2.633 L 11.391 3.319 C 11.492 3.494 11.432 3.718 11.258 3.819 L 10.081 4.498 C 9.757 4.685 9.89 5.18 10.264 5.18 L 11.634 5.18 C 11.836 5.18 12 5.343 12 5.545 L 12 6.338 C 12 6.539 11.836 6.703 11.634 6.703 L 10.166 6.703 C 9.792 6.703 9.659 7.198 9.983 7.385 L 11.258 8.121 C 11.432 8.222 11.492 8.445 11.391 8.62 L 10.995 9.306 C 10.894 9.48 10.671 9.54 10.496 9.439 L 9.327 8.765 C 9.003 8.578 8.641 8.941 8.828 9.264 L 9.502 10.43 C 9.603 10.605 9.543 10.829 9.368 10.93 L 8.682 11.326 C 8.507 11.427 8.283 11.367 8.182 11.192 L 7.445 9.914 C 7.258 9.59 6.763 9.723 6.763 10.097 L 6.763 11.876 C 6.763 12.078 6.599 12.241 6.397 12.241 L 5.606 12.241 C 5.404 12.241 5.24 12.078 5.24 11.876 L 5.24 10.397 C 5.24 10.023 4.745 9.89 4.558 10.214 L 3.818 11.497 C 3.717 11.672 3.493 11.732 3.318 11.631 L 2.632 11.235 C 2.457 11.134 2.397 10.91 2.498 10.735 L 3.171 9.569 C 3.358 9.245 2.995 8.883 2.671 9.07 L 1.504 9.744 C 1.329 9.845 1.106 9.785 1.005 9.61 L 0.609 8.925 C 0.508 8.75 0.568 8.527 0.742 8.426 L 2.544 7.385 C 2.868 7.198 2.735 6.703 2.361 6.703 L 0.366 6.703 C 0.164 6.703 0 6.539 0 6.338 L 0 5.545 C 0 5.343 0.164 5.18 0.366 5.18 L 1.735 5.18 C 2.109 5.18 2.242 4.685 1.918 4.498 L 0.742 3.819 C 0.568 3.718 0.508 3.494 0.609 3.319 L 1.005 2.633 C 1.106 2.458 1.329 2.398 1.504 2.499 L 2.674 3.175 C 2.998 3.362 3.361 2.999 3.174 2.675 L 2.498 1.505 C 2.397 1.33 2.457 1.107 2.632 1.006 L 3.318 0.61 C 3.493 0.509 3.717 0.568 3.818 0.743 L 4.558 2.026 C 4.745 2.35 5.24 2.217 5.24 1.843 L 5.24 0.366 C 5.24 0.164 5.404 0 5.606 0 L 6.397 0 C 6.599 0 6.763 0.164 6.763 0.366 Z",
+  },
+  lila: {
+    vb: "0 0 14 14",
+    d: "M 0 2.065 C 0 0.925 0.925 0 2.065 0 C 3.388 0 4.369 1.226 4.08 2.516 L 3 7.342 L 5.973 7.342 L 9 7.342 L 7.92 2.516 C 7.631 1.226 8.612 0 9.935 0 C 11.075 0 12 0.925 12 2.065 L 12 10.247 C 12 11.215 11.215 12 10.247 12 L 1.753 12 C 0.785 12 0 11.215 0 10.247 Z",
+  },
+} as const;
+
+/* Riwa corner wedges (#F0F0F0) — TL 43×67, TR 30×130, BR 16×16 chamfer */
+function TeamCuts() {
+  return (
+    <>
+      <svg
+        className="absolute"
+        style={{ left: -1, top: -1 }}
+        width="43"
+        height="67"
+        viewBox="0 0 43 67"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path d="M 34 11.083 L 43 0 L 0 0 L 0 67 L 34 30.226 Z" fill="var(--color-light-bg)" />
+      </svg>
+      <svg
+        className="absolute"
+        style={{ right: -1, top: -1 }}
+        width="30"
+        height="130"
+        viewBox="0 0 30 130"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path d="M 19 116 L 30 130 L 30 0 L 0 0 L 19 15.328 Z" fill="var(--color-light-bg)" />
+      </svg>
+      <svg
+        className="absolute"
+        style={{ right: -1, bottom: -1 }}
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path d="M 0 0 L 0 16 L 16 16 Z" fill="var(--color-light-bg)" />
+      </svg>
+    </>
+  );
+}
 
 /* ------------------------------------------------------------------ pieces */
 
@@ -264,6 +321,28 @@ function Seam({ placement, heights, color = "#080A10" }: { placement: "top" | "b
   );
 }
 
+/* barcode strip ornament (Riwa belief media right edge, 26×145.761) */
+export function BarcodeDecor({ style }: { style: CSSProperties }) {
+  return (
+    <svg
+      className="absolute hidden lg:block"
+      style={{ width: 26, height: 146, ...style }}
+      viewBox="0 0 26 145.761"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path
+        d="M 26 145.761 L 0 145.761 L 0 144.447 L 26 144.447 Z M 26 140.504 L 0 140.504 L 0 136.562 L 26 136.562 Z M 26 135.247 L 0 135.247 L 0 133.933 L 26 133.933 Z M 26 132.619 L 0 132.619 L 0 128.676 L 26 128.676 Z M 26 127.362 L 0 127.362 L 0 126.048 L 26 126.048 Z M 26 124.713 L 0 124.713 L 0 120.771 L 26 120.771 Z M 26 116.828 L 0 116.828 L 0 115.514 L 26 115.514 Z M 26 114.2 L 0 114.2 L 0 112.885 L 26 112.885 Z M 26 111.571 L 0 111.571 L 0 107.629 L 26 107.629 Z M 26 106.314 L 0 106.314 L 0 105 L 26 105 Z"
+        fill="rgb(204, 204, 204)"
+      />
+      <path
+        d="M 26 103.904 L 0 103.904 L 0 102.59 L 26 102.59 Z M 26 98.647 L 0 98.647 L 0 94.705 L 26 94.705 Z M 26 93.391 L 0 93.391 L 0 92.076 L 26 92.076 Z M 26 90.762 L 0 90.762 L 0 86.82 L 26 86.82 Z M 26 85.505 L 0 85.505 L 0 84.191 L 26 84.191 Z M 26 82.856 L 0 82.856 L 0 81.542 L 26 81.542 Z M 26 77.6 L 0 77.6 L 0 73.657 L 26 73.657 Z M 26 72.343 L 0 72.343 L 0 71.029 L 26 71.029 Z M 26 69.714 L 0 69.714 L 0 65.772 L 26 65.772 Z M 26 64.458 L 0 64.458 L 0 63.144 L 26 63.144 Z M 26 61.809 L 0 61.809 L 0 60.495 L 26 60.495 Z M 26 56.552 L 0 56.552 L 0 52.609 L 26 52.609 Z M 26 51.295 L 0 51.295 L 0 49.981 L 26 49.981 Z M 26 48.667 L 0 48.667 L 0 44.724 L 26 44.724 Z M 26 43.41 L 0 43.41 L 0 42.096 L 26 42.096 Z M 26 40.76 L 0 40.76 L 0 39.447 L 26 39.447 L 26 40.761 Z M 26 35.504 L 0 35.504 L 0 31.562 L 26 31.562 Z M 26 30.247 L 0 30.247 L 0 28.933 L 26 28.933 Z M 26 27.619 L 0 27.619 L 0 23.676 L 26 23.676 Z M 26 22.362 L 0 22.362 L 0 21.048 L 26 21.048 Z M 26 19.713 L 0 19.713 L 0 18.4 L 26 18.4 L 26 19.714 Z M 26 14.456 L 0 14.456 L 0 10.514 L 26 10.514 Z M 26 9.2 L 0 9.2 L 0 7.885 L 26 7.885 Z M 26 6.572 L 0 6.572 L 0 2.628 L 26 2.628 L 26 6.571 Z M 26 1.315 L 0 1.315 L 0 0 L 26 0 L 26 1.314 Z"
+        fill="#FFFFFF"
+      />
+    </svg>
+  );
+}
+
 /* header/body media — img carries 125% slack; scroll parallax 0 → -20% */
 function ParallaxMedia({ index, ratio }: { index: number; ratio: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -277,23 +356,71 @@ function ParallaxMedia({ index, ratio }: { index: number; ratio: string }) {
     >
       <motion.div
         className="absolute left-0 top-0 w-full"
-        style={{ height: "125%", background: PLACEHOLDERS[index % PLACEHOLDERS.length], y }}
+        style={{
+          height: "125%",
+          background: PLACEHOLDERS[index % PLACEHOLDERS.length],
+          filter: "grayscale(1)",
+          y,
+        }}
         aria-hidden="true"
       />
+      {/* Riwa corner cut-outs (exact paths, dark bg on top of media) */}
+      <svg
+        className="absolute left-0 top-0"
+        width="391"
+        height="52"
+        viewBox="0 0 391 52"
+        aria-hidden="true"
+      >
+        <path d="M 391 0 L 0 0 L 0 52 L 26.007 14.345 L 365.89 14.345 Z" fill="#080A10" />
+      </svg>
+      <svg
+        className="absolute right-0 top-0"
+        width="35"
+        height="23"
+        viewBox="0 0 35 23"
+        aria-hidden="true"
+      >
+        <path d="M 35 23 L 0 0 L 35 0 Z" fill="#080A10" />
+      </svg>
+      <svg
+        className="absolute left-0 bottom-0"
+        width="122"
+        height="63"
+        viewBox="0 0 122 63"
+        aria-hidden="true"
+      >
+        <path d="M 0 0 L 0 63 L 122 63 L 54.12 24.128 L 19.263 24.128 Z" fill="#080A10" />
+      </svg>
     </div>
   );
 }
 
 /* circle + orange asterisk button icon (26) */
 function BtnIcon({ light = false, className = "" }: { light?: boolean; className?: string }) {
+  const orange = light ? "rgb(214, 54, 20)" : "rgb(229, 59, 23)";
   return (
-    <svg width={26} height={26} viewBox="0 0 26 26" fill="none" className={className} aria-hidden="true">
-      <circle cx="13" cy="13" r="13" fill={light ? "#080A10" : "#FFFFFF"} />
-      <g stroke="rgb(214, 54, 20)" strokeWidth="1.8" strokeLinecap="round" transform="translate(13 13)">
-        <line x1="0" y1="-5.5" x2="0" y2="5.5" />
-        <line x1="0" y1="-5.5" x2="0" y2="5.5" transform="rotate(60)" />
-        <line x1="0" y1="-5.5" x2="0" y2="5.5" transform="rotate(120)" />
-      </g>
+    <svg
+      width={26}
+      height={26}
+      viewBox="0 0 26 26"
+      fill="none"
+      className={className}
+      style={{ flexShrink: 0 }}
+      aria-hidden="true"
+    >
+      <path
+        d="M 13 26 C 5.82 26 0 20.18 0 13 L 0 13 C 0 5.82 5.82 0 13 0 L 13 0 C 20.18 0 26 5.82 26 13 L 26 13 C 26 20.18 20.18 26 13 26 Z"
+        fill={light ? "#080A10" : "#FFFFFF"}
+      />
+      <path
+        d="M 13 21.667 L 13 17.333 C 13 14.94 11.06 13 8.667 13 L 4.333 13 M 21.667 13 L 17.333 13 C 14.94 13 13 14.94 13 17.333 L 13 21.667 M 13 4.333 L 13 8.667 C 13 11.06 14.94 13 17.333 13 L 21.667 13 M 4.333 13 L 8.667 13 C 11.06 13 13 11.06 13 8.667 L 13 4.333"
+        fill="transparent"
+        stroke={orange}
+        strokeWidth={1}
+        strokeMiterlimit={10}
+      />
+      <path d="M 13 15.708 L 10.292 13 L 13 9.75 L 15.708 13 Z" fill={orange} />
     </svg>
   );
 }
@@ -337,73 +464,73 @@ function SplitHeading({ text, style }: { text: string; style: CSSProperties }) {
 
 /* --------------------------------------------------------------- section 03 */
 
-type TeamMember = { name: string; role: string; blurb: string; glyph: "dot" | "star" };
+type TeamMember = { name: string; role: string; blurb: string; glyph: keyof typeof TEAM_GLYPHS };
 
 function TeamCard({ member, index }: { member: TeamMember; index: number }) {
+  const glyph = TEAM_GLYPHS[member.glyph];
   return (
     <Reveal delay={index * 0.08}>
-      <div
-        className="relative"
-        style={{ aspectRatio: "327 / 394", background: "#000000", clipPath: TEAM_CUT }}
-      >
+      <div className="relative" style={{ aspectRatio: "327 / 394", background: "#000000" }}>
         <div
           className="absolute inset-0"
-          style={{ background: PLACEHOLDERS[index % PLACEHOLDERS.length], filter: "grayscale(1)" }}
+          style={{ background: PLACEHOLDERS[index % PLACEHOLDERS.length] }}
         />
         <div
           className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(8,10,16,0) 30%, rgba(8,10,16,0.55) 60%, rgba(8,10,16,0.9) 100%)",
-          }}
+          style={{ background: "linear-gradient(rgba(8, 10, 16, 0.01) 30%, rgb(8, 10, 15) 100%)" }}
         />
-        <div className="absolute" style={{ left: 16, right: 16, bottom: 16 }}>
-          <div className="flex items-center" style={{ gap: 10 }}>
-            {member.glyph === "dot" ? (
-              <span
-                className="block shrink-0"
-                style={{ width: 10, height: 10, borderRadius: "100%", background: "rgb(214, 54, 20)" }}
-              />
-            ) : (
-              <svg width="12" height="12" viewBox="0 0 19 19" className="shrink-0" aria-hidden="true">
-                <path d={STAR_PATH} fill="rgb(214, 54, 20)" />
-              </svg>
-            )}
-            <span
+        <TeamCuts />
+        <div className="absolute" style={{ left: 0, right: 0, bottom: 0, padding: "0 16px 15px" }}>
+          <svg
+            width="14"
+            height="14"
+            viewBox={glyph.vb}
+            preserveAspectRatio="none"
+            className="block"
+            aria-hidden="true"
+          >
+            <path d={glyph.d} fill="rgb(214, 54, 20)" />
+          </svg>
+          <div style={{ marginTop: 12 }}>
+            <p
               style={{
                 fontFamily: '"IBM Plex Mono", monospace',
                 fontSize: 14,
-                lineHeight: "17px",
+                lineHeight: "16.8px",
                 fontWeight: 500,
                 letterSpacing: "-0.56px",
                 textTransform: "uppercase",
                 color: "#FFFFFF",
+                margin: 0,
               }}
             >
               {member.name}
-            </span>
+            </p>
+            <p
+              style={{
+                fontFamily: '"Geist", sans-serif',
+                fontSize: 15,
+                lineHeight: "21px",
+                fontWeight: 400,
+                color: "rgba(255, 255, 255, 0.75)",
+                margin: 0,
+                textWrap: "balance",
+              }}
+            >
+              {member.role}
+            </p>
           </div>
+          <div style={{ marginTop: 12, borderTop: "1px dashed rgba(255, 255, 255, 0.3)" }} />
           <p
             style={{
               fontFamily: '"Geist", sans-serif',
-              fontSize: 16,
+              fontSize: 15,
               lineHeight: "21px",
-              color: "#FFFFFF",
-              margin: 0,
-              marginTop: 2,
-            }}
-          >
-            {member.role}
-          </p>
-          <div style={{ marginTop: 10, borderTop: "1px dashed rgba(255, 255, 255, 0.35)" }} />
-          <p
-            style={{
-              fontFamily: '"Geist", sans-serif',
-              fontSize: 16,
-              lineHeight: "21px",
+              fontWeight: 400,
               color: "#FFFFFF",
               margin: 0,
               marginTop: 12,
+              textWrap: "balance",
             }}
           >
             {member.blurb}
@@ -421,7 +548,7 @@ function LogoCard({ year, index }: { year: string; index: number }) {
     <div className="flex flex-col" style={{ height: 180 }}>
       <div
         className="flex items-center shrink-0"
-        style={{ height: 30, background: "#EBEBEB", padding: "6px 12px", gap: 16, boxSizing: "border-box" }}
+        style={{ height: 30, background: "rgb(241, 241, 241)", padding: "6px 12px", gap: 16, boxSizing: "border-box" }}
       >
         <span
           className="block shrink-0"
@@ -516,6 +643,7 @@ function AwardRow({ award, delay }: { award: Award; delay: number }) {
               color: "#9E9E9E",
               margin: 0,
               marginTop: 11,
+              textWrap: "balance",
             }}
           >
             {award.sub}
@@ -600,6 +728,7 @@ function InsightCard({ title, index }: { title: string; index: number }) {
                 fontWeight: 500,
                 color: "#0B0D14",
                 margin: 0,
+                textWrap: "balance",
               }}
             >
               {title}
@@ -615,32 +744,32 @@ function InsightCard({ title, index }: { title: string; index: number }) {
 
 const team: TeamMember[] = [
   {
-    name: "Noah Carter",
-    role: "Product Designer",
-    blurb: "Designs flows and interfaces that feel intuitive and look effortlessly polished.",
-    glyph: "star",
+    name: "Harper Collins",
+    role: "CEO & Art Director",
+    blurb: "Shapes visual direction with a strong focus on concept, consistency, and brand expression.",
+    glyph: "harper",
   },
   {
-    name: "Maya Patel",
-    role: "Visual Designer",
-    blurb: "Transforms complex problems into clear, usable product experiences.",
-    glyph: "dot",
+    name: "Mason Turner",
+    role: "Motion & UI Designer",
+    blurb: "Creates meaningful motion that enhances storytelling, interaction, and emotional impact.",
+    glyph: "mason",
   },
   {
     name: "Dylan Brooks",
     role: "UI/UX Designer",
     blurb: "Designs intuitive interfaces with a focus on usability and scalability.",
-    glyph: "dot",
+    glyph: "dylan",
   },
   {
     name: "Lila Anderson",
     role: "Framer Developer",
     blurb: "Builds scalable, maintainable systems with clean architecture and performance in mind.",
-    glyph: "star",
+    glyph: "lila",
   },
 ];
 
-const logoYears = ["2026", "2025", "2024", "2023", "2020", "2016"];
+const logoYears = ["/2026", "/2025", "/2024", "/2023", "/2020", "/2016"];
 
 const awards: Award[] = [
   { n: "001", title: "Featured Project", sub: "Behance", count: "×02", year: "/2026" },
@@ -682,17 +811,19 @@ export default function AboutPage() {
             </Reveal>
           </div>
 
-          <div className="flex flex-col justify-between" style={{ gap: 24 }}>
+          <div className="flex flex-col">
             <Reveal>
               <div className="flex justify-end lg:justify-end">
                 <NumberChip dark n="01" label="Who we are" />
               </div>
             </Reveal>
             <Reveal delay={0.1}>
-              <p style={{ ...bodyDesc, color: "#8A8A8A", maxWidth: 334 }}>{profile.tagline}</p>
+              <p style={{ ...bodyDesc, color: "#8A8A8A", maxWidth: 334, marginTop: 77 }}>
+                {profile.tagline}
+              </p>
             </Reveal>
             <Reveal delay={0.2}>
-              <div className="flex items-center" style={{ gap: 10 }}>
+              <div className="flex items-center" style={{ gap: 10, marginTop: 48 }}>
                 <div className="flex shrink-0">
                   {[0, 1, 2, 3].map((i) => (
                     <span
@@ -811,21 +942,43 @@ export default function AboutPage() {
                     The team
                   </span>
                   <span className="block" style={{ color: "var(--color-light-muted)" }}>
-                    behind what you see.
+                    behind what
+                  </span>
+                  <span className="block" style={{ color: "var(--color-light-muted)" }}>
+                    you see.
                   </span>
                 </h2>
               </Reveal>
               <Reveal delay={0.2}>
-                <div style={{ marginTop: 40 }}>
-                  <Link to="/contact" className="group" style={{ textDecoration: "none" }}>
-                    <div style={btnStyle}>
-                      <div className="flex flex-col overflow-hidden" style={{ height: 16 }}>
-                        <div className="btn-roll">
-                          <span style={btnTxtStyle}>Work with us</span>
-                          <span style={btnTxtStyle}>Work with us</span>
+                <div style={{ marginTop: 32 }}>
+                  <Link
+                    to="/contact"
+                    className="group"
+                    style={{ textDecoration: "none", display: "block", width: "100%", maxWidth: 334 }}
+                  >
+                    <div className="relative" style={{ height: 66 }}>
+                      <div style={btnStyle}>
+                        <div className="flex flex-col overflow-hidden" style={{ height: 16 }}>
+                          <div className="btn-roll">
+                            <span style={btnTxtStyle}>Work with us</span>
+                            <span style={btnTxtStyle}>Work with us</span>
+                          </div>
                         </div>
+                        <BtnIcon className="group-hover:rotate-45 transition-transform duration-300" />
                       </div>
-                      <BtnIcon className="group-hover:rotate-45 transition-transform duration-300" />
+                      <div
+                        aria-hidden="true"
+                        style={{
+                          position: "absolute",
+                          right: 0,
+                          top: 0,
+                          width: 66,
+                          height: 66,
+                          borderRadius: "50%",
+                          overflow: "hidden",
+                          background: PLACEHOLDERS[0],
+                        }}
+                      />
                     </div>
                   </Link>
                 </div>
@@ -833,7 +986,7 @@ export default function AboutPage() {
             </div>
 
             <div className="lg:col-span-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2" style={{ columnGap: 7, rowGap: 10 }}>
+              <div className="grid grid-cols-1 sm:grid-cols-2" style={{ columnGap: 13, rowGap: 10 }}>
                 {team.map((member, i) => (
                   <TeamCard key={member.name} member={member} index={i} />
                 ))}
@@ -881,10 +1034,11 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4" style={{ marginTop: 100 }}>
+          <div className="relative grid grid-cols-1 lg:grid-cols-4" style={{ marginTop: 100 }}>
             <div className="lg:col-span-3">
               <ParallaxMedia index={1} ratio="1000 / 630" />
             </div>
+            <BarcodeDecor style={{ right: 0, bottom: 0 }} />
           </div>
         </div>
       </section>
@@ -1061,40 +1215,16 @@ export default function AboutPage() {
                 </p>
               </Reveal>
               <Reveal delay={0.2}>
-                <div style={{ marginTop: 40 }} className="flex justify-center">
-                  <Link to="/blog" className="group" style={{ textDecoration: "none" }}>
-                    <div className="inline-flex items-center" style={{ gap: 16 }}>
+                <div style={{ marginTop: 40 }}>
+                  <Link to="/blog" className="group" style={{ textDecoration: "none", display: "block" }}>
+                    <div style={{ ...btnStyle, width: "100%", maxWidth: "100%" }}>
                       <div className="flex flex-col overflow-hidden" style={{ height: 16 }}>
                         <div className="btn-roll">
-                          <span
-                            style={{
-                              fontFamily: '"Sora", sans-serif',
-                              fontWeight: 600,
-                              fontSize: 16,
-                              lineHeight: "16px",
-                              letterSpacing: "-0.64px",
-                              textTransform: "uppercase",
-                              color: "#0B0D14",
-                            }}
-                          >
-                            All articles
-                          </span>
-                          <span
-                            style={{
-                              fontFamily: '"Sora", sans-serif',
-                              fontWeight: 600,
-                              fontSize: 16,
-                              lineHeight: "16px",
-                              letterSpacing: "-0.64px",
-                              textTransform: "uppercase",
-                              color: "#0B0D14",
-                            }}
-                          >
-                            All articles
-                          </span>
+                          <span style={btnTxtStyle}>All articles</span>
+                          <span style={btnTxtStyle}>All articles</span>
                         </div>
                       </div>
-                      <BtnIcon light className="group-hover:rotate-45 transition-transform duration-300" />
+                      <BtnIcon className="group-hover:rotate-45 transition-transform duration-300" />
                     </div>
                   </Link>
                 </div>

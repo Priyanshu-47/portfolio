@@ -10,6 +10,7 @@ import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import BlogPage from "./pages/BlogPage";
 import BlogDetail from "./pages/BlogDetail";
+import { TermsPage, PrivacyPage } from "./pages/LegalPage";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -32,6 +33,8 @@ function AnimatedRoutes() {
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<BlogDetail />} />
+        <Route path="/terms-of-service" element={<TermsPage />} />
+        <Route path="/privacy-policy" element={<PrivacyPage />} />
       </Routes>
     </AnimatePresence>
   );

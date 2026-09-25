@@ -116,7 +116,8 @@ export default function FAQ({
   variant?: "home" | "inner";
   band?: FAQBand;
 }) {
-  const [open, setOpen] = useState<number[]>([0]);
+  // Riwa default = ALL COLLAPSED (answers aren't in the DOM until opened)
+  const [open, setOpen] = useState<number[]>([]);
   const inner = variant === "inner";
 
   const toggle = (i: number) =>
@@ -150,7 +151,8 @@ export default function FAQ({
         <div className="absolute top-0 bottom-0 w-[2px] bg-white" style={{ right: "17px" }} />
       </div>
 
-      <div className="relative z-10 grid lg:grid-cols-2 gap-16 lg:gap-8 items-start">
+      {/* Riwa FAQ grid gap = 0: items x692 w667 = two 667px cols, no gap */}
+      <div className="relative z-10 grid lg:grid-cols-2 gap-16 lg:gap-0 items-start">
         {/* LEFT: chip → heading → CTA */}
         <div className="lg:sticky lg:top-28">
           <Reveal>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { CSSProperties } from "react";
 import type { FormEvent } from "react";
+import { Link } from "react-router-dom";
 import { Reveal } from "./Reveal";
 import { profile } from "../data/resume";
 
@@ -420,7 +421,21 @@ export default function Contact({ variant = "home" }: { variant?: "home" | "inne
                   margin: 0,
                 }}
               >
-                By submitting, you agree to our terms and privacy policy.
+                By submitting, you agree to our{" "}
+                <Link
+                  to="/terms-of-service"
+                  style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: 2 }}
+                >
+                  terms
+                </Link>{" "}
+                and{" "}
+                <Link
+                  to="/privacy-policy"
+                  style={{ color: "inherit", textDecoration: "underline", textUnderlineOffset: 2 }}
+                >
+                  privacy policy
+                </Link>
+                .
               </p>
             </form>
           </Reveal>
