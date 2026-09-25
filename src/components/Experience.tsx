@@ -218,12 +218,15 @@ export default function Experience() {
                       boxSizing: "border-box",
                     }}
                   >
-                    <div
-                      className="flex flex-col overflow-hidden justify-start group-hover:justify-end transition-[justify-content] duration-300"
-                      style={{ height: 16 }}
-                    >
-                      <span style={btnTextStyle}>Get in touch</span>
-                      <span style={btnTextStyle}>Get in touch</span>
+                    {/* Text-roll — Riwa flips justify-content instantly and a
+                        JS spring smooths the jump; we animate transform
+                        directly with the spring curve captured from the live
+                        site (420ms, ~1.4% overshoot — .btn-roll in index.css) */}
+                    <div className="flex flex-col overflow-hidden" style={{ height: 16 }}>
+                      <div className="btn-roll">
+                        <span style={btnTextStyle}>Get in touch</span>
+                        <span style={btnTextStyle}>Get in touch</span>
+                      </div>
                     </div>
                     <div
                       className="group-hover:rotate-45 transition-transform duration-300"

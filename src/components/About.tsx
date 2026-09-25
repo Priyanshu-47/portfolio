@@ -420,12 +420,13 @@ export default function About() {
                   border: "1px solid #E6E6E6",
                 }}
               >
-                <div
-                  className="flex flex-col overflow-hidden justify-start group-hover:justify-end transition-[justify-content] duration-300"
-                  style={{ height: 16 }}
-                >
-                  <span style={btnTextStyle}>Get in touch</span>
-                  <span style={btnTextStyle}>Get in touch</span>
+                {/* Text-roll — same Riwa spring curve as the Experience CTA
+                    (.btn-roll in index.css): 420ms, ~1.4% overshoot */}
+                <div className="flex flex-col overflow-hidden" style={{ height: 16 }}>
+                  <div className="btn-roll">
+                    <span style={btnTextStyle}>Get in touch</span>
+                    <span style={btnTextStyle}>Get in touch</span>
+                  </div>
                 </div>
                 <div
                   className="group-hover:rotate-45 transition-transform duration-300"

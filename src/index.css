@@ -298,6 +298,18 @@ body::before {
   color: var(--color-orange);
 }
 
+/* Light-section outline — Riwa benefits-style white cards (Skills) */
+.riwa-btn-outline-light {
+  border: 1px solid #e6e6e6;
+  color: var(--color-light-text);
+  background: transparent;
+}
+
+.riwa-btn-outline-light:hover {
+  border-color: var(--color-orange);
+  color: var(--color-orange);
+}
+
 /* Pill variant */
 .riwa-pill {
   border-radius: 50px;
@@ -362,4 +374,23 @@ body::before {
 
 .marquee-track:hover {
   animation-play-state: paused;
+}
+
+/* Riwa CTA text-roll — spring curve captured live from
+   riwadesign.framer.website: translateY 0 → -16px over 420ms with
+   ~1.4% overshoot then settle. Replaces transition-[justify-content]
+   (browsers render that as an instant snap — Riwa itself doesn't
+   transition justify-content either; it flips a .hover class on the
+   whole link and smooths the jump with a JS spring). Triggered by
+   .group:hover on the button link. */
+.btn-roll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  will-change: transform;
+  transition: transform 420ms linear(0, 0.079 13.3%, 0.325 17.4%, 0.601 24.5%, 0.838 33.6%, 0.983 46.7%, 1.002 49.5%, 1.0147 57.9%, 1.0121 69.3%, 1.0065 78.8%, 1.0029 87.6%, 1.0006 97.6%, 1);
+}
+
+.group:hover .btn-roll {
+  transform: translateY(-16px);
 }

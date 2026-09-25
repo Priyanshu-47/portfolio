@@ -1,216 +1,867 @@
+import { useRef } from "react";
 import { useParams, Link } from "react-router-dom";
-import {
-  FiArrowLeft,
-  FiArrowRight,
-  FiCalendar,
-  FiUser,
-} from "react-icons/fi";
-import { projectDetails } from "../data/projectDetails";
+import type { CSSProperties } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Reveal } from "../components/Reveal";
+import Contact from "../components/Contact";
 import Footer from "../components/Footer";
+import AnimatedLinesBand from "../components/AnimatedLinesBand";
+import { projects } from "../data/resume";
+import { projectDetails } from "../data/projectDetails";
+import { slugify, PLACEHOLDERS, CARD_ICON_MASK } from "./ProjectsPage";
+
+/* Riwa /projects/:slug — live-verified (rp-det-1..4 + DOM probes @ vw1398):
+   dark header #080A10 y0 h1728 pad "160 24 120", 5 lines white@15%:
+     chip col1 y160 — dark #21242B pad8/14 gap12 (dot10 orange + category
+       mono 500 14/17 uppercase #CCCCCC),
+     H1 row y213 (mt20) — flex space-between items-end: "/" Sora600 100/100
+       -0.06em #5E5E5E gap10 + title white; date right (mono 500 14/17
+       uppercase #9E9E9E ls-0.56, bottom-aligned to the H1 box → y296),
+     grid y413 (mt100) [col1 button | col2 empty | col3-4 right]:
+       button w334 h66 r40 bg #080A10 pad "20 20 20 24" gap16 justify-center,
+         border 0.73px white (rgba .73 at 1px), text Sora600 16/16 uppercase
+         ls-0.64 white roll (.btn-roll, two stacked copies, window 16) +
+         icon 26 (white circle + orange asterisk),
+       desc Geist 18/25.2 #9E9E9E (2 lines),
+       rows mt40 — 3 rows pitch68 (h47 pad14 gap10, alignItems center):
+         label block flex-1 mono 500 14/17 uppercase rgba(255,255,255,.75),
+         value block flex-1 mono 500 16/19.2 right rgba(255,255,255,.75);
+         container gap21 + pb21 (= 204, rows end 708),
+     media y808 (grid+100) — aspect 1333/800 black, img 125% slack with
+       scroll parallax (y 0 → -20%), clip TR notch 35×23 (section bg shows),
+     dark ends media+120 → 1728.
+   seam1 1728-1798: light strip h70, band placement "top", dark teeth
+     [10,8,6,4,2] gap10, container 70 → 30.
+   light A #F0F0F0 pt160 pb120, 5 lines white: 4 sections gap100 —
+     row1 chip col1 (E6E6E6: dot+num gap4 | label gap12, mono 500 14
+       uppercase #686868) + H3 col2-4 Sora600 48/48 -0.06em uppercase solid
+       #0B0D14 (01 Challenge 3 lines h144 / 02 Approach / 03 Result /
+       04 Takeaway 2 lines h96),
+     row2 mt40 — col2 rule 1px #CCC anchored bottom-12 + 19px sparkle
+       (#CCC) hanging left -9 | col3-4 desc Geist 18/25.2 #686868 3 lines,
+     media mt80 gap8: 01/02 = two-up (aspect 663/400, clip TR 26×17 +
+       BL step 93×38) + full (1333/800, clip TR 35×23); 03 = two-up;
+       04 = full. Body media static (only header media parallaxes).
+   seam2 7208-7278: band placement "bottom", dark teeth [2,4,6,8,10].
+   testimonial dark y7278 h784 pad "120 24", lines white@15%:
+     col1 chip05 "05 FEEDBACK" + desc mt40 (Geist 18/25.2 #9E9E9E 4 lines);
+     col3-4 pl56: quote Sora600 58/58 uppercase #666 (8 lines), author mt40
+       — avatar 40 round + gap8: name mono 500 14/17 uppercase
+       rgba(255,255,255,.75) + role Geist 15/21 #9E9E9E (stack gap2).
+   light B #F0F0F0 pt190 pb120: chip06 "06 PORTFOLIO" → H2 mt20 Sora600
+     80/80 -0.06em two-tone (More #0B0D14 / Projects. #5E5E5E) maxW668 →
+     cards mt100 grid-2 gap20: strip #EBEBEB pad6/12 (glyph14 orange mask
+     + title mono uppercase #686868 | "/ tag" mono lowercase) + image
+     657/491 grayscale, hover scale 105.
+   seam3 9205-9275: band placement "bottom", orange teeth [2,4,6,8,10] →
+     <Contact variant="inner"/> y9275 h1052 → footer (Riwa docH 10948).
+   Content: dummy body copy (line-count-matched rhythm) until the final
+   content pass; title/category/period/client/meta from user's data. */
+
+/* --- notch clip-paths (paint-equivalent of Riwa's corner overlay divs) --- */
+/* hero/full 1333×800: TR chamfer 35×23 + BL step piece 122×63
+   ("M 0 0 L 0 63 L 122 63 L 54.12 24.128 L 19.263 24.128 Z" at 0,737 —
+   section bg shows through the clip, dark on the header, light on body) */
+const FULL_CUT =
+  "polygon(0 0, 97.374% 0, 100% 2.875%, 100% 100%, 9.152% 100%, 4.060% 95.141%, 1.445% 95.141%, 0 92.125%)";
+/* two-up 663×400: TR chamfer 26×17 + BL step 93×38 */
+const TWO_CUT =
+  "polygon(0 0, 96.078% 0, 100% 4.25%, 100% 100%, 14.027% 100%, 6.223% 95.125%, 2.215% 95.125%, 0 90.5%)";
+
+const STAR_PATH =
+  "M 19 9.5 L 12.066 12.066 L 9.5 19 L 6.934 12.066 L 0 9.5 L 6.934 6.934 L 9.5 0 L 12.066 6.934 Z";
+
+/* ------------------------------------------------------------------ tokens */
+
+const monoLabel: CSSProperties = {
+  fontFamily: '"IBM Plex Mono", monospace',
+  fontSize: 14,
+  lineHeight: "16.8px",
+  fontWeight: 500,
+  letterSpacing: "-0.56px",
+  textTransform: "uppercase",
+  color: "#686868",
+};
+
+const monoCat: CSSProperties = { ...monoLabel, textTransform: "none" };
+
+const darkChipLabel: CSSProperties = {
+  fontFamily: '"IBM Plex Mono", monospace',
+  fontSize: 14,
+  lineHeight: "17px",
+  fontWeight: 500,
+  letterSpacing: "-0.56px",
+  textTransform: "uppercase",
+  color: "#CCCCCC",
+};
+
+const chipBase: CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  padding: "8px 14px",
+  borderRadius: 100,
+  gap: 12,
+};
+
+const chipDarkStyle: CSSProperties = { ...chipBase, background: "#21242B" };
+const chipLightStyle: CSSProperties = { ...chipBase, background: "#E6E6E6" };
+const chipDot: CSSProperties = {
+  width: 10,
+  height: 10,
+  borderRadius: "100%",
+  background: "rgb(214, 54, 20)",
+  flexShrink: 0,
+};
+
+const h1Style: CSSProperties = {
+  fontFamily: '"Sora", sans-serif',
+  fontWeight: 600,
+  fontSize: "clamp(2.5rem, 7.16vw, 6.25rem)",
+  lineHeight: 1,
+  letterSpacing: "-0.06em",
+  textTransform: "uppercase",
+  margin: 0,
+};
+
+const dateStyle: CSSProperties = {
+  ...darkChipLabel,
+  color: "#9E9E9E",
+  marginLeft: "auto",
+};
+
+const h3Style: CSSProperties = {
+  fontFamily: '"Sora", sans-serif',
+  fontWeight: 600,
+  fontSize: "clamp(32px, 4vw, 48px)",
+  lineHeight: 1,
+  letterSpacing: "-0.06em",
+  textTransform: "uppercase",
+  color: "var(--color-light-text)",
+  margin: 0,
+};
+
+const h2Style: CSSProperties = {
+  fontFamily: '"Sora", sans-serif',
+  fontWeight: 600,
+  fontSize: "clamp(40px, 5.73vw, 80px)",
+  lineHeight: 1,
+  letterSpacing: "-0.06em",
+  textTransform: "uppercase",
+  color: "#9E9E9E",
+  margin: 0,
+  maxWidth: 668,
+};
+
+const bodyDesc: CSSProperties = {
+  fontFamily: '"Geist", sans-serif',
+  fontSize: 18,
+  lineHeight: "25.2px",
+  margin: 0,
+};
+
+const heroDescStyle: CSSProperties = { ...bodyDesc, color: "#9E9E9E" };
+const secDescStyle: CSSProperties = { ...bodyDesc, color: "#686868" };
+
+const btnStyle: CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "center",
+  width: "100%",
+  maxWidth: 334,
+  height: 66,
+  boxSizing: "border-box",
+  borderRadius: 40,
+  background: "#080A10",
+  padding: "20px 20px 20px 24px",
+  gap: 16,
+  border: "1px solid rgba(255, 255, 255, 0.73)",
+  textDecoration: "none",
+};
+
+const btnTxtStyle: CSSProperties = {
+  fontFamily: '"Sora", sans-serif',
+  fontWeight: 600,
+  fontSize: 16,
+  lineHeight: "16px",
+  letterSpacing: "-0.64px",
+  textTransform: "uppercase",
+  color: "#FFFFFF",
+};
+
+const rowLabelStyle: CSSProperties = {
+  fontFamily: '"IBM Plex Mono", monospace',
+  fontSize: 14,
+  lineHeight: "17px",
+  fontWeight: 500,
+  letterSpacing: "-0.56px",
+  textTransform: "uppercase",
+  color: "rgba(255, 255, 255, 0.75)",
+};
+
+const rowValueStyle: CSSProperties = {
+  fontFamily: '"IBM Plex Mono", monospace',
+  fontSize: 16,
+  lineHeight: "19.2px",
+  fontWeight: 500,
+  letterSpacing: "-0.64px",
+  color: "rgba(255, 255, 255, 0.75)",
+  textAlign: "right",
+};
+
+const quoteStyle: CSSProperties = {
+  fontFamily: '"Sora", sans-serif',
+  fontWeight: 600,
+  fontSize: "clamp(32px, 4.15vw, 58px)",
+  lineHeight: 1,
+  textTransform: "uppercase",
+  color: "#666666",
+  margin: 0,
+};
+
+const authorRoleStyle: CSSProperties = {
+  fontFamily: '"Geist", sans-serif',
+  fontSize: 15,
+  lineHeight: "21px",
+  color: "#9E9E9E",
+};
+
+/* ------------------------------------------------------------------ pieces */
+
+function GridLines({ dark = false }: { dark?: boolean }) {
+  return (
+    <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
+      <div className="absolute top-0 bottom-0 left-6 right-6 flex justify-between">
+        {[0, 1, 2, 3, 4].map((i) => (
+          <span
+            key={i}
+            className="w-px block"
+            style={{ background: dark ? "rgba(255, 255, 255, 0.15)" : "#FFFFFF" }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function NumberChip({
+  n,
+  label,
+  dark = false,
+}: {
+  n: string;
+  label: string;
+  dark?: boolean;
+}) {
+  const lbl = dark ? darkChipLabel : monoLabel;
+  return (
+    <span
+      className="inline-flex items-center"
+      style={dark ? chipDarkStyle : chipLightStyle}
+    >
+      <span className="inline-flex items-center" style={{ gap: 4 }}>
+        <span style={chipDot} />
+        <span style={lbl}>{n}</span>
+      </span>
+      <span style={lbl}>{label}</span>
+    </span>
+  );
+}
+
+/* header media — img carries 125% slack; scroll parallax 0 → -20% */
+function HeroMedia({ index }: { index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
+  return (
+    <div
+      ref={ref}
+      className="relative w-full overflow-hidden"
+      style={{
+        aspectRatio: "1333 / 800",
+        background: "#000000",
+        clipPath: FULL_CUT,
+      }}
+    >
+      <motion.div
+        className="absolute left-0 top-0 w-full"
+        style={{
+          height: "125%",
+          background: PLACEHOLDERS[index % PLACEHOLDERS.length],
+          y,
+        }}
+        aria-hidden="true"
+      />
+    </div>
+  );
+}
+
+/* body media — static cover, notched corners (section bg shows through) */
+function StaticMedia({
+  index,
+  cut,
+  ratio,
+}: {
+  index: number;
+  cut: string;
+  ratio: string;
+}) {
+  return (
+    <div
+      className="w-full overflow-hidden"
+      style={{
+        aspectRatio: ratio,
+        background: "#000000",
+        clipPath: cut,
+      }}
+      aria-hidden="true"
+    >
+      <div
+        className="w-full h-full"
+        style={{ background: PLACEHOLDERS[index % PLACEHOLDERS.length] }}
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ content */
+
+type SectionSpec = {
+  n: string;
+  label: string;
+  h3: string;
+  desc: string;
+  layout: "two-full" | "two" | "full";
+};
+
+const sections: SectionSpec[] = [
+  {
+    n: "01",
+    label: "Challenge",
+    h3: "Our legacy workflow could not keep pace with the rules and teams it had to manage every day.",
+    desc: "The client needed a platform that could absorb complex eligibility rules and a growing user base without repeating the same manual steps for every certification drive.",
+    layout: "two-full",
+  },
+  {
+    n: "02",
+    label: "Approach",
+    h3: "We rebuilt every screen and state from the ground up.",
+    desc: "We mapped every workflow first, then designed modular components and clear interaction states that could be reused across screens, roles, and future feature releases.",
+    layout: "two-full",
+  },
+  {
+    n: "03",
+    label: "Result",
+    h3: "A clearer interface cut friction across every workflow.",
+    desc: "The result is a structured interface with consistent hierarchy, faster task completion, and analytics that stakeholders can read at a single glance without any training.",
+    layout: "two",
+  },
+  {
+    n: "04",
+    label: "Takeaway",
+    h3: "Real work became a structured, reusable foundation.",
+    desc: "By emphasizing structure and usability, the platform turns a dense operational process into a product that teams trust and enjoy using every single day, without workarounds.",
+    layout: "full",
+  },
+];
+
+const TESTIMONIAL_DESC =
+  "A short note from the people who relied on the platform daily — how the redesign changed their workflow and made the product feel obvious.";
+
+const DUMMY_QUOTE =
+  "The team turned a dense workflow into a calm, confident product that our people understood on day one.";
+
+/* -------------------------------------------------------------------- page */
 
 export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
-  const project = projectDetails.find((p) => p.slug === slug);
+  const project =
+    projectDetails.find((p) => p.slug === slug) ?? projectDetails[0];
 
-  if (!project) {
-    return (
-      <section className="bg-[var(--color-dark-bg)] pt-32 container-riwa">
-        <p className="text-[var(--color-dark-muted)]">Project not found.</p>
-        <Link
-          to="/projects"
-          className="mt-4 inline-flex items-center gap-2 text-[var(--color-accent)] text-sm"
-        >
-          <FiArrowLeft /> Back to projects
-        </Link>
-      </section>
-    );
-  }
+  const more = projects
+    .filter((p) => slugify(p.title) !== slug)
+    .slice(0, 2);
 
-  const currentIndex = projectDetails.findIndex((p) => p.slug === slug);
-  const nextProject =
-    projectDetails[(currentIndex + 1) % projectDetails.length];
+  const metaRows: [string, string][] = [
+    ["Client", project.client],
+    ["Industry", project.category],
+    ["Timeline", project.period],
+  ];
+
+  // Dummy body copy until the final content pass (line-count-matched to
+  // Riwa's 8-line quote); author/role are short list-level data — kept.
+  const quote = DUMMY_QUOTE;
+  const author = project.testimonial?.author ?? "Ron Simpson";
+  const authorRole = project.testimonial?.role ?? "Founder of Asterio";
 
   return (
-    <div className="min-h-screen">
-      {/* Hero */}
-      <section className="bg-[var(--color-dark-bg)] pt-32 pb-20 relative overflow-hidden">
-        <div className="absolute inset-0 riwa-grid-bg opacity-30" />
+    <div className="relative">
+      {/* ============================ dark project header (y0 h1728) */}
+      <section
+        className="relative"
+        style={{ background: "#080A10", padding: "160px 24px 120px" }}
+      >
+        <GridLines dark />
 
-        <div className="container-riwa relative z-10">
+        <div className="relative z-10">
+          {/* category pill */}
           <Reveal>
-            <Link
-              to="/projects"
-              className="inline-flex items-center gap-2 text-sm text-[var(--color-dark-muted)] hover:text-[var(--color-dark-text)] transition-colors mb-12"
+            <span className="inline-flex items-center" style={chipDarkStyle}>
+              <span style={chipDot} />
+              <span style={darkChipLabel}>{project.category}</span>
+            </span>
+          </Reveal>
+
+          {/* "/" + title | date (bottom-aligned to the H1 box) */}
+          <Reveal delay={0.08}>
+            <div
+              className="flex flex-wrap items-end justify-between lg:flex-nowrap"
+              style={{ marginTop: 20, gap: 20 }}
             >
-              <FiArrowLeft />
-              All Projects
-            </Link>
-          </Reveal>
-
-          <Reveal>
-            <div className="section-label section-label-dark mb-6">
-              ● {project.category}
-            </div>
-          </Reveal>
-
-          <Reveal>
-            <h1 className="font-display font-bold text-[var(--color-dark-text)] leading-[1.05] tracking-tight max-w-4xl mb-6"
-              style={{ fontSize: "clamp(2.5rem, 5vw, 5rem)" }}
-            >
-              {project.title}
-            </h1>
-          </Reveal>
-
-          <Reveal>
-            <p className="text-[var(--color-dark-secondary)] text-lg max-w-2xl mb-8">
-              {project.subtitle}
-            </p>
-          </Reveal>
-
-          <Reveal>
-            <div className="flex flex-wrap gap-6 text-sm text-[var(--color-dark-muted)]">
-              <span className="inline-flex items-center gap-2">
-                <FiCalendar className="text-[var(--color-accent)]" />
-                {project.period}
-              </span>
-              <span className="inline-flex items-center gap-2">
-                <FiUser className="text-[var(--color-accent)]" />
-                {project.client}
-              </span>
-            </div>
-          </Reveal>
-
-          <Reveal>
-            <div className="flex flex-wrap gap-2 mt-6">
-              {project.tags.map((tag) => (
+              <div className="flex items-start" style={{ gap: 10, minWidth: 0 }}>
                 <span
-                  key={tag}
-                  className="px-3 py-1 text-xs font-mono text-[var(--color-accent)] bg-[var(--color-accent-subtle)] rounded-full"
+                  aria-hidden="true"
+                  style={{ ...h1Style, color: "#5E5E5E", flexShrink: 0 }}
                 >
-                  {tag}
+                  /
                 </span>
-              ))}
+                <h1 style={{ ...h1Style, color: "#FFFFFF" }}>
+                  {project.title}
+                </h1>
+              </div>
+              <span style={dateStyle}>{project.period}</span>
             </div>
           </Reveal>
-        </div>
 
-        <div className="absolute bottom-0 left-0 right-0">
-          <div className="riwa-divider">
-            <div />
-            <div />
+          {/* [col1 visit button | col2 empty | col3-4 desc + meta rows] */}
+          <div
+            className="grid grid-cols-1 lg:grid-cols-4"
+            style={{ marginTop: 100, rowGap: 40 }}
+          >
+            <div>
+              <Reveal>
+                <a
+                  href="#"
+                  onClick={(e) => e.preventDefault()}
+                  className="group"
+                  style={btnStyle}
+                >
+                  <span
+                    className="flex flex-col overflow-hidden"
+                    style={{ height: 16 }}
+                  >
+                    <span className="btn-roll">
+                      <span className="block" style={btnTxtStyle}>
+                        Visit Website
+                      </span>
+                      <span className="block" style={btnTxtStyle}>
+                        Visit Website
+                      </span>
+                    </span>
+                  </span>
+                  <span
+                    className="block shrink-0"
+                    style={{ width: 26, height: 26 }}
+                  >
+                    <svg
+                      width="26"
+                      height="26"
+                      viewBox="0 0 26 26"
+                      fill="none"
+                      aria-hidden="true"
+                    >
+                      <circle cx="13" cy="13" r="13" fill="#FFFFFF" />
+                      <path
+                        d="M13 5.5V20.5M5.5 13H20.5M7.7 7.7L18.3 18.3M18.3 7.7L7.7 18.3"
+                        stroke="rgb(214, 54, 20)"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                  </span>
+                </a>
+              </Reveal>
+            </div>
+
+            <div className="hidden lg:block" aria-hidden="true" />
+
+            <div className="lg:col-span-2">
+              <Reveal delay={0.05}>
+                <p style={heroDescStyle}>{project.description}</p>
+
+                <div
+                  style={{
+                    marginTop: 40,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 21,
+                    paddingBottom: 21,
+                  }}
+                >
+                  {metaRows.map(([label, value]) => (
+                    <div
+                      key={label}
+                      className="flex"
+                      style={{ padding: 14, gap: 10, alignItems: "center" }}
+                    >
+                      <span
+                        style={{ ...rowLabelStyle, flex: "1 1 0", minWidth: 0 }}
+                      >
+                        {label}/
+                      </span>
+                      <span
+                        style={{ ...rowValueStyle, flex: "1 1 0", minWidth: 0 }}
+                      >
+                        {value}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </Reveal>
+            </div>
+          </div>
+
+          {/* media1 — parallax hero (125% slack), TR notch */}
+          <div style={{ marginTop: 100 }}>
+            <Reveal>
+              <HeroMedia index={0} />
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* Hero Image */}
-      <section className="bg-[var(--color-dark-bg)] py-16">
-        <div className="container-riwa">
-          <Reveal>
-            <div className="w-full h-[300px] lg:h-[500px] rounded-2xl bg-gradient-to-br from-[var(--color-dark-card)] via-[#1a1a1a] to-[var(--color-dark-border)] flex items-center justify-center overflow-hidden">
-              <span className="font-display text-[8rem] font-bold text-[var(--color-dark-border)] select-none">
-                {project.title.charAt(0)}
-              </span>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      {/* seam1: dark → light (top-anchored dark teeth 10/8/6/4/2) */}
+      <div
+        className="relative"
+        style={{ height: 70, background: "var(--color-light-bg)" }}
+      >
+        <AnimatedLinesBand
+          placement="top"
+          color="#080A10"
+          lineHeights={[10, 8, 6, 4, 2]}
+          gapPx={10}
+          containerFrom={70}
+          containerTo={30}
+          gapColor="transparent"
+        />
+      </div>
 
-      {/* Content Sections */}
-      <section className="bg-[var(--color-dark-bg)] pb-24">
-        <div className="container-riwa">
-          {[
-            { label: "01 — Challenge", title: "The Problem", text: project.challenge },
-            { label: "02 — Approach", title: "What I Built", text: project.approach },
-            { label: "03 — Result", title: "The Outcome", text: project.result },
-            { label: "04 — Takeaway", title: "What I Learned", text: project.takeaway },
-          ].map((section, i) => (
-            <Reveal key={i} delay={i * 0.1}>
-              <div className="border-b border-[var(--color-dark-border)] pb-12 mb-12">
-                <p className="font-mono text-xs text-[var(--color-accent)] uppercase tracking-wider mb-4">
-                  {section.label}
-                </p>
-                <h2 className="font-display text-2xl lg:text-3xl font-semibold text-[var(--color-dark-text)] tracking-tight mb-6">
-                  {section.title}
-                </h2>
-                <p className="max-w-2xl text-[var(--color-dark-secondary)] leading-relaxed">
-                  {section.text}
-                </p>
-              </div>
-            </Reveal>
-          ))}
+      {/* ============================ light sections 01-04 (pt160 pb120) */}
+      <section
+        className="relative"
+        style={{
+          background: "var(--color-light-bg)",
+          padding: "160px 24px 120px",
+        }}
+      >
+        <GridLines />
 
-          {project.testimonial && (
-            <Reveal>
-              <div className="riwa-card p-8 lg:p-12 max-w-2xl">
-                <p className="font-display text-lg text-[var(--color-dark-text)] leading-relaxed italic">
-                  "{project.testimonial.quote}"
-                </p>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full bg-[var(--color-dark-border)] flex items-center justify-center">
-                    <FiUser className="h-4 w-4 text-[var(--color-dark-muted)]" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-[var(--color-dark-text)]">
-                      {project.testimonial.author}
-                    </p>
-                    <p className="text-xs text-[var(--color-dark-muted)]">
-                      {project.testimonial.role}
-                    </p>
-                  </div>
+        <div className="relative z-10">
+          {sections.map((s, idx) => (
+            <div key={s.n} style={{ marginTop: idx === 0 ? 0 : 100 }}>
+              {/* row1: chip col1 | H3 col2-4 */}
+              <div className="grid grid-cols-1 lg:grid-cols-4">
+                <div>
+                  <Reveal>
+                    <NumberChip n={s.n} label={s.label} />
+                  </Reveal>
+                </div>
+                <div className="lg:col-span-3">
+                  <Reveal delay={0.05}>
+                    <h3 style={h3Style}>{s.h3}</h3>
+                  </Reveal>
                 </div>
               </div>
+
+              {/* row2: rule+star col2 (anchored to desc's last line) | desc col3-4 */}
+              <div
+                className="grid grid-cols-1 lg:grid-cols-4"
+                style={{ marginTop: 40 }}
+              >
+                <div className="hidden lg:block" aria-hidden="true" />
+                <div className="lg:col-start-2 self-end">
+                  <div
+                    className="relative"
+                    style={{ height: 19, marginBottom: 2 }}
+                    aria-hidden="true"
+                  >
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        right: 0,
+                        top: 9,
+                        height: 1,
+                        background: "#CCCCCC",
+                      }}
+                    />
+                    <span
+                      style={{
+                        position: "absolute",
+                        left: -9,
+                        top: 0,
+                        width: 19,
+                        height: 19,
+                        color: "#CCCCCC",
+                      }}
+                    >
+                      <svg
+                        viewBox="0 0 19 19"
+                        width="19"
+                        height="19"
+                        aria-hidden="true"
+                      >
+                        <path d={STAR_PATH} fill="currentColor" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+                <div className="lg:col-start-3 lg:col-span-2">
+                  <Reveal delay={0.1}>
+                    <p style={secDescStyle}>{s.desc}</p>
+                  </Reveal>
+                </div>
+              </div>
+
+              {/* media: two-up (+full) / full only */}
+              <Reveal delay={0.15}>
+                <div
+                  style={{
+                    marginTop: 80,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 8,
+                  }}
+                >
+                  {s.layout !== "full" && (
+                    <div
+                      className="grid grid-cols-1 sm:grid-cols-2"
+                      style={{ gap: 8 }}
+                    >
+                      <StaticMedia
+                        index={idx * 3}
+                        cut={TWO_CUT}
+                        ratio="663 / 400"
+                      />
+                      <StaticMedia
+                        index={idx * 3 + 1}
+                        cut={TWO_CUT}
+                        ratio="663 / 400"
+                      />
+                    </div>
+                  )}
+                  {s.layout !== "two" && (
+                    <StaticMedia
+                      index={idx * 3 + 2}
+                      cut={FULL_CUT}
+                      ratio="1333 / 800"
+                    />
+                  )}
+                </div>
+              </Reveal>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* seam2: light → dark (bottom-anchored dark teeth 2/4/6/8/10) */}
+      <div
+        className="relative"
+        style={{ height: 70, background: "var(--color-light-bg)" }}
+      >
+        <AnimatedLinesBand
+          placement="bottom"
+          color="#080A10"
+          lineHeights={[2, 4, 6, 8, 10]}
+          gapPx={10}
+          containerFrom={70}
+          containerTo={30}
+          gapColor="transparent"
+        />
+      </div>
+
+      {/* ============================ dark testimonial 05 (pad 120) */}
+      <section
+        className="relative"
+        style={{ background: "#080A10", padding: "120px 24px" }}
+      >
+        <GridLines dark />
+
+        <div
+          className="relative z-10 grid grid-cols-1 lg:grid-cols-4"
+          style={{ rowGap: 40 }}
+        >
+          <div className="lg:col-span-1">
+            <Reveal>
+              <NumberChip n="05" label="Feedback" dark />
             </Reveal>
-          )}
-        </div>
-      </section>
-
-      {/* Next Project */}
-      <section className="bg-[var(--color-dark-bg)] border-t border-[var(--color-dark-border)] py-16">
-        <div className="container-riwa">
-          <Reveal>
-            <p className="font-mono text-xs text-[var(--color-dark-muted)] uppercase tracking-wider mb-4">
-              Next Project
-            </p>
-            <Link
-              to={`/projects/${nextProject.slug}`}
-              className="group block"
-            >
-              <h3 className="font-display text-2xl lg:text-4xl font-semibold text-[var(--color-dark-text)] tracking-tight group-hover:text-[var(--color-accent)] transition-colors">
-                {nextProject.title}
-              </h3>
-              <p className="mt-2 text-sm text-[var(--color-dark-secondary)] flex items-center gap-2">
-                {nextProject.subtitle}
-                <FiArrowRight className="transition-transform group-hover:translate-x-1" />
+            <Reveal delay={0.05}>
+              <p style={{ ...heroDescStyle, marginTop: 40 }}>
+                {TESTIMONIAL_DESC}
               </p>
-            </Link>
-          </Reveal>
+            </Reveal>
+          </div>
+
+          <div
+            className="lg:col-start-3 lg:col-span-2"
+            style={{ paddingLeft: 56 }}
+          >
+            <Reveal>
+              <p style={quoteStyle}>{quote}</p>
+            </Reveal>
+            <Reveal delay={0.08}>
+              <div
+                className="flex items-center"
+                style={{ gap: 8, marginTop: 40 }}
+              >
+                <span
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: "100%",
+                    flexShrink: 0,
+                    background:
+                      "radial-gradient(circle at 35% 30%, #4A4A4A, #1D1D1D)",
+                  }}
+                />
+                <span
+                  className="flex flex-col"
+                  style={{ gap: 2, minWidth: 0 }}
+                >
+                  <span style={rowLabelStyle}>{author}</span>
+                  <span style={authorRoleStyle}>{authorRole}</span>
+                </span>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
-      {/* Contact CTA */}
-      <section className="bg-[var(--color-dark-bg)] border-t border-[var(--color-dark-border)] py-24">
-        <div className="container-riwa">
+      {/* ============================ MORE PROJECTS 06 (pt190 pb120) */}
+      <section
+        className="relative"
+        style={{
+          background: "var(--color-light-bg)",
+          padding: "190px 24px 120px",
+        }}
+      >
+        <GridLines />
+
+        <div className="relative z-10">
           <Reveal>
-            <h2 className="section-heading text-[var(--color-dark-text)] mb-6">
-              Like what you{" "}
-              <span className="riwa-gradient-text">see?</span>
+            <div>
+              <NumberChip n="06" label="Portfolio" />
+            </div>
+            <h2 style={{ ...h2Style, marginTop: 20 }}>
+              <span className="block" style={{ color: "var(--color-light-text)" }}>
+                More
+              </span>
+              <span className="block" style={{ color: "var(--color-light-muted)" }}>
+                Projects.
+              </span>
             </h2>
-            <p className="text-[var(--color-dark-secondary)] text-lg max-w-xl mb-8">
-              Let's build something great together. I'm always open to new
-              challenges and interesting problems.
-            </p>
-            <Link
-              to="/contact"
-              className="riwa-pill riwa-pill-primary inline-flex items-center gap-2 group"
-            >
-              Get in Touch
-              <FiArrowRight className="transition-transform group-hover:translate-x-1" />
-            </Link>
           </Reveal>
+
+          <div
+            className="grid grid-cols-1 sm:grid-cols-2"
+            style={{ gap: 20, marginTop: 100 }}
+          >
+            {more.map((p, i) => (
+              <Reveal key={p.title} delay={i * 0.08}>
+                <Link
+                  to={`/projects/${slugify(p.title)}`}
+                  className="group block"
+                >
+                  <div
+                    className="flex items-center justify-between"
+                    style={{
+                      background: "#EBEBEB",
+                      padding: "6px 12px",
+                      gap: 16,
+                    }}
+                  >
+                    <span className="flex items-center min-w-0" style={{ gap: 16 }}>
+                      <span
+                        className="block shrink-0"
+                        style={{
+                          width: 14,
+                          height: 14,
+                          background: "rgb(214, 54, 20)",
+                          WebkitMaskImage: CARD_ICON_MASK,
+                          maskImage: CARD_ICON_MASK,
+                          WebkitMaskSize: "auto, auto",
+                          maskSize: "auto, auto",
+                          WebkitMaskPosition: "50% 50%",
+                          maskPosition: "50% 50%",
+                          WebkitMaskRepeat: "no-repeat",
+                          maskRepeat: "no-repeat",
+                        }}
+                      />
+                      <span
+                        style={{
+                          ...monoLabel,
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {p.title}
+                      </span>
+                    </span>
+                    <span
+                      className="flex items-center shrink-0"
+                      style={{ gap: 4 }}
+                    >
+                      <span style={monoCat}>/ {p.tags[0]}</span>
+                    </span>
+                  </div>
+
+                  <div
+                    className="overflow-hidden bg-black"
+                    style={{ aspectRatio: "657 / 491" }}
+                  >
+                    {p.image ? (
+                      <img
+                        src={p.image}
+                        alt={p.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-105"
+                        style={{
+                          background: PLACEHOLDERS[i % PLACEHOLDERS.length],
+                        }}
+                      />
+                    )}
+                  </div>
+                </Link>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
+      {/* seam3: light → orange contact (bottom-anchored orange teeth) */}
+      <div
+        className="relative"
+        style={{ height: 70, background: "var(--color-light-bg)" }}
+      >
+        <AnimatedLinesBand
+          placement="bottom"
+          color="rgb(214, 54, 20)"
+          lineHeights={[2, 4, 6, 8, 10]}
+          gapPx={10}
+          containerFrom={70}
+          containerTo={30}
+          gapColor="transparent"
+        />
+      </div>
+
+      <Contact variant="inner" />
       <Footer />
     </div>
   );

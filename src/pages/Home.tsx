@@ -88,8 +88,8 @@ export default function Home() {
       <About />
       <Experience />
       <Skills />
-      <Credentials />
       <Testimonials />
+      <Credentials />
       <FAQ />
       <Blog />
       <Contact />

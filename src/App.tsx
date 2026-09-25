@@ -9,6 +9,7 @@ import ProjectDetail from "./pages/ProjectDetail";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
 import BlogPage from "./pages/BlogPage";
+import BlogDetail from "./pages/BlogDetail";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -30,6 +31,7 @@ function AnimatedRoutes() {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/blog" element={<BlogPage />} />
+        <Route path="/blog/:slug" element={<BlogDetail />} />
       </Routes>
     </AnimatePresence>
   );

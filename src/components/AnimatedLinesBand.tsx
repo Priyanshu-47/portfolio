@@ -28,8 +28,24 @@ import { motion, useScroll, useTransform } from "framer-motion";
  */
 export default function AnimatedLinesBand({
   placement = "bottom",
+  color = "rgb(8, 10, 16)",
+  lineHeights = [12, 10, 8, 5, 1],
+  gapPx = 6,
+  containerFrom = 64,
+  containerTo = 28,
+  gapColor = "white",
 }: {
   placement?: "top" | "bottom";
+  color?: string;
+  /** bar heights, top -> bottom (hero band = 12/10/8/5/1; Riwa "Lines 1" = 2/4/6/8/10) */
+  lineHeights?: number[];
+  /** rest gap between bars (hero = 6; Lines 1 = 10) */
+  gapPx?: number;
+  /** container rest/compressed heights (hero = 64->28; Lines 1 = 70->30) */
+  containerFrom?: number;
+  containerTo?: number;
+  /** the gaps paint whatever backdrop shows between the bars */
+  gapColor?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -39,13 +55,16 @@ export default function AnimatedLinesBand({
 
   // p=0: band top touches viewport bottom. Fade in as it enters.
   const linesOpacity = useTransform(scrollYProgress, [0, 0.06], [0, 1]);
-  // White gaps shrink from 6px to 0 while the band travels the viewport.
-  const gapHeight = useTransform(scrollYProgress, [0.06, 0.62], [6, 0]);
-  // Container compresses 64 -> 28 (same merge as the hero band), anchored
-  // at the bottom edge = toward the section seam / next section.
-  const containerHeight = useTransform(scrollYProgress, [0.06, 0.62], [64, 28]);
+  // Gaps shrink to 0 while the band travels the viewport.
+  const gapHeight = useTransform(scrollYProgress, [0.06, 0.62], [gapPx, 0]);
+  // Container compresses toward the merged bar stack, anchored at the
+  // bottom edge = toward the section seam / next section.
+  const containerHeight = useTransform(
+    scrollYProgress,
+    [0.06, 0.62],
+    [containerFrom, containerTo]
+  );
 
-  const lineHeights = [12, 10, 8, 5, 1];
   const gapCount = lineHeights.length - 1;
 
   return (
@@ -53,7 +72,8 @@ export default function AnimatedLinesBand({
       ref={ref}
       className={`absolute ${
         placement === "top" ? "top-0" : "bottom-0"
-      } left-0 right-0 h-16 z-[6] pointer-events-none`}
+      } left-0 right-0 z-[6] pointer-events-none`}
+      style={{ height: containerFrom }}
       aria-hidden="true"
     >
       <motion.div
@@ -67,14 +87,14 @@ export default function AnimatedLinesBand({
             <div
               style={{
                 height: `${h}px`,
-                backgroundColor: "rgb(8, 10, 16)",
+                backgroundColor: color,
               }}
             />
             {i < gapCount && (
               <motion.div
                 style={{
                   height: gapHeight,
-                  backgroundColor: "white",
+                  backgroundColor: gapColor,
                 }}
               />
             )}

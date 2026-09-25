@@ -134,7 +134,7 @@ function StatCard({ stat, index, active }: { stat: (typeof stats)[number]; index
   );
 }
 
-export default function Stats() {
+export default function Stats({ hideLines = false }: { hideLines?: boolean }) {
   const ref = useRef<HTMLElement>(null);
   const [active, setActive] = useState(false);
 
@@ -159,6 +159,7 @@ export default function Stats() {
   return (
     <section ref={ref} className="bg-[var(--color-light-bg)] py-0 relative">
       {/* 5 vertical lines — edges at 17px, middles centered in card gaps */}
+      {!hideLines && (
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 bottom-0 w-[2px] bg-white" style={{ left: "17px" }} />
         <div className="absolute top-0 bottom-0 w-[1px] bg-white" style={{ left: `calc(24px + ${col} + 3.5px)` }} />
@@ -166,6 +167,7 @@ export default function Stats() {
         <div className="absolute top-0 bottom-0 w-[1px] bg-white" style={{ left: `calc(24px + ${col} * 3 + 17.5px)` }} />
         <div className="absolute top-0 bottom-0 w-[2px] bg-white" style={{ right: "17px" }} />
       </div>
+      )}
 
       {/* 4-column grid, 7px gaps, 24px section padding — exact Riwa geometry */}
       <div className="relative z-10 grid grid-cols-4" style={{ padding: "0 24px", columnGap: "7px" }}>
