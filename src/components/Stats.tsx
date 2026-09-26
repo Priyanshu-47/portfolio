@@ -35,8 +35,7 @@ function StatCard({ stat, index, active }: { stat: (typeof stats)[number]; index
   return (
     <Reveal delay={index * 0.1}>
       <div
-        className="relative bg-white h-[346px]"
-        style={{ marginTop: index % 2 === 1 ? "160px" : "0" }}
+        className={`relative bg-white h-[346px] ${index % 2 === 1 ? "lg:mt-[160px]" : ""}`}
       >
         {/* Chip cutouts — exact Riwa SVG shapes (fill #F0F0F0) */}
         <svg className="absolute" style={{ left: 0, top: 0 }} width="43" height="67" viewBox="0 0 43 67" fill="none">
@@ -170,7 +169,7 @@ export default function Stats({ hideLines = false }: { hideLines?: boolean }) {
       )}
 
       {/* 4-column grid, 7px gaps, 24px section padding — exact Riwa geometry */}
-      <div className="relative z-10 grid grid-cols-4" style={{ padding: "0 24px", columnGap: "7px" }}>
+      <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ padding: "0 24px", columnGap: "7px" }}>
         {stats.map((stat, i) => (
           <StatCard key={i} stat={stat} index={i} active={active} />
         ))}

@@ -600,7 +600,8 @@ function AwardRow({ award, delay }: { award: Award; delay: number }) {
     <Reveal delay={delay}>
       <div
         style={{
-          height: 105,
+          minHeight: 105,
+          height: "auto",
           background: "rgb(20, 23, 29)",
           display: "flex",
           alignItems: "center",
@@ -619,8 +620,8 @@ function AwardRow({ award, delay }: { award: Award; delay: number }) {
           <span style={darkChipLabel}>{award.n}</span>
         </span>
         <span
-          className="shrink-0"
-          style={{ display: "block", width: 222, height: 0, borderTop: "1px dashed rgba(255, 255, 255, 0.25)" }}
+          className="shrink-0 hidden sm:block"
+          style={{ width: 222, height: 0, borderTop: "1px dashed rgba(255, 255, 255, 0.25)" }}
         />
         <div style={{ flex: "1 1 auto", minWidth: 0 }}>
           <p

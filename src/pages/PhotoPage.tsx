@@ -55,7 +55,7 @@ const bodyText: CSSProperties = {
 const h1Style: CSSProperties = {
   fontFamily: '"Sora", sans-serif',
   fontWeight: 600,
-  fontSize: "clamp(5rem, 7.16vw, 6.25rem)",
+  fontSize: "clamp(3.5rem, 7.16vw, 6.25rem)",
   lineHeight: 1,
   letterSpacing: "-0.06em",
   textTransform: "uppercase",
