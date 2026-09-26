@@ -11,6 +11,8 @@ import ContactPage from "./pages/ContactPage";
 import BlogPage from "./pages/BlogPage";
 import BlogDetail from "./pages/BlogDetail";
 import { TermsPage, PrivacyPage } from "./pages/LegalPage";
+import { PhotoArchivePage, PhotoMomentsPage } from "./pages/PhotoPage";
+import NotFound from "./pages/NotFound";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -35,6 +37,10 @@ function AnimatedRoutes() {
         <Route path="/blog/:slug" element={<BlogDetail />} />
         <Route path="/terms-of-service" element={<TermsPage />} />
         <Route path="/privacy-policy" element={<PrivacyPage />} />
+        <Route path="/about/photo-archive" element={<PhotoArchivePage />} />
+        <Route path="/about/photo-moments" element={<PhotoMomentsPage />} />
+        <Route path="/404" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
   );

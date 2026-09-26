@@ -222,21 +222,54 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* copyright */}
-      <p
-        className="relative z-10"
-        style={{
-          fontFamily: '"Geist", sans-serif',
-          fontWeight: 400,
-          fontSize: 13,
-          lineHeight: "18px",
-          color: "#5E5E5E",
-          margin: 0,
-          marginTop: 48,
-        }}
+      {/* copyright + legal links (Riwa footer bottom row) */}
+      <div
+        className="relative z-10 flex flex-wrap items-center justify-between"
+        style={{ marginTop: 48, gap: 16 }}
       >
-        © {new Date().getFullYear()} {profile.name}. All rights reserved.
-      </p>
+        <p
+          style={{
+            fontFamily: '"Geist", sans-serif',
+            fontWeight: 400,
+            fontSize: 13,
+            lineHeight: "18px",
+            color: "#5E5E5E",
+            margin: 0,
+          }}
+        >
+          © {new Date().getFullYear()} {profile.name}. All rights reserved.
+        </p>
+        <div className="flex items-center" style={{ gap: 20 }}>
+          <Link
+            to="/terms-of-service"
+            style={{
+              fontFamily: '"Geist", sans-serif',
+              fontWeight: 400,
+              fontSize: 13,
+              lineHeight: "18px",
+              color: "#5E5E5E",
+              textDecoration: "none",
+            }}
+            className="hover:text-white transition-colors"
+          >
+            Terms of Service
+          </Link>
+          <Link
+            to="/privacy-policy"
+            style={{
+              fontFamily: '"Geist", sans-serif',
+              fontWeight: 400,
+              fontSize: 13,
+              lineHeight: "18px",
+              color: "#5E5E5E",
+              textDecoration: "none",
+            }}
+            className="hover:text-white transition-colors"
+          >
+            Privacy Policy
+          </Link>
+        </div>
+      </div>
 
       {/* giant watermark clipped at the bottom (Riwa RIVVA®) */}
       <div

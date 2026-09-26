@@ -10,7 +10,14 @@ const navLinks = [
 ];
 
 /* Pages whose top is a light section — Riwa renders the primary nav dark there */
-const LIGHT_TOP_ROUTES = ["/projects", "/blog", "/terms-of-service", "/privacy-policy"];
+const LIGHT_TOP_ROUTES = [
+  "/projects",
+  "/blog",
+  "/terms-of-service",
+  "/privacy-policy",
+  "/about/photo-archive",
+  "/about/photo-moments",
+];
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);

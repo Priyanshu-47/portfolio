@@ -659,9 +659,26 @@ function AwardRow({ award, delay }: { award: Award; delay: number }) {
   );
 }
 
-function GalleryPanel({ label, index }: { label: string; index: number }) {
+/* Riwa gallery panel — links to /about/photo-* (confirmed in riwa-about-snap:
+   MOMENTS → photo-moments, ARCHIVE → photo-archive); caption bar under the
+   image is opacity 0 at rest, reveals on hover (dicto Riwa DOM) */
+function GalleryPanel({
+  label,
+  index,
+  desc,
+  chip,
+}: {
+  label: string;
+  index: number;
+  desc: string;
+  chip: string;
+}) {
   return (
-    <div className="flex flex-col">
+    <Link
+      to={`/about/photo-${label.toLowerCase()}`}
+      className="group flex flex-col"
+      style={{ textDecoration: "none" }}
+    >
       <div
         className="flex items-center shrink-0"
         style={{
@@ -692,11 +709,46 @@ function GalleryPanel({ label, index }: { label: string; index: number }) {
       </div>
       <div className="overflow-hidden" style={{ aspectRatio: "663 / 400", clipPath: TWO_CUT }}>
         <div
-          className="w-full h-full"
+          className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-105"
           style={{ background: PLACEHOLDERS[index % PLACEHOLDERS.length], filter: "grayscale(1)" }}
         />
       </div>
-    </div>
+      {/* caption bar — hidden at rest, reveals on hover */}
+      <div
+        className="flex items-center justify-between box-border opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        style={{
+          height: 43,
+          background: "rgb(20, 23, 29)",
+          border: "1px solid rgb(52, 54, 59)",
+          padding: 12,
+        }}
+      >
+        <span
+          style={{
+            fontFamily: '"IBM Plex Mono", monospace',
+            fontSize: 16,
+            lineHeight: "19.2px",
+            fontWeight: 500,
+            letterSpacing: "-0.64px",
+            color: "#FFFFFF",
+          }}
+        >
+          {desc}
+        </span>
+        <span
+          style={{
+            fontFamily: '"IBM Plex Mono", monospace',
+            fontSize: 14,
+            lineHeight: "16.8px",
+            fontWeight: 500,
+            letterSpacing: "-0.56px",
+            color: "#686868",
+          }}
+        >
+          {chip}
+        </span>
+      </div>
+    </Link>
   );
 }
 
@@ -1161,8 +1213,8 @@ export default function AboutPage() {
             className="grid grid-cols-1 lg:grid-cols-2"
             style={{ columnGap: 10, rowGap: 10, marginTop: 100 }}
           >
-            <GalleryPanel label="Moments" index={2} />
-            <GalleryPanel label="Archive" index={3} />
+            <GalleryPanel label="Moments" index={2} desc="Work in progress" chip="/2026" />
+            <GalleryPanel label="Archive" index={3} desc="Inside the studio" chip="/2025" />
           </div>
         </div>
         <SpikeDecor dark style={{ right: 24, top: 124 }} />
