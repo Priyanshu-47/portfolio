@@ -70,7 +70,7 @@ export default function Hero() {
         {/* Portrait — uses rem so zoom scales it */}
         <div className="absolute inset-0 flex items-end justify-center pointer-events-none z-[2]">
           <img
-            src="./portrait.png"
+            src="/portrait.png"
             alt="Priyanshu Lodha"
             className="object-contain object-bottom"
             style={{
@@ -172,7 +172,7 @@ export default function Hero() {
                   transition={{ duration: 0.3, ease: "easeOut" }}
                 >
                   <img
-                    src="./portrait.png"
+                    src="/portrait.png"
                     alt="Priyanshu"
                     className="w-full h-full object-cover"
                   />

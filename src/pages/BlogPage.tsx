@@ -41,6 +41,7 @@ export const articles = [
       "Lessons learned from architecting large-scale React apps with TypeScript and modern tooling.",
     date: "2025",
     tag: "React",
+    image: "/img/blog-react.jpg",
   },
   {
     title: "The Art of Clean Code",
@@ -48,6 +49,7 @@ export const articles = [
       "Why readable, maintainable code matters more than clever solutions in professional environments.",
     date: "2025",
     tag: "Best Practices",
+    image: "/img/blog-clean.jpg",
   },
   {
     title: "Full-Stack Deployment with Docker",
@@ -55,6 +57,7 @@ export const articles = [
       "A practical guide to containerizing and deploying full-stack applications on cloud platforms.",
     date: "2024",
     tag: "DevOps",
+    image: "/img/blog-docker.jpg",
   },
 ];
 
@@ -255,9 +258,11 @@ export default function BlogPage() {
 
                       {/* image — flex-fill of the fixed card height, bg black letterbox */}
                       <div className="flex-1 overflow-hidden bg-black" style={{ minHeight: 0 }}>
-                        <div
-                          className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-105"
-                          style={{ background: PLACEHOLDERS[i % 5] }}
+                        <img
+                          src={article.image}
+                          alt={article.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                         />
                       </div>
 

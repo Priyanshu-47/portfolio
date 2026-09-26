@@ -10,7 +10,7 @@ import Contact from "../components/Contact";
 import Footer from "../components/Footer";
 import Stats from "../components/Stats";
 import { profile } from "../data/resume";
-import { PLACEHOLDERS, CARD_ICON_MASK } from "./ProjectsPage";
+import { CARD_ICON_MASK } from "./ProjectsPage";
 import { articles, slugify, DECOR_BARS_1, DECOR_BARS_2 } from "./BlogPage";
 
 /* Riwa /about — live-verified (rb-00..rb-11 + DOM probes @ vw1398, docH 11910,
@@ -344,7 +344,7 @@ export function BarcodeDecor({ style }: { style: CSSProperties }) {
 }
 
 /* header/body media — img carries 125% slack; scroll parallax 0 → -20% */
-function ParallaxMedia({ index, ratio }: { index: number; ratio: string }) {
+function ParallaxMedia({ src, ratio }: { src: string; ratio: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
@@ -356,14 +356,11 @@ function ParallaxMedia({ index, ratio }: { index: number; ratio: string }) {
     >
       <motion.div
         className="absolute left-0 top-0 w-full"
-        style={{
-          height: "125%",
-          background: PLACEHOLDERS[index % PLACEHOLDERS.length],
-          filter: "grayscale(1)",
-          y,
-        }}
+        style={{ height: "125%", filter: "grayscale(1)", y }}
         aria-hidden="true"
-      />
+      >
+        <img src={src} alt="" loading="lazy" className="w-full h-full object-cover" />
+      </motion.div>
       {/* Riwa corner cut-outs (exact paths, dark bg on top of media) */}
       <svg
         className="absolute left-0 top-0"
@@ -464,17 +461,28 @@ function SplitHeading({ text, style }: { text: string; style: CSSProperties }) {
 
 /* --------------------------------------------------------------- section 03 */
 
-type TeamMember = { name: string; role: string; blurb: string; glyph: keyof typeof TEAM_GLYPHS };
+type TeamMember = {
+  name: string;
+  role: string;
+  blurb: string;
+  glyph: keyof typeof TEAM_GLYPHS;
+  img: string;
+};
 
 function TeamCard({ member, index }: { member: TeamMember; index: number }) {
   const glyph = TEAM_GLYPHS[member.glyph];
   return (
     <Reveal delay={index * 0.08}>
       <div className="relative" style={{ aspectRatio: "327 / 394", background: "#000000" }}>
-        <div
-          className="absolute inset-0"
-          style={{ background: PLACEHOLDERS[index % PLACEHOLDERS.length] }}
-        />
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src={member.img}
+            alt=""
+            loading="lazy"
+            className="w-full h-full object-cover"
+            style={{ filter: "grayscale(1)" }}
+          />
+        </div>
         <div
           className="absolute inset-0"
           style={{ background: "linear-gradient(rgba(8, 10, 16, 0.01) 30%, rgb(8, 10, 15) 100%)" }}
@@ -543,7 +551,7 @@ function TeamCard({ member, index }: { member: TeamMember; index: number }) {
 
 /* --------------------------------------------------------------- section 05 */
 
-function LogoCard({ year, index }: { year: string; index: number }) {
+function LogoCard({ label, year, index }: { label: string; year: string; index: number }) {
   return (
     <div className="flex flex-col" style={{ height: 180 }}>
       <div
@@ -582,7 +590,7 @@ function LogoCard({ year, index }: { year: string; index: number }) {
             color: "#C9C9C9",
           }}
         >
-          Logo Ipsum
+          {label}
         </span>
       </div>
       {/* keeps index in signature for future per-card placeholder art */}
@@ -593,7 +601,7 @@ function LogoCard({ year, index }: { year: string; index: number }) {
 
 /* --------------------------------------------------------------- section 06 */
 
-type Award = { n: string; title: string; sub: string; count: string; year: string };
+type Award = { n: string; title: string; sub: string; count: string; unit: string; year: string };
 
 function AwardRow({ award, delay }: { award: Award; delay: number }) {
   return (
@@ -652,7 +660,7 @@ function AwardRow({ award, delay }: { award: Award; delay: number }) {
         </div>
         <div className="flex items-center shrink-0" style={{ gap: 10, marginLeft: "auto", ...rowLabelStyle }}>
           <span>{award.count}</span>
-          <span>awards</span>
+          <span>{award.unit}</span>
           <span>{award.year}</span>
         </div>
       </div>
@@ -665,12 +673,12 @@ function AwardRow({ award, delay }: { award: Award; delay: number }) {
    image is opacity 0 at rest, reveals on hover (dicto Riwa DOM) */
 function GalleryPanel({
   label,
-  index,
+  img,
   desc,
   chip,
 }: {
   label: string;
-  index: number;
+  img: string;
   desc: string;
   chip: string;
 }) {
@@ -711,8 +719,15 @@ function GalleryPanel({
       <div className="overflow-hidden" style={{ aspectRatio: "663 / 400", clipPath: TWO_CUT }}>
         <div
           className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-105"
-          style={{ background: PLACEHOLDERS[index % PLACEHOLDERS.length], filter: "grayscale(1)" }}
-        />
+          style={{ filter: "grayscale(1)" }}
+        >
+          <img
+            src={img}
+            alt=""
+            loading="lazy"
+            className="w-full h-full object-cover"
+          />
+        </div>
       </div>
       {/* caption bar — hidden at rest, reveals on hover */}
       <div
@@ -757,7 +772,7 @@ function GalleryPanel({
 
 const INSIGHT_HEIGHTS = [287, 428, 287, 447];
 
-function InsightCard({ title, index }: { title: string; index: number }) {
+function InsightCard({ title, image, index }: { title: string; image: string; index: number }) {
   return (
     <Reveal delay={(index % 4) * 0.08}>
       <Link
@@ -769,8 +784,14 @@ function InsightCard({ title, index }: { title: string; index: number }) {
           <div className="overflow-hidden bg-black" style={{ height: INSIGHT_HEIGHTS[index % 4] }}>
             <div
               className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-105"
-              style={{ background: PLACEHOLDERS[index % PLACEHOLDERS.length] }}
-            />
+            >
+              <img
+                src={image}
+                alt=""
+                loading="lazy"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </div>
           <div style={{ padding: 12 }}>
             <p
@@ -797,38 +818,77 @@ function InsightCard({ title, index }: { title: string; index: number }) {
 
 const team: TeamMember[] = [
   {
-    name: "Harper Collins",
-    role: "CEO & Art Director",
-    blurb: "Shapes visual direction with a strong focus on concept, consistency, and brand expression.",
+    name: ".NET & APIs",
+    role: "Backend",
+    blurb: "Secure REST APIs, auth flows and data models in .NET Core that stay easy to change.",
     glyph: "harper",
+    img: "/img/stack-4.jpg",
   },
   {
-    name: "Mason Turner",
-    role: "Motion & UI Designer",
-    blurb: "Creates meaningful motion that enhances storytelling, interaction, and emotional impact.",
+    name: "React & Next.js",
+    role: "Frontend",
+    blurb: "Component-driven React interfaces with motion that guides rather than distracts.",
     glyph: "mason",
+    img: "/img/blog-react.jpg",
   },
   {
-    name: "Dylan Brooks",
-    role: "UI/UX Designer",
-    blurb: "Designs intuitive interfaces with a focus on usability and scalability.",
+    name: "AI & LLM Tooling",
+    role: "Applied AI",
+    blurb: "RAG pipelines, AWS Bedrock and OpenAI integrations wired into real product workflows.",
     glyph: "dylan",
+    img: "/img/stack-3.jpg",
   },
   {
-    name: "Lila Anderson",
-    role: "Framer Developer",
-    blurb: "Builds scalable, maintainable systems with clean architecture and performance in mind.",
+    name: "AWS & DevOps",
+    role: "Delivery",
+    blurb: "Docker, CI/CD and AWS pipelines that keep every release boring and repeatable.",
     glyph: "lila",
+    img: "/img/blog-docker.jpg",
   },
 ];
 
-const logoYears = ["/2026", "/2025", "/2024", "/2023", "/2020", "/2016"];
+const logoYears = [
+  { name: "React", year: "/2026" },
+  { name: ".NET", year: "/2025" },
+  { name: "AWS", year: "/2025" },
+  { name: "Python", year: "/2024" },
+  { name: "PostgreSQL", year: "/2024" },
+  { name: "Docker", year: "/2023" },
+];
 
 const awards: Award[] = [
-  { n: "001", title: "Featured Project", sub: "Behance", count: "×02", year: "/2026" },
-  { n: "002", title: "UX Design Award", sub: "Awwwards", count: "×01", year: "/2025" },
-  { n: "003", title: "Best Web Design Agency", sub: "CSS Design Awards", count: "×01", year: "/2024" },
-  { n: "004", title: "#1 Product of the Day", sub: "Product Hunt", count: "×03", year: "/2023" },
+  {
+    n: "001",
+    title: "Maverick Designathon — Runner-Up",
+    sub: "Hexaware Technologies · corporate certification platform",
+    count: "×01",
+    unit: "award",
+    year: "/2026",
+  },
+  {
+    n: "002",
+    title: "Claude Certified Developer & Associate",
+    sub: "Anthropic Academy · foundations track",
+    count: "×02",
+    unit: "certs",
+    year: "/2026",
+  },
+  {
+    n: "003",
+    title: "Microsoft Azure Fundamentals (AZ-900)",
+    sub: "Microsoft · cloud fundamentals",
+    count: "×01",
+    unit: "cert",
+    year: "/2025",
+  },
+  {
+    n: "004",
+    title: "AWS AI Learning Track",
+    sub: "Amazon Web Services · AI services",
+    count: "×01",
+    unit: "cert",
+    year: "/2025",
+  },
 ];
 
 const insights = [
@@ -839,6 +899,7 @@ const insights = [
       "How purposeful animation turns interfaces into experiences people remember.",
     date: "2024",
     tag: "Interaction",
+    image: "/img/dev-code2.jpg",
   },
 ];
 
@@ -867,7 +928,7 @@ export default function AboutPage() {
           <div className="flex flex-col">
             <Reveal>
               <div className="flex justify-end lg:justify-end">
-                <NumberChip dark n="01" label="Who we are" />
+                <NumberChip dark n="01" label="Who I am" />
               </div>
             </Reveal>
             <Reveal delay={0.1}>
@@ -878,22 +939,31 @@ export default function AboutPage() {
             <Reveal delay={0.2}>
               <div className="flex items-center" style={{ gap: 10, marginTop: 48 }}>
                 <div className="flex shrink-0">
-                  {[0, 1, 2, 3].map((i) => (
-                    <span
-                      key={i}
-                      style={{
-                        display: "block",
-                        width: 41,
-                        height: 41,
-                        borderRadius: "100%",
-                        background: PLACEHOLDERS[i % PLACEHOLDERS.length],
-                        border: "2px solid #080A10",
-                        boxSizing: "border-box",
-                        marginLeft: i ? -14 : 0,
-                        flexShrink: 0,
-                      }}
-                    />
-                  ))}
+                  {["/project-1.jpg", "/project-2.jpg", "/project-4.jpg", "/project-3.jpg"].map(
+                    (src, i) => (
+                      <span
+                        key={src}
+                        style={{
+                          display: "block",
+                          width: 41,
+                          height: 41,
+                          borderRadius: "100%",
+                          overflow: "hidden",
+                          border: "2px solid #080A10",
+                          boxSizing: "border-box",
+                          marginLeft: i ? -14 : 0,
+                          flexShrink: 0,
+                        }}
+                      >
+                        <img
+                          src={src}
+                          alt=""
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
+                      </span>
+                    ),
+                  )}
                 </div>
                 <div className="flex flex-col" style={{ gap: 4 }}>
                   <span
@@ -910,7 +980,7 @@ export default function AboutPage() {
                     ★★★★★
                   </span>
                   <span style={{ display: "flex", alignItems: "baseline" }}>
-                    <span style={{ ...monoLabel }}>200+</span>
+                    <span style={{ ...monoLabel }}>{profile.githubStats.repos}</span>
                     <span
                       style={{
                         fontFamily: '"Geist", sans-serif',
@@ -920,7 +990,7 @@ export default function AboutPage() {
                         marginLeft: 5,
                       }}
                     >
-                      Satisfied clients
+                      Public repositories
                     </span>
                   </span>
                 </div>
@@ -930,7 +1000,7 @@ export default function AboutPage() {
         </div>
 
         <div className="relative z-10" style={{ marginTop: 100 }}>
-          <ParallaxMedia index={0} ratio="1333 / 800" />
+          <ParallaxMedia src="/img/stack-4.jpg" ratio="1333 / 800" />
         </div>
       </section>
 
@@ -987,18 +1057,18 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4" style={{ marginTop: 236, rowGap: 40 }}>
             <div className="lg:col-span-2">
               <Reveal>
-                <NumberChip n="03" label="Experts" />
+                <NumberChip n="03" label="Stack" />
               </Reveal>
               <Reveal delay={0.1}>
                 <h2 style={{ ...h70Style, marginTop: 20 }}>
                   <span className="block" style={{ color: "var(--color-light-text)" }}>
-                    The team
+                    The stack
                   </span>
                   <span className="block" style={{ color: "var(--color-light-muted)" }}>
                     behind what
                   </span>
                   <span className="block" style={{ color: "var(--color-light-muted)" }}>
-                    you see.
+                    I ship.
                   </span>
                 </h2>
               </Reveal>
@@ -1013,8 +1083,8 @@ export default function AboutPage() {
                       <div style={btnStyle}>
                         <div className="flex flex-col overflow-hidden" style={{ height: 16 }}>
                           <div className="btn-roll">
-                            <span style={btnTxtStyle}>Work with us</span>
-                            <span style={btnTxtStyle}>Work with us</span>
+                            <span style={btnTxtStyle}>Work with me</span>
+                            <span style={btnTxtStyle}>Work with me</span>
                           </div>
                         </div>
                         <BtnIcon className="group-hover:rotate-45 transition-transform duration-300" />
@@ -1029,9 +1099,15 @@ export default function AboutPage() {
                           height: 66,
                           borderRadius: "50%",
                           overflow: "hidden",
-                          background: PLACEHOLDERS[0],
                         }}
-                      />
+                      >
+                        <img
+                          src="/img/about-chip.jpg"
+                          alt=""
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
                     </div>
                   </Link>
                 </div>
@@ -1081,7 +1157,7 @@ export default function AboutPage() {
                 <path d="M23 0 L40 0 L40 30 L29 30 L23 20 Z" />
               </svg>
               <SplitHeading
-                text="Built to solve real problems — not chase trends. Clear thinking. Lasting design. Real value."
+                text="Built to solve real problems — not chase trends. Clear thinking. Solid architecture. Real value."
                 style={h58Style}
               />
             </div>
@@ -1089,7 +1165,7 @@ export default function AboutPage() {
 
           <div className="relative grid grid-cols-1 lg:grid-cols-4" style={{ marginTop: 100 }}>
             <div className="lg:col-span-3">
-              <ParallaxMedia index={1} ratio="1000 / 630" />
+              <ParallaxMedia src="/img/life-1.jpg" ratio="1000 / 630" />
             </div>
             <BarcodeDecor style={{ right: 0, bottom: 0 }} />
           </div>
@@ -1109,17 +1185,17 @@ export default function AboutPage() {
               <Reveal>
                 <h2 style={h70Style}>
                   <span className="block" style={{ color: "var(--color-light-text)" }}>
-                    Results shaped through
+                    Built on tools that
                   </span>
                   <span className="block" style={{ color: "var(--color-light-muted)" }}>
-                    collaboration.
+                    ship.
                   </span>
                 </h2>
               </Reveal>
             </div>
             <div className="lg:col-span-1 flex justify-end">
               <Reveal delay={0.1}>
-                <NumberChip n="05" label="Partnership" />
+                <NumberChip n="05" label="Toolkit" />
               </Reveal>
             </div>
           </div>
@@ -1132,17 +1208,17 @@ export default function AboutPage() {
             </Reveal>
             <Reveal delay={0.2} className="lg:col-start-3">
               <p style={{ ...bodyDesc, color: "#686868", maxWidth: 330 }}>
-                We partner with startups and established brands to design digital products and
-                scalable brand systems — focused on clarity and usability.
+                I work with product teams and startups to build software that scales — clear
+                architecture, usable interfaces, and delivery you can plan around.
               </p>
             </Reveal>
           </div>
 
-          {/* "(2016-26©)" col1 | logo wall col2-4 */}
+          {/* "(2023-26©)" col1 | logo wall col2-4 */}
           <div className="grid grid-cols-1 lg:grid-cols-4" style={{ marginTop: 100, rowGap: 40 }}>
             <div className="lg:col-span-1">
               <Reveal>
-                <span style={monoLabel}>(2016-26©)</span>
+                <span style={monoLabel}>(2023-26©)</span>
               </Reveal>
             </div>
             <div className="lg:col-span-3">
@@ -1150,9 +1226,9 @@ export default function AboutPage() {
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
                 style={{ columnGap: "5.5px", rowGap: 10 }}
               >
-                {logoYears.map((year, i) => (
-                  <Reveal key={year} delay={(i % 3) * 0.08}>
-                    <LogoCard year={year} index={i} />
+                {logoYears.map((tool, i) => (
+                  <Reveal key={tool.name} delay={(i % 3) * 0.08}>
+                    <LogoCard label={tool.name} year={tool.year} index={i} />
                   </Reveal>
                 ))}
               </div>
@@ -1175,17 +1251,17 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4">
             <div className="lg:col-span-1">
               <Reveal>
-                <NumberChip dark n="06" label="Awards" />
+                <NumberChip dark n="06" label="Credentials" />
               </Reveal>
             </div>
             <div className="lg:col-span-3">
               <Reveal delay={0.1}>
                 <h2 style={h100Style}>
                   <span className="block" style={{ color: "#FFFFFF" }}>
-                    Design work, recognized
+                    Certified while
                   </span>
                   <span className="block" style={{ color: "#9E9E9E" }}>
-                    globally.
+                    shipping real work.
                   </span>
                 </h2>
               </Reveal>
@@ -1199,7 +1275,7 @@ export default function AboutPage() {
             </Reveal>
             <Reveal delay={0.2} className="lg:col-start-3">
               <p style={{ ...bodyDesc, color: "#9E9E9E", maxWidth: 330 }}>
-                Awards and nominations from respected and trusted international design communities.
+                Certifications and competition results earned while building production software.
               </p>
             </Reveal>
           </div>
@@ -1214,8 +1290,8 @@ export default function AboutPage() {
             className="grid grid-cols-1 lg:grid-cols-2"
             style={{ columnGap: 10, rowGap: 10, marginTop: 100 }}
           >
-            <GalleryPanel label="Moments" index={2} desc="Work in progress" chip="/2026" />
-            <GalleryPanel label="Archive" index={3} desc="Inside the studio" chip="/2025" />
+            <GalleryPanel label="Moments" img="/img/life-2.jpg" desc="Work in progress" chip="/2026" />
+            <GalleryPanel label="Archive" img="/img/life-8.jpg" desc="Inside my workspace" chip="/2025" />
           </div>
         </div>
         <SpikeDecor dark style={{ right: 24, top: 124 }} />
@@ -1255,7 +1331,7 @@ export default function AboutPage() {
                     Latest from
                   </span>
                   <span className="block" style={{ color: "var(--color-light-muted)" }}>
-                    our studio.
+                    my notebook.
                   </span>
                 </h2>
               </Reveal>
@@ -1263,8 +1339,8 @@ export default function AboutPage() {
             <div className="lg:col-span-2">
               <Reveal delay={0.15}>
                 <p style={{ ...bodyDesc, color: "#686868", maxWidth: 668 }}>
-                  Notes on design, engineering and the decisions behind the products we ship every
-                  week.
+                  Notes on engineering, AI tooling and the decisions behind the products I ship
+                  every week.
                 </p>
               </Reveal>
               <Reveal delay={0.2}>
@@ -1290,7 +1366,12 @@ export default function AboutPage() {
             style={{ gap: 0, marginTop: 138 }}
           >
             {insights.map((article, i) => (
-              <InsightCard key={article.title} title={article.title} index={i} />
+              <InsightCard
+                key={article.title}
+                title={article.title}
+                image={article.image}
+                index={i}
+              />
             ))}
           </div>
         </div>

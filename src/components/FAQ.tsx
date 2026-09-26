@@ -36,7 +36,7 @@ const faqs = [
   {
     question: "What technologies do you specialize in?",
     answer:
-      "I specialize in React, TypeScript, Node.js, Python, and modern web technologies. I'm proficient in both frontend and backend development, with experience in cloud services like AWS and Docker.",
+      "My core is C# / .NET and React with TypeScript, plus Python for AI pipelines — deployed on AWS with Docker. Cursor AI is part of my daily workflow for generation, debugging and review.",
   },
   {
     question: "Are you available for freelance work?",

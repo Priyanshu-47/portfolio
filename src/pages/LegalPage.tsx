@@ -62,7 +62,7 @@ type LegalDoc = {
 
 const TERMS: LegalDoc = {
   titleDark: "Terms of",
-  titleGray: "Service.",
+  titleGray: "Use.",
   titleBreak: false,
   updated: "Dec 20, 2025",
   intro:
@@ -71,58 +71,58 @@ const TERMS: LegalDoc = {
     {
       heading: "1. Introduction",
       paragraph:
-        'Welcome to [Your Website Name] ("we," "our," "us"). By accessing and using our website [yourwebsite.com] (the "Website") and services, you agree to comply with and be bound by these Terms of Service. If you do not agree to these terms, please do not use our Website.',
+        'Welcome to the Priyanshu Lodha portfolio (the "Website"). By accessing and using this Website, you agree to comply with and be bound by these Terms of Use. If you do not agree to these terms, please do not use this Website.',
     },
     {
-      heading: "2. Services",
+      heading: "2. About This Website",
       paragraph:
-        "We offer a range of design and creative services as described on our Website. We reserve the right to modify, suspend, or discontinue any part of our services at any time, with or without notice.",
+        "This Website is a personal portfolio presenting projects, writing, and contact details. Content is provided for informational purposes and may be updated, replaced, or removed at any time without notice.",
     },
     {
       heading: "3. User Responsibilities",
       items: [
-        "Provide accurate and up-to-date information when using our services.",
-        "Keep your account credentials secure and confidential.",
-        "Attempt to gain unauthorized access to our systems or networks.",
-        "Copy, reproduce, or distribute our content without permission.",
-        "Use our content or designs without permission.",
+        "Use the Website only for lawful purposes.",
+        "Attempt to gain unauthorized access to our systems or hosting infrastructure.",
+        "Copy, reproduce, or redistribute content without permission.",
+        "Scrape or index the site in a way that degrades its availability.",
+        "Misrepresent your identity when reaching out through the contact form.",
       ],
     },
     {
-      heading: "4. Payments and Refunds",
+      heading: "4. Correspondence",
       items: [
-        "Refunds are only granted under specific circumstances, subject to our review.",
-        "All payments for services must be made as per the agreed terms before work commences.",
-        "Late payments may result in service delays or termination.",
+        "Messages sent through the contact form are used only to respond to your enquiry.",
+        "No account is created and no credentials are stored by this Website.",
+        "Correspondence may be retained for as long as follow-up is relevant.",
       ],
     },
     {
       heading: "5. Intellectual Property",
       items: [
-        "Clients receive rights to use the final design as outlined in the agreed contract.",
-        "We retain ownership of all preliminary design work until final payment is received.",
-        "You may not resell, modify, or claim ownership of any work without our permission.",
+        "Project screenshots, writing, and code samples remain the property of their respective owners.",
+        "Original content on this Website may not be resold or presented as someone else's work.",
+        "Third-party trademarks, logos, and libraries belong to their respective owners.",
       ],
     },
     {
       heading: "6. Limitation of Liability",
       paragraph:
-        "We are not liable for any damages, including lost profits or data, resulting from the use of our Website or services. We do not guarantee that our Website will be error-free or uninterrupted.",
+        "This Website is provided \"as is\" without warranties of any kind. I am not liable for any damages, including lost profits or data, resulting from the use of, or inability to use, this Website. I do not guarantee that it will be error-free or uninterrupted.",
     },
     {
       heading: "7. Termination",
       paragraph:
-        "We reserve the right to terminate or suspend access to our Website or services at any time if a user violates these Terms of Service.",
+        "Access may be restricted, suspended, or terminated at any time, including for conduct that violates these Terms of Use.",
     },
     {
       heading: "8. Changes to These Terms",
       paragraph:
-        "We may update these Terms of Service from time to time. Any changes will be posted on this page with an updated revision date. Your continued use of the Website after changes are posted constitutes your acceptance of the new terms.",
+        "These Terms of Use may be updated from time to time. Any changes will be posted on this page with an updated revision date. Your continued use of the Website after changes are posted constitutes your acceptance of the new terms.",
     },
     {
       heading: "9. Governing Law",
       paragraph:
-        "These Terms of Service shall be governed by and construed in accordance with the laws of [Your Country], without regard to its conflict of law provisions. Any disputes arising from these terms shall be resolved in the courts of [Your Country].",
+        "These Terms of Use shall be governed by and construed in accordance with the laws of India, without regard to its conflict of law provisions. Any disputes arising from these terms shall be resolved in the courts of Pune, Maharashtra.",
     },
   ],
 };
@@ -138,7 +138,7 @@ const PRIVACY: LegalDoc = {
     {
       heading: "1. Introduction",
       paragraph:
-        'Welcome to [Your Website Name] ("we," "our," "us"). Your privacy is important to us. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our Website.',
+        'Welcome to the Priyanshu Lodha portfolio (the "Website"). Your privacy matters to me. This Privacy Policy explains how information is collected, used, disclosed, and safeguarded when you visit this Website.',
     },
     {
       heading: "2. Information We Collect",
@@ -150,48 +150,48 @@ const PRIVACY: LegalDoc = {
       ],
     },
     {
-      heading: "3. How We Use Your Information",
+      heading: "3. How Your Information Is Used",
       items: [
-        "To provide, operate, and improve our Website and services.",
+        "To provide, operate, and improve this Website.",
         "To communicate with you and respond to your inquiries.",
-        "To analyze usage trends and enhance user experience.",
-        "To comply with legal obligations and protect our rights.",
+        "To analyze usage trends and enhance the experience.",
+        "To comply with legal obligations and protect my rights.",
       ],
     },
     {
       heading: "4. Cookies and Tracking Technologies",
       paragraph:
-        "We use cookies and similar tracking technologies to track activity on our Website and hold certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.",
+        "Cookies and similar technologies may be used to track activity on this Website and hold certain information. You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent.",
     },
     {
       heading: "5. Third-Party Services",
       paragraph:
-        "We may share your information with third-party service providers that assist us in operating our Website, provided that those parties agree to keep this information confidential.",
+        "Information may be processed by third-party service providers that assist in operating this Website — for example hosting and form delivery — provided those parties agree to keep the information confidential.",
     },
     {
       heading: "6. Data Security",
       paragraph:
-        "We use administrative and technical safeguards to protect your personal information. However, no method of transmission over the Internet is 100% secure, and we cannot guarantee its absolute security.",
+        "Administrative and technical safeguards are used to protect personal information. However, no method of transmission over the Internet is 100% secure, and absolute security cannot be guaranteed.",
     },
     {
       heading: "7. Your Rights",
       paragraph:
-        "Depending on your location, you may have the right to access, update, or delete the personal information we hold about you at any time by contacting us.",
+        "Depending on your location, you may have the right to access, update, or delete the personal information held about you at any time by getting in touch through the contact page.",
     },
     {
       heading: "8. Children's Privacy",
       paragraph:
-        "Our Website is not intended for use by children under the age of 13, and we do not knowingly collect personal information from children.",
+        "This Website is not intended for use by children under the age of 13, and personal information from children is not knowingly collected.",
     },
     {
       heading: "9. Changes to This Policy",
       paragraph:
-        "We may update this Privacy Policy from time to time. Changes will be effective when posted on this page with an updated revision date.",
+        "This Privacy Policy may be updated from time to time. Changes will be effective when posted on this page with an updated revision date.",
     },
     {
-      heading: "10. Contact Us",
+      heading: "10. Contact",
       paragraph:
-        "If you have questions or concerns about this Privacy Policy, please contact us through our website.",
+        "If you have questions or concerns about this Privacy Policy, please reach out through the contact page of this Website.",
     },
   ],
 };

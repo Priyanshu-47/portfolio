@@ -264,7 +264,7 @@ export default function Experience() {
                     aria-hidden="true"
                   >
                     <img
-                      src="./portrait.png"
+                      src="/portrait.png"
                       alt="Priyanshu Lodha"
                       className="w-full h-full object-cover"
                     />

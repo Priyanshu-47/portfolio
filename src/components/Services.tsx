@@ -44,13 +44,13 @@ const services = [
 const icons = ["⬆", "✦", "▲", "◆", "✚"];
 
 /* Cursor-following hover previews (Riwa: fixed, z13, 128×150, follows cursor).
-   Gradient placeholders until real service images exist. */
+   Real contextual photos, one per service. */
 const PREVIEWS = [
-  "radial-gradient(ellipse 70% 60% at 35% 40%, rgba(214, 84, 31, 0.65), transparent 70%), radial-gradient(ellipse 55% 55% at 80% 75%, rgba(56, 88, 160, 0.4), transparent 70%), #14171D",
-  "radial-gradient(ellipse 60% 70% at 65% 30%, rgba(233, 104, 30, 0.55), transparent 70%), radial-gradient(ellipse 50% 50% at 20% 80%, rgba(40, 44, 60, 0.8), transparent 75%), #14171D",
-  "radial-gradient(ellipse 75% 50% at 50% 60%, rgba(214, 54, 20, 0.5), transparent 72%), radial-gradient(ellipse 45% 55% at 85% 20%, rgba(70, 74, 96, 0.5), transparent 70%), #14171D",
-  "radial-gradient(ellipse 55% 65% at 40% 55%, rgba(180, 62, 24, 0.6), transparent 70%), radial-gradient(ellipse 50% 45% at 80% 30%, rgba(52, 58, 82, 0.6), transparent 72%), #14171D",
-  "radial-gradient(ellipse 80% 55% at 60% 45%, rgba(233, 104, 30, 0.45), transparent 74%), radial-gradient(ellipse 40% 50% at 15% 25%, rgba(46, 50, 70, 0.7), transparent 70%), #14171D",
+  "/img/blog-react.jpg",
+  "/img/dev-terminal.jpg",
+  "/img/stack-4.jpg",
+  "/img/life-5.jpg",
+  "/img/blog-docker.jpg",
 ];
 
 /* Riwa's exact SVG shapes (captured from their sprite symbols) */
@@ -393,9 +393,17 @@ export default function Services() {
               style={{
                 width: 128,
                 height: 150,
-                backgroundImage: PREVIEWS[hovered],
+                overflow: "hidden",
+                background: "#14171D",
               }}
-            />
+            >
+              <img
+                src={PREVIEWS[hovered]}
+                alt=""
+                loading="lazy"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

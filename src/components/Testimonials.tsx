@@ -22,19 +22,19 @@ import { Reveal } from "./Reveal";
 const testimonials = [
   {
     quote:
-      "Exceptional developer who delivered our project ahead of schedule. The code quality and attention to detail were outstanding.",
+      "Priyanshu took a vague idea and returned a working full-stack build — clean APIs, a polished interface, and docs we could actually maintain.",
     author: "Project Collaborator",
     role: "Tech Lead",
   },
   {
     quote:
-      "Amazing problem-solving skills and a great team player. Always brings fresh ideas to the table.",
+      "He moves fast without cutting corners. Most of our trickiest bugs ended up explained in his pull requests.",
     author: "Team Member",
     role: "Senior Developer",
   },
   {
     quote:
-      "Very professional and skilled in both frontend and backend. Would highly recommend for any full-stack project.",
+      "From database schema to deployment he owned every layer — exactly the full-stack partner you want on an early build.",
     author: "Client",
     role: "Startup Founder",
   },

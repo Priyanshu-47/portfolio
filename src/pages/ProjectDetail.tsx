@@ -6,8 +6,9 @@ import { Reveal } from "../components/Reveal";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
 import AnimatedLinesBand from "../components/AnimatedLinesBand";
-import { projects } from "../data/resume";
+import { projects, profile } from "../data/resume";
 import { projectDetails } from "../data/projectDetails";
+import type { ProjectDetail as ProjectDetailData } from "../data/projectDetails";
 import { slugify, PLACEHOLDERS, CARD_ICON_MASK } from "./ProjectsPage";
 
 /* Riwa /projects/:slug — live-verified (rp-det-1..4 + DOM probes @ vw1398):
@@ -55,7 +56,7 @@ import { slugify, PLACEHOLDERS, CARD_ICON_MASK } from "./ProjectsPage";
      657/491 grayscale, hover scale 105.
    seam3 9205-9275: band placement "bottom", orange teeth [2,4,6,8,10] →
      <Contact variant="inner"/> y9275 h1052 → footer (Riwa docH 10948).
-   Content: dummy body copy (line-count-matched rhythm) until the final
+   Content: real copy from projectDetails until (line-count-matched rhythm) until the final
    content pass; title/category/period/client/meta from user's data. */
 
 /* --- notch clip-paths (paint-equivalent of Riwa's corner overlay divs) --- */
@@ -268,7 +269,7 @@ function NumberChip({
 }
 
 /* header media — img carries 125% slack; scroll parallax 0 → -20% */
-function HeroMedia({ index }: { index: number }) {
+function HeroMedia({ src }: { src: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -289,22 +290,28 @@ function HeroMedia({ index }: { index: number }) {
         className="absolute left-0 top-0 w-full"
         style={{
           height: "125%",
-          background: PLACEHOLDERS[index % PLACEHOLDERS.length],
           y,
         }}
         aria-hidden="true"
-      />
+      >
+        <img
+          src={src}
+          alt=""
+          loading="lazy"
+          className="w-full h-full object-cover"
+        />
+      </motion.div>
     </div>
   );
 }
 
 /* body media — static cover, notched corners (section bg shows through) */
 function StaticMedia({
-  index,
+  src,
   cut,
   ratio,
 }: {
-  index: number;
+  src: string;
   cut: string;
   ratio: string;
 }) {
@@ -316,11 +323,12 @@ function StaticMedia({
         background: "#000000",
         clipPath: cut,
       }}
-      aria-hidden="true"
     >
-      <div
-        className="w-full h-full"
-        style={{ background: PLACEHOLDERS[index % PLACEHOLDERS.length] }}
+      <img
+        src={src}
+        alt=""
+        loading="lazy"
+        className="w-full h-full object-cover"
       />
     </div>
   );
@@ -334,44 +342,40 @@ type SectionSpec = {
   h3: string;
   desc: string;
   layout: "two-full" | "two" | "full";
+  /** running start index into project.media.body (3+3+2+1 slots = 9) */
+  slot: number;
 };
 
-const sections: SectionSpec[] = [
-  {
-    n: "01",
-    label: "Challenge",
-    h3: "Our legacy workflow could not keep pace with the rules and teams it had to manage every day.",
-    desc: "The client needed a platform that could absorb complex eligibility rules and a growing user base without repeating the same manual steps for every certification drive.",
-    layout: "two-full",
-  },
-  {
-    n: "02",
-    label: "Approach",
-    h3: "We rebuilt every screen and state from the ground up.",
-    desc: "We mapped every workflow first, then designed modular components and clear interaction states that could be reused across screens, roles, and future feature releases.",
-    layout: "two-full",
-  },
-  {
-    n: "03",
-    label: "Result",
-    h3: "A clearer interface cut friction across every workflow.",
-    desc: "The result is a structured interface with consistent hierarchy, faster task completion, and analytics that stakeholders can read at a single glance without any training.",
-    layout: "two",
-  },
-  {
-    n: "04",
-    label: "Takeaway",
-    h3: "Real work became a structured, reusable foundation.",
-    desc: "By emphasizing structure and usability, the platform turns a dense operational process into a product that teams trust and enjoy using every single day, without workarounds.",
-    layout: "full",
-  },
-];
+/* Sections 01-04 built per-project from projectDetails (real copy) */
+function buildSections(project: ProjectDetailData): SectionSpec[] {
+  const [h1, h2, h3, h4] = project.heads;
+  let slot = 0;
+  const take = (layout: SectionSpec["layout"]) => {
+    const start = slot;
+    slot += layout === "two-full" ? 3 : layout === "two" ? 2 : 1;
+    return start;
+  };
+  const layouts: SectionSpec["layout"][] = ["two-full", "two-full", "two", "full"];
+  const heads = [h1, h2, h3, h4];
+  const labels = ["Challenge", "Approach", "Result", "Takeaway"];
+  const copy = [
+    project.challenge,
+    project.approach,
+    project.result,
+    project.takeaway,
+  ];
+  return layouts.map((layout, i) => ({
+    n: String(i + 1).padStart(2, "0"),
+    label: labels[i],
+    h3: heads[i],
+    desc: copy[i],
+    layout,
+    slot: take(layout),
+  }));
+}
 
 const TESTIMONIAL_DESC =
-  "A short note from the people who relied on the platform daily — how the redesign changed their workflow and made the product feel obvious.";
-
-const DUMMY_QUOTE =
-  "The team turned a dense workflow into a calm, confident product that our people understood on day one.";
+  "A short note on the work — how the build changed the process it was made for.";
 
 /* -------------------------------------------------------------------- page */
 
@@ -379,6 +383,8 @@ export default function ProjectDetail() {
   const { slug } = useParams<{ slug: string }>();
   const project =
     projectDetails.find((p) => p.slug === slug) ?? projectDetails[0];
+
+  const sections = buildSections(project);
 
   const more = projects
     .filter((p) => slugify(p.title) !== slug)
@@ -390,11 +396,11 @@ export default function ProjectDetail() {
     ["Timeline", project.period],
   ];
 
-  // Dummy body copy until the final content pass (line-count-matched to
-  // Riwa's 8-line quote); author/role are short list-level data — kept.
-  const quote = DUMMY_QUOTE;
-  const author = project.testimonial?.author ?? "Ron Simpson";
-  const authorRole = project.testimonial?.role ?? "Founder of Asterio";
+  // Real testimonial where one exists; otherwise the project takeaway stands
+  // in as the author's own note (line-count-matched to Riwa's quote block).
+  const quote = project.testimonial?.quote ?? project.takeaway;
+  const author = project.testimonial?.author ?? profile.name;
+  const authorRole = project.testimonial?.role ?? project.role;
 
   return (
     <div className="relative">
@@ -526,7 +532,7 @@ export default function ProjectDetail() {
           {/* media1 — parallax hero (125% slack), TR notch */}
           <div style={{ marginTop: 100 }}>
             <Reveal>
-              <HeroMedia index={0} />
+              <HeroMedia src={project.media.hero} />
             </Reveal>
           </div>
         </div>
@@ -641,12 +647,12 @@ export default function ProjectDetail() {
                       style={{ gap: 8 }}
                     >
                       <StaticMedia
-                        index={idx * 3}
+                        src={project.media.body[s.slot]}
                         cut={TWO_CUT}
                         ratio="663 / 400"
                       />
                       <StaticMedia
-                        index={idx * 3 + 1}
+                        src={project.media.body[s.slot + 1]}
                         cut={TWO_CUT}
                         ratio="663 / 400"
                       />
@@ -654,7 +660,11 @@ export default function ProjectDetail() {
                   )}
                   {s.layout !== "two" && (
                     <StaticMedia
-                      index={idx * 3 + 2}
+                      src={
+                        project.media.body[
+                          s.layout === "full" ? s.slot : s.slot + 2
+                        ]
+                      }
                       cut={FULL_CUT}
                       ratio="1333 / 800"
                     />

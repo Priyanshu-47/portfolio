@@ -5,7 +5,7 @@ import Contact from "../components/Contact";
 import Footer from "../components/Footer";
 import AnimatedLinesBand from "../components/AnimatedLinesBand";
 import { profile } from "../data/resume";
-import { articles, slugify, BLOG_ICON_MASK, PLACEHOLDERS } from "./BlogPage";
+import { articles, slugify, BLOG_ICON_MASK } from "./BlogPage";
 
 /* Riwa /blog/:slug — live-verified (rp-bdet-1..4 + DOM probes @ vw1398):
    dark article section #080A10 y0 h3098 pad "160px 24px 120px",
@@ -33,7 +33,7 @@ import { articles, slugify, BLOG_ICON_MASK, PLACEHOLDERS } from "./BlogPage";
    seam: dark strip h70 bg #080A10 with Riwa "Lines 1" band (orange bars
    2/4/6/8/10, gaps 10, 70→30 on scroll) → orange Contact inner y3168
    h1052 → Footer (docH 4841).
-   Content: dummy article body; date/year + titles from the user's list. */
+   Content: real per-article body copy (3 posts); date/year + titles from the user's list. */
 
 /* Riwa's exact 19×19 4-point sparkle (svg-160579582_315) */
 const STAR_PATH =
@@ -97,83 +97,237 @@ const displayTitle: CSSProperties = {
   margin: 0,
 };
 
-/* Dummy body — 4 mono-H4 sections, Riwa's block rhythm (mt20 p / mt40 h4 /
-   mt0 ul), line-count-matched so the column flows like the reference. */
-function ArticleBody() {
+/* Real article bodies — 4 mono-H4 sections each, Riwa's block rhythm (mt20 p /
+   mt40 h4 / mt0 ul). Blocks are data so every article renders its own copy. */
+type BodyBlock =
+  | { t: "p"; text: string }
+  | { t: "h4"; text: string }
+  | { t: "ul"; items: string[] };
+
+const BODIES: Record<string, BodyBlock[]> = {
+  "building-scalable-react-applications": [
+    {
+      t: "p",
+      text: "Scalability in a React codebase is rarely about React itself — it is about the boundaries you draw around state, data and rendering.",
+    },
+    {
+      t: "p",
+      text: "After building dashboards and internal tools that grew from a handful of screens to dozens, the patterns that kept them fast were almost always the boring ones.",
+    },
+    {
+      t: "p",
+      text: "This is a walk-through of the decisions that let a React + TypeScript app keep shipping without turning into a rewrite.",
+    },
+    { t: "h4", text: "Boundaries Before Components" },
+    {
+      t: "p",
+      text: "Decide where state lives before you decide what the component tree looks like. Server data, URL state and UI state want very different lifecycles, and mixing them is how a two-line change starts touching twelve files.",
+    },
+    { t: "p", text: "A rule that has held up well:" },
+    {
+      t: "ul",
+      items: [
+        "keep server cache out of component state",
+        "derive everything else instead of storing it",
+        "push route state into the router",
+        "give every shared component one reason to change",
+      ],
+    },
+    {
+      t: "p",
+      text: "When those boundaries are explicit, a new feature mostly means adding a file rather than editing a web of existing ones.",
+    },
+    { t: "h4", text: "Types That Pay For Themselves" },
+    {
+      t: "p",
+      text: "TypeScript is only worth its compile time when illegal states become unrepresentable. Discriminated unions for view state, exact payloads for API responses, and a hard rule against `any` at module boundaries do more for correctness than any linter.",
+    },
+    {
+      t: "p",
+      text: "The payoff shows up in review: most bugs become compile errors, and the ones that survive are genuinely interesting.",
+    },
+    { t: "h4", text: "Rendering On Purpose" },
+    {
+      t: "p",
+      text: "Most performance problems I have fixed were not algorithmic — they were unnecessary renders caused by inline object literals, unstable context values, and lists that never got virtualized.",
+    },
+    {
+      t: "p",
+      text: "Fix causes in the order the profiler reports them. Memoize where the flame graph points, not where you suspect, and virtualize only when the list is actually long — premature memoization costs more readability than it saves frames.",
+    },
+    { t: "h4", text: "What Scales In Practice" },
+    {
+      t: "p",
+      text: "A React app scales when a new engineer can answer three questions quickly: where does this data come from, who owns this state, and what breaks if this prop changes shape.",
+    },
+    {
+      t: "p",
+      text: "If those answers live in the structure of the code instead of someone's head, the project scales — regardless of which state library you picked.",
+    },
+    { t: "p", text: "Structure first. Libraries second." },
+  ],
+  "the-art-of-clean-code": [
+    {
+      t: "p",
+      text: "Clean code is not a style. It is a communication strategy for people who will read the file long after you have forgotten writing it.",
+    },
+    {
+      t: "p",
+      text: "Most so-called legacy pain is really decisions that were never written down, spread across files that never explain themselves.",
+    },
+    { t: "p", text: "These are the habits I keep returning to in review." },
+    { t: "h4", text: "Names That Carry Meaning" },
+    {
+      t: "p",
+      text: "A name should say what a value is for, not how it was implemented. `retryBudgetMs` beats `timeout2`, and `loadPolicy()` beats `handleData()` every time.",
+    },
+    { t: "p", text: "When a name needs a comment to make sense, the name is the problem:" },
+    {
+      t: "ul",
+      items: [
+        "prefer specific, searchable nouns",
+        "encode units inside the name",
+        "delete abbreviations nobody defines",
+        "let structure replace explanation",
+      ],
+    },
+    { t: "p", text: "The best comment is a function that no longer needs one." },
+    { t: "h4", text: "Small Functions, Honest Boundaries" },
+    {
+      t: "p",
+      text: "A function does one thing only when its boundary is honest. If a helper secretly mutates its argument or reaches for a global, it is doing three things no matter how few lines it has.",
+    },
+    {
+      t: "p",
+      text: "I look for a clear input contract, no hidden side effects, and a name that matches the body. Anything else is a future bug with good intentions.",
+    },
+    { t: "h4", text: "Make The Wrong Thing Hard" },
+    {
+      t: "p",
+      text: "Codebases drift toward whatever is easiest to write next. If the easy path skips validation, logging or authorization, that is exactly what ships under deadline.",
+    },
+    {
+      t: "p",
+      text: "Guardrails — typed helpers, shared middleware, safe defaults — matter more than guidelines in a README, because guidelines are read once and helpers are used daily.",
+    },
+    { t: "h4", text: "Refactor In Small Steps" },
+    {
+      t: "p",
+      text: "Big-bang rewrites are where clean code earns its reputation for being risky. The safer version is a sequence of boring, reversible changes, each one shipping green.",
+    },
+    {
+      t: "p",
+      text: "Delete dead code first — it is the highest-return refactor there is, and it never breaks anybody.",
+    },
+    { t: "p", text: "Readable beats clever. Every time." },
+  ],
+  "full-stack-deployment-with-docker": [
+    {
+      t: "p",
+      text: "Containerizing a full-stack app is easy for an afternoon and hard for a year — the difference is what happens after `docker run` works on your laptop.",
+    },
+    {
+      t: "p",
+      text: "This is the setup I keep returning to for React + .NET applications: one image per service, one compose file for local, one pipeline for everything else.",
+    },
+    { t: "p", text: "Nothing here is exotic. It is mostly about making the boring parts repeatable." },
+    { t: "h4", text: "One Image Per Service" },
+    {
+      t: "p",
+      text: "Build the frontend in a Node stage, copy the output into an nginx stage, and keep the API image limited to the runtime its SDK actually needs. Multi-stage builds are the difference between a 1.2 GB image and a 90 MB one.",
+    },
+    { t: "p", text: "Rules that keep images small and builds cached:" },
+    {
+      t: "ul",
+      items: [
+        "pin base image versions",
+        "copy lockfiles before source",
+        "never bake secrets into layers",
+        "run as a non-root user",
+        "tag by commit, not by branch",
+      ],
+    },
+    {
+      t: "p",
+      text: "Once layers cache well, a deploy is mostly the time it takes to copy the last artifact.",
+    },
+    { t: "h4", text: "Configuration Belongs At Runtime" },
+    {
+      t: "p",
+      text: "Images that need environment variables at build time become images you must rebuild for every environment. Read config at startup, fail fast when something required is missing, and let one identical image move from staging to production.",
+    },
+    {
+      t: "p",
+      text: "That single rule removes an entire category of works-on-my-machine bugs.",
+    },
+    { t: "h4", text: "Local Parity Without Pain" },
+    {
+      t: "p",
+      text: "Compose should mirror production topology — separate database, API and web containers, named volumes for state, healthchecks before dependents start — without pretending to be a cluster.",
+    },
+    {
+      t: "p",
+      text: "If a developer can bring the whole stack up with one command, onboarding stops being a wiki article nobody trusts.",
+    },
+    { t: "h4", text: "Ship It" },
+    {
+      t: "p",
+      text: "In CI, build once, scan the image, push it, then deploy that exact artifact. Rebuilding during deploy means the thing in production was never tested anywhere.",
+    },
+    {
+      t: "p",
+      text: "Containers are ephemeral, so stdout is the contract: structured logs and a driver that persists them are not optional.",
+    },
+    {
+      t: "p",
+      text: "Containers will not fix a messy architecture — but they will make a clean one repeatable.",
+    },
+  ],
+};
+
+function ArticleBody({ slug }: { slug: string }) {
+  const blocks = BODIES[slug] ?? Object.values(BODIES)[0];
+  let first = true;
   return (
     <div style={{ marginTop: 100 }}>
-      <p style={{ ...bodyP, marginTop: 0 }}>
-        Great software is built on decisions that compound over time.
-      </p>
-      <p style={bodyP}>
-        This piece walks through the principles behind systems that last.
-      </p>
-      <p style={bodyP}>
-        From architecture to delivery, every layer benefits from a shared set
-        of conventions that keep teams aligned and products predictable.
-      </p>
-
-      <h4 style={bodyH4}>From Structure to Experience</h4>
-      <p style={bodyP}>
-        Interfaces are no longer judged by a single screen but by the rhythm
-        that connects every state, transition, and edge case across the
-        journey.
-      </p>
-      <p style={bodyP}>Every interaction matters:</p>
-      <ul
-        style={{
-          listStyle: "disc",
-          paddingLeft: 24,
-          margin: 0,
-          marginTop: 0,
-          fontFamily: '"Geist", sans-serif',
-          fontWeight: 400,
-          fontSize: 18,
-          lineHeight: "25.2px",
-          color: "#9E9E9E",
-        }}
-      >
-        <li>keep teams aligned</li>
-        <li>make trade-offs visible</li>
-        <li>reduce review cycles</li>
-        <li>and compound effort over time</li>
-      </ul>
-      <p style={bodyP}>
-        When the system carries the thinking, individual features can evolve
-        without breaking the whole.
-      </p>
-
-      <h4 style={bodyH4}>Why Systems Thinking Wins</h4>
-      <p style={bodyP}>
-        Teams that document the why behind a choice move faster six months
-        later, when context has faded and the stakes have grown.
-      </p>
-      <p style={bodyP}>
-        A shared language turns reviews into decisions and keeps quality
-        consistent as more people contribute.
-      </p>
-
-      <h4 style={bodyH4}>Designing for Change</h4>
-      <p style={bodyP}>
-        Change is the only constant in a product's life, so the foundation
-        should bend long before it breaks.
-      </p>
-      <p style={bodyP}>
-        Modular components, clear boundaries, and honest naming make
-        refactors feel routine instead of risky.
-      </p>
-
-      <h4 style={bodyH4}>What Lasts Beyond the Launch</h4>
-      <p style={bodyP}>
-        Products that endure treat launch as the first checkpoint rather than
-        the finish line.
-      </p>
-      <p style={bodyP}>
-        Measurement, iteration, and honest feedback loops turn early momentum
-        into durable growth, and they only work when the underlying system
-        is legible to everyone who touches it.
-      </p>
-      <p style={bodyP}>Build once, refine forever.</p>
+      {blocks.map((b, i) => {
+        if (b.t === "h4") {
+          return (
+            <h4 key={i} style={bodyH4}>
+              {b.text}
+            </h4>
+          );
+        }
+        if (b.t === "ul") {
+          return (
+            <ul
+              key={i}
+              style={{
+                listStyle: "disc",
+                paddingLeft: 24,
+                margin: 0,
+                marginTop: 0,
+                fontFamily: '"Geist", sans-serif',
+                fontWeight: 400,
+                fontSize: 18,
+                lineHeight: "25.2px",
+                color: "#9E9E9E",
+              }}
+            >
+              {b.items.map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
+          );
+        }
+        const isFirst = first;
+        first = false;
+        return (
+          <p key={i} style={{ ...bodyP, marginTop: isFirst ? 0 : undefined }}>
+            {b.text}
+          </p>
+        );
+      })}
     </div>
   );
 }
@@ -216,15 +370,12 @@ export default function BlogDetail() {
                 overflow: "clip",
               }}
             >
-              {/* image slot — grayscale placeholder until the real photo arrives */}
-              <div
-                className="w-full h-full"
-                style={{
-                  clipPath: IMAGE_CUT,
-                  background:
-                    "radial-gradient(ellipse 70% 55% at 32% 38%, #3d3d3d, transparent 72%), radial-gradient(ellipse 45% 60% at 78% 72%, #232323, transparent 70%), #060606",
-                }}
-                aria-hidden="true"
+              {/* image — article cover, notched corners */}
+              <img
+                src={article.image}
+                alt={article.title}
+                className="w-full h-full object-cover"
+                style={{ clipPath: IMAGE_CUT }}
               />
             </div>
           </div>
@@ -363,7 +514,7 @@ export default function BlogDetail() {
 
             {/* body */}
             <Reveal>
-              <ArticleBody />
+              <ArticleBody slug={slugify(article.title)} />
             </Reveal>
 
             {/* MORE ARTICLES — chip + two-tone H3 + 2 cards */}
@@ -442,11 +593,11 @@ export default function BlogDetail() {
                           className="flex-1 overflow-hidden bg-black"
                           style={{ minHeight: 0 }}
                         >
-                          <div
-                            className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-105"
-                            style={{
-                              background: PLACEHOLDERS[(i + 1) % 5],
-                            }}
+                          <img
+                            src={a.image}
+                            alt={a.title}
+                            loading="lazy"
+                            className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
                           />
                         </div>
 

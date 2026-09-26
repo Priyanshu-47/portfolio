@@ -338,7 +338,7 @@ export default function Contact({ variant = "home" }: { variant?: "home" | "inne
                 name="contact-name"
                 value={formData.name}
                 onChange={(v) => setFormData({ ...formData, name: v })}
-                placeholder="Jane Smith"
+                placeholder="Your name"
               />
               <Field
                 label="Email"
@@ -346,7 +346,7 @@ export default function Contact({ variant = "home" }: { variant?: "home" | "inne
                 type="email"
                 value={formData.email}
                 onChange={(v) => setFormData({ ...formData, email: v })}
-                placeholder="jane@example.com"
+                placeholder="you@example.com"
               />
               <Field
                 label="Message"
@@ -390,7 +390,7 @@ export default function Contact({ variant = "home" }: { variant?: "home" | "inne
                 </button>
                 {/* portrait circle overlapping the pill's right edge */}
                 <img
-                  src="./portrait.png"
+                  src="/portrait.png"
                   alt=""
                   aria-hidden="true"
                   className="absolute pointer-events-none"

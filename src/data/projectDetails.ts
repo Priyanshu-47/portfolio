@@ -17,6 +17,13 @@ export type ProjectDetail = {
     role: string
   }
   tags: string[]
+  /** punchy h3 headlines for sections 01-04 (Challenge/Approach/Result/Takeaway) */
+  heads: [string, string, string, string]
+  /** hero (1333/800 parallax) + exactly 9 body slots (3+3+2+1 by layout) */
+  media: {
+    hero: string
+    body: string[]
+  }
 }
 
 export const projectDetails: ProjectDetail[] = [
@@ -44,6 +51,26 @@ export const projectDetails: ProjectDetail[] = [
       role: 'Maverick 2026',
     },
     tags: ['Next.js', 'AWS Bedrock', 'AWS Cognito', 'Neon DB'],
+    heads: [
+      'Manual certification drives could not scale past a few hundred employees.',
+      'One rules engine, Bedrock automation, and dashboards that update themselves.',
+      'Runner-up in 48 hours — with zero manual voucher errors.',
+      'AI-assisted development compressed a quarter of work into a weekend.',
+    ],
+    media: {
+      hero: '/img/mch-header.jpg',
+      body: [
+        '/img/mch-1.jpg',
+        '/img/biz-meeting.jpg',
+        '/img/ui-analytics.jpg',
+        '/img/mch-2.jpg',
+        '/img/biz-planning.jpg',
+        '/img/life-1.jpg',
+        '/img/desk-wide.jpg',
+        '/img/stack-4.jpg',
+        '/img/life-3.jpg',
+      ],
+    },
   },
   {
     slug: 'policysense-ai',
@@ -63,7 +90,33 @@ export const projectDetails: ProjectDetail[] = [
       'The platform successfully processes unstructured policy documents, extracts relevant context, and provides intelligent coverage analysis — helping users understand their insurance benefits in plain language.',
     takeaway:
       'RAG pipelines are powerful for domain-specific Q&A. The combination of OCR, document intelligence, and LLM reasoning creates a system that truly understands complex insurance documents.',
+    testimonial: {
+      quote:
+        'The real win was turning dense policy jargon into answers anyone can actually read.',
+      author: 'Priyanshu Lodha',
+      role: 'AI Engineer',
+    },
     tags: ['Python', 'OpenAI API', 'LangChain', 'PostgreSQL', 'AWS Bedrock'],
+    heads: [
+      'Insurance policies are written for lawyers, not for the people who bought them.',
+      'A RAG pipeline that reads, embeds, and reasons over every policy clause.',
+      'Coverage analysis in plain language, drawn straight from the source documents.',
+      'Domain Q&A is a retrieval problem before it is a model problem.',
+    ],
+    media: {
+      hero: '/img/psi-header.jpg',
+      body: [
+        '/img/psi-1.jpg',
+        '/img/psi-2.jpg',
+        '/img/ui-analytics.jpg',
+        '/img/blog-react.jpg',
+        '/img/life-7.jpg',
+        '/img/stack-3.jpg',
+        '/img/about-chip.jpg',
+        '/img/desk-wide.jpg',
+        '/img/life-5.jpg',
+      ],
+    },
   },
   {
     slug: 'incidentlens-ai',
@@ -83,7 +136,33 @@ export const projectDetails: ProjectDetail[] = [
       'The platform generates root-cause candidates and remediation suggestions by correlating current incidents with historical data, significantly reducing mean time to resolution.',
     takeaway:
       'Combining log analysis with semantic search and LLM reasoning creates a powerful incident response tool. The key insight is that most production issues have occurred before — the challenge is finding the right context fast.',
+    testimonial: {
+      quote:
+        'Most production issues have happened before — the hard part is finding that context fast.',
+      author: 'Priyanshu Lodha',
+      role: 'Full Stack + AI Engineer',
+    },
     tags: ['Python', 'LangChain', 'OpenAI API', 'PostgreSQL', 'React'],
+    heads: [
+      'Every incident began with an hour of grepping logs across five tools.',
+      'Log ingestion, embeddings, and LLM reasoning in a single retrieval pipeline.',
+      'Root-cause candidates arrive before the war room does.',
+      'The knowledge already exists — retrieval is what makes it useful under pressure.',
+    ],
+    media: {
+      hero: '/img/ili-header.jpg',
+      body: [
+        '/img/ili-1.jpg',
+        '/img/ops-logs.jpg',
+        '/img/dev-terminal.jpg',
+        '/img/ili-2.jpg',
+        '/img/rrd-1.jpg',
+        '/img/dev-code2.jpg',
+        '/img/stack-1.jpg',
+        '/img/life-6.jpg',
+        '/img/blog-clean.jpg',
+      ],
+    },
   },
   {
     slug: 'releaseradar',
@@ -103,7 +182,33 @@ export const projectDetails: ProjectDetail[] = [
       'A unified dashboard that gives engineering teams real-time visibility into release readiness, deployment status, and historical changes — reducing release anxiety and improving deployment confidence.',
     takeaway:
       'The real value is in aggregation. By pulling data from multiple sources into a single view, teams can make faster, more informed decisions about when to release.',
+    testimonial: {
+      quote:
+        'Releases stopped being a guessing game — readiness is visible in one view now.',
+      author: 'Priyanshu Lodha',
+      role: 'Full Stack Engineer',
+    },
     tags: ['.NET 10', 'React', 'PostgreSQL', 'GitHub API', 'Docker', 'AWS'],
+    heads: [
+      'Release readiness lived across GitHub, CI dashboards, and monitoring nobody opened.',
+      'ASP.NET Core APIs that correlate commits, pull requests, and deployments.',
+      'One dashboard for readiness, deployment status, and environment health.',
+      'Aggregation beats another dashboard — the signal finally sits in one place.',
+    ],
+    media: {
+      hero: '/img/rrd-header.jpg',
+      body: [
+        '/img/ui-analytics.jpg',
+        '/img/dev-code2.jpg',
+        '/img/rrd-2.jpg',
+        '/img/rrd-1.jpg',
+        '/img/stack-4.jpg',
+        '/img/dev-terminal.jpg',
+        '/img/blog-docker.jpg',
+        '/img/life-8.jpg',
+        '/img/desk-wide.jpg',
+      ],
+    },
   },
   {
     slug: 'hotpot',
@@ -123,6 +228,32 @@ export const projectDetails: ProjectDetail[] = [
       'A fully functional food ordering platform with secure auth, responsive UI, and complete order lifecycle management — from browsing menus to tracking deliveries.',
     takeaway:
       'This project solidified my understanding of full-stack architecture — from JWT auth and Redux state management to REST API design and database modeling.',
+    testimonial: {
+      quote:
+        'Auth, cart, and delivery workflows held together cleanly — the fundamentals done right.',
+      author: 'Priyanshu Lodha',
+      role: 'Full Stack Developer',
+    },
     tags: ['.NET Core', 'React', 'MSSQL', 'C#', 'JWT'],
+    heads: [
+      'Three roles, one order lifecycle, and no room for a loose end in the auth flow.',
+      'React and .NET Core with JWT auth and Redux driving every cart state.',
+      'Menus to delivery tracking — the complete order lifecycle, end to end.',
+      'Full-stack architecture clicks once auth, state, and APIs share one contract.',
+    ],
+    media: {
+      hero: '/img/hot-header.jpg',
+      body: [
+        '/img/hot-1.jpg',
+        '/img/food-plate.jpg',
+        '/img/food-app.jpg',
+        '/img/hot-2.jpg',
+        '/img/food-resto.jpg',
+        '/img/life-4.jpg',
+        '/img/stack-2.jpg',
+        '/img/life-2.jpg',
+        '/img/life-1.jpg',
+      ],
+    },
   },
 ]

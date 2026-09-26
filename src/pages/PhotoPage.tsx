@@ -3,7 +3,7 @@ import { Reveal } from "../components/Reveal";
 import AnimatedLinesBand from "../components/AnimatedLinesBand";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
-import { PLACEHOLDERS } from "./ProjectsPage";
+
 import { STAR_PATH } from "./AboutPage";
 
 /* ---------------------------------------------------------------------------
@@ -90,10 +90,14 @@ function PhotoCard({ n, delay }: { n: number; delay: number }) {
         </div>
         {/* image — full-bleed under the bar */}
         <div className="group overflow-hidden" style={{ aspectRatio: "657 / 491" }}>
-          <div
-            className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-105"
-            style={{ background: PLACEHOLDERS[(n - 1) % PLACEHOLDERS.length] }}
-          />
+          <div className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-105">
+            <img
+              src={`/img/life-${n}.jpg`}
+              alt=""
+              loading="lazy"
+              className="w-full h-full object-cover"
+            />
+          </div>
         </div>
       </div>
     </Reveal>
@@ -105,11 +109,13 @@ function PhotoPage({
   titleDark,
   titleGray,
   desc,
+  start,
 }: {
   chip: string;
   titleDark: string;
   titleGray: string;
   desc: string;
+  start: number;
 }) {
   return (
     <div>
@@ -206,7 +212,7 @@ function PhotoPage({
           <div className="lg:col-span-4" style={{ marginTop: 100 }}>
             <div className="grid grid-cols-1 lg:grid-cols-2" style={{ gap: 20 }}>
               {[1, 2, 3, 4].map((n) => (
-                <PhotoCard key={n} n={n} delay={n * 0.08} />
+                <PhotoCard key={n} n={start + n - 1} delay={n * 0.08} />
               ))}
             </div>
           </div>
@@ -241,7 +247,8 @@ export function PhotoArchivePage() {
       chip="/2025"
       titleDark="photo"
       titleGray="archive."
-      desc="Inside the studio"
+      desc="Inside my workspace"
+      start={5}
     />
   );
 }
@@ -253,6 +260,7 @@ export function PhotoMomentsPage() {
       titleDark="photo"
       titleGray="moments."
       desc="Work in progress"
+      start={1}
     />
   );
 }

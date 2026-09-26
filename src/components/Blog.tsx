@@ -23,6 +23,7 @@ const articles = [
       "Lessons learned from architecting large-scale React apps with TypeScript and modern tooling.",
     date: "2025",
     tag: "React",
+    image: "/img/blog-react.jpg",
   },
   {
     title: "The Art of Clean Code",
@@ -30,6 +31,7 @@ const articles = [
       "Why readable, maintainable code matters more than clever solutions in professional environments.",
     date: "2025",
     tag: "Best Practices",
+    image: "/img/blog-clean.jpg",
   },
   {
     title: "Full-Stack Deployment with Docker",
@@ -37,6 +39,7 @@ const articles = [
       "A practical guide to containerizing and deploying full-stack applications on cloud platforms.",
     date: "2024",
     tag: "DevOps",
+    image: "/img/blog-docker.jpg",
   },
 ];
 
@@ -197,17 +200,16 @@ export default function Blog() {
           {articles.map((a, i) => (
             <Reveal key={a.title} delay={i * 0.1}>
               <article className="group cursor-pointer h-full flex flex-col">
-                {/* image block — gradient placeholder until real covers arrive */}
+                {/* image block — article cover */}
                 <div
                   className="overflow-hidden"
                   style={{ height: 200, background: "#34363B" }}
                 >
-                  <div
-                    className="w-full h-full transition-transform duration-500 group-hover:scale-105"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, #34363B 0%, #21242B 55%, #14171D 100%)",
-                    }}
+                  <img
+                    src={a.image}
+                    alt={a.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                 </div>
 

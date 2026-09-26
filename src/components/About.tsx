@@ -69,10 +69,7 @@ const DECO_BOTTOM_LEFT = "M 0 0 L 0 63 L 122 63 L 54.12 24.128 L 19.263 24.128 Z
 const EDGE_FADE =
   "linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 5%, rgba(0,0,0,1) 95%, rgba(0,0,0,0) 100%)";
 
-/* Chip-frame photo placeholder — grayscale office-tone gradient; swap for
-   the user's real image later (Riwa photo: framerusercontent EW5tkzMc…png) */
-const FRAME_PHOTO_PLACEHOLDER =
-  "radial-gradient(ellipse 70% 55% at 32% 38%, #575757, transparent 72%), radial-gradient(ellipse 45% 60% at 78% 72%, #2e2e2e, transparent 70%), #0a0a0a";
+/* Chip-frame photo — real workspace image, grayscale-treated by the layer. */
 
 const SPARKLE_D =
   "M 19 9.5 L 12.066 12.066 L 9.5 19 L 6.934 12.066 L 0 9.5 L 6.934 6.934 L 9.5 0 L 12.066 6.934 Z";
@@ -268,8 +265,8 @@ export default function About() {
                 margin: 0,
               }}
             >
-              <span style={{ color: "var(--color-dark-text)" }}>The Team Behind Your </span>
-              <span style={{ color: "var(--color-dark-secondary)" }}>Projects.</span>
+              <span style={{ color: "var(--color-dark-text)" }}>The Engineer Behind Your </span>
+              <span style={{ color: "var(--color-dark-secondary)" }}>Products.</span>
             </h2>
           </Reveal>
         </div>
@@ -300,8 +297,8 @@ export default function About() {
               margin: 0,
             }}
           >
-            My goal is to combine strategy, design, and technology to create experiences that
-            build trust and deliver results.
+            I design and build full-stack products end to end — architecture,
+            APIs, interface, and the AI tooling that keeps delivery fast.
           </p>
           <div className="hidden lg:block" />
         </div>
@@ -315,8 +312,7 @@ export default function About() {
         </div>
 
         {/* Memory-chip photo frame — Riwa's About CTA zone: full-content-width
-            black frame (h800), grayscale photo (placeholder until user
-            supplies the real image) dimmed by a dark scrim, section-bg notch
+            black frame (h800), grayscale workspace photo dimmed by a dark scrim, section-bg notch
             overlays carving the chip silhouette, with the tagline marquee +
             centered CTA pill inside. Frame → section bottom = 120 pad. */}
         <div
@@ -333,9 +329,11 @@ export default function About() {
               transform: "scale(1.25)",
             }}
           >
-            <div
-              className="w-full h-full"
-              style={{ background: FRAME_PHOTO_PLACEHOLDER }}
+            <img
+              src="/img/about-chip.jpg"
+              alt="Priyanshu's workspace"
+              loading="lazy"
+              className="w-full h-full object-cover"
             />
           </div>
           {/* scrim (Riwa: rgba(8,10,16,0.3) @ opacity .8) */}
