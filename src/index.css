@@ -392,5 +392,5 @@ body::before {
 }
 
 .group:hover .btn-roll {
-  transform: translateY(-16px);
+  transform: translateY(var(--roll, -16px));
 }
