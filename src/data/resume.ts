@@ -15,6 +15,7 @@ import {
   SiCursor,
 } from 'react-icons/si'
 import { FaAws } from 'react-icons/fa6'
+import { asset } from "../lib/asset";
 
 /* ---------------------------------------------------------------------------
    Profile
@@ -27,7 +28,7 @@ export const profile = {
   email: 'priyanshulodha47@gmail.com',
   phone: '+91 98500 50647',
   phoneRaw: '9850050647',
-  resumeUrl: '/resume.pdf',
+  resumeUrl: asset('/resume.pdf'),
   linkedin: 'https://linkedin.com/in/priyanshu-lodha/',
   github: 'https://github.com/Priyanshu-47',
   tagline:
@@ -205,7 +206,7 @@ export const projects: Project[] = [
       'Runner-Up — Hexaware Maverick Designathon 2026, developed within a 48-hour engineering cycle.',
     ],
     tags: ['Next.js', 'AWS Bedrock', 'AWS Cognito', 'Neon DB'],
-    image: '/project-1.jpg',
+    image: asset('/project-1.jpg'),
     featured: true,
   },
   {
@@ -220,7 +221,7 @@ export const projects: Project[] = [
       'Integrated OCR and document intelligence workflows for processing unstructured policy documents and retrieving relevant policy context.',
     ],
     tags: ['Python', 'OpenAI API', 'LangChain', 'PostgreSQL', 'AWS Bedrock'],
-    image: '/project-2.jpg',
+    image: asset('/project-2.jpg'),
   },
   {
     title: 'IncidentLens AI',
@@ -234,7 +235,7 @@ export const projects: Project[] = [
       'Developed REST APIs and a React dashboard for log submission, incident analysis and investigation reports.',
     ],
     tags: ['Python', 'LangChain', 'OpenAI API', 'PostgreSQL', 'React'],
-    image: '/project-4.jpg',
+    image: asset('/project-4.jpg'),
   },
   {
     title: 'ReleaseRadar',
@@ -248,7 +249,7 @@ export const projects: Project[] = [
       'Developed React dashboards for engineering teams to monitor release readiness, deployment status and historical changes.',
     ],
     tags: ['.NET 10', 'React', 'PostgreSQL', 'GitHub API', 'Docker', 'AWS'],
-    image: '/project-3.jpg',
+    image: asset('/project-3.jpg'),
   },
   {
     title: 'HotPot',
@@ -262,7 +263,7 @@ export const projects: Project[] = [
       'Developed REST APIs and database components for menu, cart, address and order workflows using MSSQL and Entity Framework Core.',
     ],
     tags: ['.NET Core', 'React', 'MSSQL', 'C#', 'JWT'],
-    image: '/project-5.jpg',
+    image: asset('/project-5.jpg'),
   },
 ]
 

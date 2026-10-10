@@ -12,6 +12,7 @@ import Stats from "../components/Stats";
 import { profile } from "../data/resume";
 import { CARD_ICON_MASK } from "./ProjectsPage";
 import { articles, slugify, DECOR_BARS_1, DECOR_BARS_2 } from "./BlogPage";
+import { asset } from "../lib/asset";
 
 /* Riwa /about — live-verified (rb-00..rb-11 + DOM probes @ vw1398, docH 11910,
    root light rgb(240,240,240)):
@@ -822,28 +823,28 @@ const team: TeamMember[] = [
     role: "Backend",
     blurb: "Secure REST APIs, auth flows and data models in .NET Core that stay easy to change.",
     glyph: "harper",
-    img: "/img/stack-4.jpg",
+    img: asset("/img/stack-4.jpg"),
   },
   {
     name: "React & Next.js",
     role: "Frontend",
     blurb: "Component-driven React interfaces with motion that guides rather than distracts.",
     glyph: "mason",
-    img: "/img/blog-react.jpg",
+    img: asset("/img/blog-react.jpg"),
   },
   {
     name: "AI & LLM Tooling",
     role: "Applied AI",
     blurb: "RAG pipelines, AWS Bedrock and OpenAI integrations wired into real product workflows.",
     glyph: "dylan",
-    img: "/img/stack-3.jpg",
+    img: asset("/img/stack-3.jpg"),
   },
   {
     name: "AWS & DevOps",
     role: "Delivery",
     blurb: "Docker, CI/CD and AWS pipelines that keep every release boring and repeatable.",
     glyph: "lila",
-    img: "/img/blog-docker.jpg",
+    img: asset("/img/blog-docker.jpg"),
   },
 ];
 
@@ -899,7 +900,7 @@ const insights = [
       "How purposeful animation turns interfaces into experiences people remember.",
     date: "2024",
     tag: "Interaction",
-    image: "/img/dev-code2.jpg",
+    image: asset("/img/dev-code2.jpg"),
   },
 ];
 
@@ -939,7 +940,7 @@ export default function AboutPage() {
             <Reveal delay={0.2}>
               <div className="flex items-center" style={{ gap: 10, marginTop: 48 }}>
                 <div className="flex shrink-0">
-                  {["/project-1.jpg", "/project-2.jpg", "/project-4.jpg", "/project-3.jpg"].map(
+                  {[asset("/project-1.jpg"), asset("/project-2.jpg"), asset("/project-4.jpg"), asset("/project-3.jpg")].map(
                     (src, i) => (
                       <span
                         key={src}
@@ -1000,7 +1001,7 @@ export default function AboutPage() {
         </div>
 
         <div className="relative z-10" style={{ marginTop: 100 }}>
-          <ParallaxMedia src="/img/stack-4.jpg" ratio="1333 / 800" />
+          <ParallaxMedia src={asset("/img/stack-4.jpg")} ratio="1333 / 800" />
         </div>
       </section>
 
@@ -1102,7 +1103,7 @@ export default function AboutPage() {
                         }}
                       >
                         <img
-                          src="/img/about-chip.jpg"
+                          src={asset("/img/about-chip.jpg")}
                           alt=""
                           loading="lazy"
                           className="w-full h-full object-cover"
@@ -1165,7 +1166,7 @@ export default function AboutPage() {
 
           <div className="relative grid grid-cols-1 lg:grid-cols-4" style={{ marginTop: 100 }}>
             <div className="lg:col-span-3">
-              <ParallaxMedia src="/img/life-1.jpg" ratio="1000 / 630" />
+              <ParallaxMedia src={asset("/img/life-1.jpg")} ratio="1000 / 630" />
             </div>
             <BarcodeDecor style={{ right: 0, bottom: 0 }} />
           </div>
@@ -1290,8 +1291,8 @@ export default function AboutPage() {
             className="grid grid-cols-1 lg:grid-cols-2"
             style={{ columnGap: 10, rowGap: 10, marginTop: 100 }}
           >
-            <GalleryPanel label="Moments" img="/img/life-2.jpg" desc="Work in progress" chip="/2026" />
-            <GalleryPanel label="Archive" img="/img/life-8.jpg" desc="Inside my workspace" chip="/2025" />
+            <GalleryPanel label="Moments" img={asset("/img/life-2.jpg")} desc="Work in progress" chip="/2026" />
+            <GalleryPanel label="Archive" img={asset("/img/life-8.jpg")} desc="Inside my workspace" chip="/2025" />
           </div>
         </div>
         <SpikeDecor dark style={{ right: 24, top: 124 }} />

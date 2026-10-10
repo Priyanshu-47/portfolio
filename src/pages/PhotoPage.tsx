@@ -5,6 +5,7 @@ import Contact from "../components/Contact";
 import Footer from "../components/Footer";
 
 import { STAR_PATH } from "./AboutPage";
+import { asset } from "../lib/asset";
 
 /* ---------------------------------------------------------------------------
    Shared photo-gallery layout — dicto Riwa /about/photo-archive +
@@ -92,7 +93,7 @@ function PhotoCard({ n, delay }: { n: number; delay: number }) {
         <div className="group overflow-hidden" style={{ aspectRatio: "657 / 491" }}>
           <div className="w-full h-full transition-transform duration-500 ease-out group-hover:scale-105">
             <img
-              src={`/img/life-${n}.jpg`}
+              src={asset(`/img/life-${n}.jpg`)}
               alt=""
               loading="lazy"
               className="w-full h-full object-cover"

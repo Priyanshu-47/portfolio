@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { Reveal } from "./Reveal";
 import { profile } from "../data/resume";
+import { asset } from "../lib/asset";
 
 /* Riwa "04 ABOUT US" section — measured live on riwadesign (section name "About us"):
    header : h2 75% LEFT (Sora 600, 70px, -0.06em, uppercase, two-tone)
@@ -330,7 +331,7 @@ export default function About() {
             }}
           >
             <img
-              src="/img/about-chip.jpg"
+              src={asset("/img/about-chip.jpg")}
               alt="Priyanshu's workspace"
               loading="lazy"
               className="w-full h-full object-cover"

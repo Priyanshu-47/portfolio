@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import { Reveal } from "../components/Reveal";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
+import { asset } from "../lib/asset";
 
 /* Riwa /blog — live-verified (rp-blog-1/2/3, DOM probes @ vw1398):
    page  : light #F0F0F0, docH 3538 — header y120 (chip INSIGHTS pill
@@ -41,7 +42,7 @@ export const articles = [
       "Lessons learned from architecting large-scale React apps with TypeScript and modern tooling.",
     date: "2025",
     tag: "React",
-    image: "/img/blog-react.jpg",
+    image: asset("/img/blog-react.jpg"),
   },
   {
     title: "The Art of Clean Code",
@@ -49,7 +50,7 @@ export const articles = [
       "Why readable, maintainable code matters more than clever solutions in professional environments.",
     date: "2025",
     tag: "Best Practices",
-    image: "/img/blog-clean.jpg",
+    image: asset("/img/blog-clean.jpg"),
   },
   {
     title: "Full-Stack Deployment with Docker",
@@ -57,7 +58,7 @@ export const articles = [
       "A practical guide to containerizing and deploying full-stack applications on cloud platforms.",
     date: "2024",
     tag: "DevOps",
-    image: "/img/blog-docker.jpg",
+    image: asset("/img/blog-docker.jpg"),
   },
 ];
 

@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { Reveal } from "./Reveal";
 import { experience } from "../data/resume";
 import AnimatedLinesBand from "./AnimatedLinesBand";
+import { asset } from "../lib/asset";
 
 /* Riwa "05 WORKFLOW" section — rebuilt to the corrected measured spec:
    section : bg light rgb(240,240,240), pad 120/24, 2-col 50/50 gap 0,
@@ -264,7 +265,7 @@ export default function Experience() {
                     aria-hidden="true"
                   >
                     <img
-                      src="/portrait.png"
+                      src={asset("/portrait.png")}
                       alt="Priyanshu Lodha"
                       className="w-full h-full object-cover"
                     />

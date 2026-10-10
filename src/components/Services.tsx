@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { CSSProperties } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Reveal } from "./Reveal";
+import { asset } from "../lib/asset";
 
 const services = [
   {
@@ -46,11 +47,11 @@ const icons = ["⬆", "✦", "▲", "◆", "✚"];
 /* Cursor-following hover previews (Riwa: fixed, z13, 128×150, follows cursor).
    Real contextual photos, one per service. */
 const PREVIEWS = [
-  "/img/blog-react.jpg",
-  "/img/dev-terminal.jpg",
-  "/img/stack-4.jpg",
-  "/img/life-5.jpg",
-  "/img/blog-docker.jpg",
+  asset("/img/blog-react.jpg"),
+  asset("/img/dev-terminal.jpg"),
+  asset("/img/stack-4.jpg"),
+  asset("/img/life-5.jpg"),
+  asset("/img/blog-docker.jpg"),
 ];
 
 /* Riwa's exact SVG shapes (captured from their sprite symbols) */

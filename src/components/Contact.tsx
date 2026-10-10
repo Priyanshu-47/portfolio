@@ -4,6 +4,7 @@ import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { Reveal } from "./Reveal";
 import { profile } from "../data/resume";
+import { asset } from "../lib/asset";
 
 /* Riwa "12 GET IN TOUCH" section — live-verified (d-contact-a, contact shot):
    section : bg ORANGE rgb(214, 54, 20) #D63614, pad 120/24 (full-bleed),
@@ -390,7 +391,7 @@ export default function Contact({ variant = "home" }: { variant?: "home" | "inne
                 </button>
                 {/* portrait circle overlapping the pill's right edge */}
                 <img
-                  src="/portrait.png"
+                  src={asset("/portrait.png")}
                   alt=""
                   aria-hidden="true"
                   className="absolute pointer-events-none"

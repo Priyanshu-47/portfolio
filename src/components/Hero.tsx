@@ -2,6 +2,7 @@ import { useState, useMemo, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import AnimatedLines from "./AnimatedLines";
+import { asset } from "../lib/asset";
 
 // 4-pointed star SVG path — matches Riwa's sparkle shape
 const StarSVG = ({ size, color }: { size: number; color: string }) => (
@@ -70,7 +71,7 @@ export default function Hero() {
         {/* Portrait — uses rem so zoom scales it */}
         <div className="absolute inset-0 flex items-end justify-center pointer-events-none z-[2]">
           <img
-            src="/portrait.png"
+            src={asset("/portrait.png")}
             alt="Priyanshu Lodha"
             className="object-contain object-bottom"
             style={{
@@ -172,7 +173,7 @@ export default function Hero() {
                   transition={{ duration: 0.3, ease: "easeOut" }}
                 >
                   <img
-                    src="/portrait.png"
+                    src={asset("/portrait.png")}
                     alt="Priyanshu"
                     className="w-full h-full object-cover"
                   />

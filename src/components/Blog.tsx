@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { Reveal } from "./Reveal";
 import AnimatedLinesBand from "./AnimatedLinesBand";
+import { asset } from "../lib/asset";
 
 /* Riwa "11 BLOG/INSIGHTS" section — live-verified (final-blogtop, d-blog-a/b):
    section : bg light #F0F0F0, pad 120/24 (full-bleed), 5-line white overlay
@@ -23,7 +24,7 @@ const articles = [
       "Lessons learned from architecting large-scale React apps with TypeScript and modern tooling.",
     date: "2025",
     tag: "React",
-    image: "/img/blog-react.jpg",
+    image: asset("/img/blog-react.jpg"),
   },
   {
     title: "The Art of Clean Code",
@@ -31,7 +32,7 @@ const articles = [
       "Why readable, maintainable code matters more than clever solutions in professional environments.",
     date: "2025",
     tag: "Best Practices",
-    image: "/img/blog-clean.jpg",
+    image: asset("/img/blog-clean.jpg"),
   },
   {
     title: "Full-Stack Deployment with Docker",
@@ -39,7 +40,7 @@ const articles = [
       "A practical guide to containerizing and deploying full-stack applications on cloud platforms.",
     date: "2024",
     tag: "DevOps",
-    image: "/img/blog-docker.jpg",
+    image: asset("/img/blog-docker.jpg"),
   },
 ];
 
