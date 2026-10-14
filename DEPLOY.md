@@ -45,7 +45,7 @@ To preview locally first: `npm run dev` (http://localhost:5173) or
 The About section's **GitHub** and **Open Source** cards are backed by the
 real profile `github.com/Priyanshu-47`, fetched 2026-08-08:
 
-- 27 public repositories (Python, C#, TypeScript, SQL, JS, Dart, more)
+- 35 public repositories (Python, C#, TypeScript, SQL, JS, Dart, more)
 - Active: daily NeetCode DSA practice (`neetcode-submissions`), plus a
   certification hub and Hexaware/ARTH training projects
 

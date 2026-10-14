@@ -43,9 +43,9 @@ export const profile = {
     { value: '5+', label: 'AWS services used' },
     { value: '5', label: 'Certifications' },
   ],
-  /* Live values pulled from https://github.com/Priyanshu-47 (fetched 2026-08-08) */
+  /* Live values pulled from https://github.com/Priyanshu-47 (fetched 2026-10-14) */
   githubStats: {
-    repos: 27,
+    repos: 35,
     handle: 'github.com/Priyanshu-47',
     activity: 'Daily DSA practice on NeetCode',
   },
@@ -308,6 +308,7 @@ export const skillGroups: SkillGroup[] = [
       { label: 'React', icon: SiReact },
       { label: 'Next.js', icon: SiNextdotjs },
       { label: 'Entity Framework Core' },
+      { label: 'FastAPI' },
       { label: 'Redux', icon: SiRedux },
     ],
   },

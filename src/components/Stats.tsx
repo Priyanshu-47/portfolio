@@ -4,7 +4,7 @@ import { Reveal } from "./Reveal";
 const stats = [
   { target: 2, prefix: "", suffix: "+", label: "Experience", description: "Full-stack engineering\nat Hexaware", icon: "▼" },
   { target: 5, prefix: "", suffix: "", label: "Projects Shipped", description: "SaaS, AI and\nfull-stack builds", icon: "✦" },
-  { target: 27, prefix: "", suffix: "", label: "Public Repos", description: "Daily DSA practice\nplus side projects", icon: "✳" },
+  { target: 35, prefix: "", suffix: "", label: "Public Repos", description: "Daily DSA practice\nplus side projects", icon: "✳" },
   { target: 5, prefix: "", suffix: "", label: "Certifications", description: "Anthropic, Microsoft\nand AWS", icon: "✚" },
 ];
 
