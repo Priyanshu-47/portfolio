@@ -68,26 +68,12 @@
       rel="stylesheet"
     />
     <script>
-      /* Restore client-route paths after GitHub Pages' 404.html redirect
-         (see public/404.html). A direct visit to /portfolio/about arrives as
-         /portfolio/?/about — turn it back into /portfolio/about before the
-         router boots. No-op in dev and on normal visits (search[1] !== "/"). */
-      (function (l) {
-        if (l.search[1] === "/") {
-          var decoded = l.search
-            .slice(1)
-            .split("&")
-            .map(function (s) {
-              return s.replace(/~and~/g, "&");
-            })
-            .join("?");
-          window.history.replaceState(
-            null,
-            null,
-            l.pathname.slice(0, -1) + decoded + l.hash
-          );
-        }
-      })(window.location);
+      /* Deep-link path restoration now happens at the top of src/main.tsx —
+         inside the deferred entry module, AFTER ./assets/... has resolved
+         against the original /portfolio/?/... URL. (Restoring earlier, in
+         this file, made two-segment routes like /portfolio/projects/x resolve
+         assets against /portfolio/projects/assets/ and 404.)
+         See public/404.html for the redirect half. */
     </script>
   </head>
   <body>

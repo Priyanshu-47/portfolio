@@ -8,7 +8,7 @@
          GH Pages has no server fallback: a direct visit / refresh of a client
          route like /portfolio/about 404s because no such file exists. GH serves
          this 404.html instead; we rewrite the URL to /portfolio/?/about so the
-         real index.html loads, then the inline restore script in index.html
+         real index.html loads, then the restore at the top of src/main.tsx
          turns ?/about back into /about before React Router boots.
          /portfolio is the deployed subpath -> keep 1 path segment. */
       var pathSegmentsToKeep = 1;
