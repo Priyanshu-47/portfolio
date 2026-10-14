@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import { Reveal } from "../components/Reveal";
 import Contact from "../components/Contact";
 import Footer from "../components/Footer";
-import { projects, profile } from "../data/resume";
+import { projects } from "../data/resume";
 
 /* Riwa /projects — live-verified (rp-proj-top, rp-grid, DOM probes):
    page  : light #F0F0F0, h3956 — header y120 h290, grid y510 h1600
@@ -21,13 +21,7 @@ import { projects, profile } from "../data/resume";
            uppercase #686868 | right "/ tag" mono #686868 lowercase) →
            full-bleed image 657/491 grayscale, hover scale 105.
    decor : barcode stack top-right (right 24, y128, 13 bars h4 gap3).
-   more  : "More on GitHub" sub-block (pill chip + hairline rows) — recent
-           public repos beyond the featured five: index mono | Sora name
-           (hover orange) | Geist desc | mono lang · date | ↗, white 1px
-           rules per light-section line rule, then a mono "VIEW ALL N
-           REPOSITORIES" link to the GitHub repo list.
-   Content: user's 5 featured projects (title / tags[0] as category) +
-            recent GitHub repos (fetched 2026-10-14). */
+   Content: user's 5 projects (title / tags[0] as category). */
 
 export function slugify(title: string) {
   return title
@@ -64,40 +58,6 @@ export const PLACEHOLDERS = [
 
 /* Barcode decoration — right-aligned stack, top-right of header */
 const BARCODE = [55, 30, 64, 22, 48, 70, 35, 60, 26, 52, 44, 68, 38];
-
-/* Recent public repos beyond the featured five — pulled from
-   github.com/Priyanshu-47 (fetched 2026-10-14), newest first. Each row
-   links out to the real repository. */
-const GITHUB_MORE = [
-  {
-    name: "Denials Command Center",
-    repo: "denials-command-center",
-    lang: "C#",
-    period: "Oct 2026",
-    desc: "AI claims-denial analytics — 835 ingestion and reconciliation, policy-cited appeal drafts, two-role worklist, manager analytics and pre-bill prevention rules. .NET 8 · EF Core · PostgreSQL · React.",
-  },
-  {
-    name: "jainLLM",
-    repo: "jainLLM",
-    lang: "Python",
-    period: "Oct 2026",
-    desc: "Source-grounded AI research assistant for the Svetambara Sthanakavasi Jain tradition, with retrieval over primary texts.",
-  },
-  {
-    name: "ChangeLens AI",
-    repo: "ChangeLens-AI",
-    lang: "C#",
-    period: "Sep 2026",
-    desc: "Grounded-AI engineering investigation platform — hybrid RAG, Roslyn dependency intelligence, controlled AI tool loop, evaluation and observability. React · ASP.NET Core · FastAPI · pgvector.",
-  },
-  {
-    name: "Market AI",
-    repo: "market-ai",
-    lang: "Python",
-    period: "Aug 2026",
-    desc: "Stock-market screening system — broker-independent data feeds, SMMA crossover signals, ML accept/avoid predictions and a PySide6 dashboard.",
-  },
-];
 
 export default function ProjectsPage() {
   return (
@@ -271,100 +231,6 @@ export default function ProjectsPage() {
                 </Link>
               </Reveal>
             ))}
-          </div>
-
-          {/* More on GitHub — recent repos beyond the featured five */}
-          <div style={{ marginTop: 110 }}>
-            <Reveal>
-              <div
-                className="inline-flex items-center"
-                style={{ background: "#E6E6E6", padding: "8px 14px", borderRadius: 100, gap: 12 }}
-              >
-                <span className="inline-flex items-center" style={{ gap: 4 }}>
-                  <span
-                    className="block"
-                    style={{ width: 10, height: 10, borderRadius: "100%", background: "rgb(214, 54, 20)" }}
-                  />
-                  <span style={monoLabel}>(More on GitHub)</span>
-                </span>
-              </div>
-            </Reveal>
-
-            <div style={{ marginTop: 32, borderTop: "1px solid #FFFFFF" }}>
-              {GITHUB_MORE.map((r, i) => (
-                <Reveal key={r.repo} delay={i * 0.06}>
-                  <a
-                    href={`https://github.com/Priyanshu-47/${r.repo}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group block"
-                    style={{ borderBottom: "1px solid #FFFFFF", padding: "24px 0" }}
-                  >
-                    <div
-                      className="grid grid-cols-1 md:grid-cols-[44px_minmax(180px,260px)_1fr_auto] items-baseline"
-                      style={{ gap: "10px 24px" }}
-                    >
-                      <span className="hidden md:block" style={monoLabel}>
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span
-                        className="text-[#0B0D14] group-hover:text-[#D63614] transition-colors duration-300"
-                        style={{
-                          fontFamily: '"Sora", sans-serif',
-                          fontWeight: 600,
-                          fontSize: "clamp(20px, 2.4vw, 28px)",
-                          lineHeight: 1.15,
-                          letterSpacing: "-0.03em",
-                        }}
-                      >
-                        {r.name}
-                      </span>
-                      <span
-                        style={{
-                          fontFamily: '"Geist", sans-serif',
-                          fontSize: 15,
-                          lineHeight: "21px",
-                          color: "#5E5E5E",
-                        }}
-                      >
-                        {r.desc}
-                      </span>
-                      <span className="flex items-center" style={{ gap: 16 }}>
-                        <span style={monoCat}>
-                          {r.lang} · {r.period}
-                        </span>
-                        <span
-                          aria-hidden="true"
-                          className="text-[#0B0D14] group-hover:text-[#D63614] group-hover:translate-x-1 transition-all duration-300"
-                          style={{ fontSize: 18, lineHeight: 1 }}
-                        >
-                          ↗
-                        </span>
-                      </span>
-                    </div>
-                  </a>
-                </Reveal>
-              ))}
-            </div>
-
-            <Reveal>
-              <a
-                href={`${profile.github}?tab=repositories`}
-                target="_blank"
-                rel="noreferrer"
-                className="group inline-flex items-center"
-                style={{ marginTop: 28, gap: 10 }}
-              >
-                <span style={monoLabel}>View all {profile.githubStats.repos} repositories</span>
-                <span
-                  aria-hidden="true"
-                  className="text-[#686868] group-hover:translate-x-1 transition-transform duration-300"
-                  style={{ fontSize: 16, lineHeight: 1 }}
-                >
-                  ↗
-                </span>
-              </a>
-            </Reveal>
           </div>
         </div>
       </section>
